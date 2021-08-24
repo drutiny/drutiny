@@ -39,6 +39,11 @@ class CodeScanAnalysis extends AbstractAnalysis
           static::PARAMETER_OPTIONAL,
           'Patterns which the \'patterns\' parameter may yield false positives from',
       );
+      $this->addParameter(
+          'maxdepth',
+          static::PARAMETER_OPTIONAL,
+          'An optional max depth for the scan.',
+      );
     }
 
 
@@ -63,6 +68,12 @@ class CodeScanAnalysis extends AbstractAnalysis
         $directory =  strtr($directory, $stat['%paths']);
 
         $command = ['find', $directory, '-type f'];
+
+        // Add maxdepth to command if applicable.
+        $maxdepth = $this->getParameter('maxdepth', NULL);
+        if (is_int($maxdepth) && $maxdepth >= 0) {
+            $command[] = '-maxdepth ' . $maxdepth;
+        }
 
         $types = $this->getParameter('filetypes', []);
 
