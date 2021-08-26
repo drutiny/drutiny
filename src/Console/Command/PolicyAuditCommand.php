@@ -127,6 +127,7 @@ class PolicyAuditCommand extends DrutinyBaseCommand
         $progress->clear();
 
         foreach ($this->getFormats($input, $profile) as $format) {
+            $format->setNamespace($this->getReportNamespace($input, $uri));
             $format->render($profile, $assessment);
             foreach ($format->write() as $location) {
               $output->write("Policy Audit written to $location.");
