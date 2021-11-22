@@ -5,7 +5,6 @@ namespace Drutiny\Audit\Filesystem;
 use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
 use Drutiny\Audit\AbstractAnalysis;
-use Drutiny\Annotation\Param;
 
 /**
  * Checks for existence of requested file/directory on specified path.
@@ -47,9 +46,7 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
  */
   public function gather(Sandbox $sandbox) {
     $directory = $this->getParameter('directory', '%root');
-    $stat = $this->getTarget()->getService('drush')->status(['format' => 'json'])->run(function ($output) {
-      return json_decode($output, true);
-    });
+    $stat = $this->target['drush']->export();
 
     // Backwards compatibility. %paths is no longer present since Drush 8.
     if (!isset($stat['%paths'])) {
@@ -86,11 +83,11 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
 
     $command = implode(' ', $command);
     $this->logger->info('[' . __CLASS__ . '] ' . $command);
-    $output = $this->target->getService('exec')->run($command);
-
-    $this->set('has_results', !empty($output));
-
-    $matches = array_filter(explode(PHP_EOL, $output));
+    
+    $matches = $this->target->getService('exec')->run($command, function ($output) {
+      return array_filter(explode(PHP_EOL, $output));
+    });
+    $this->set('has_results', !empty($matches));
     $results = [
       'found' => count($matches),
       'findings' => $matches,
