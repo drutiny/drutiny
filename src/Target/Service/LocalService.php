@@ -117,7 +117,7 @@ class LocalService implements ExecutionInterface {
       // TODO: Fix bug that generates a DataNotFoundException from a listed property.
       catch (DataNotFoundException $e) {}
 
-      if (is_object($value) && !method_exists($key, '__toString')) {
+      if ((is_object($value) && !method_exists($key, '__toString')) || is_array($value)) {
         continue;
       }
       $var = strtoupper(str_replace('.', '_', $key));
