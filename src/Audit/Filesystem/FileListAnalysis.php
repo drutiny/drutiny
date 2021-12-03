@@ -39,7 +39,7 @@ class FileListAnalysis extends AbstractAnalysis {
  * @inheritdoc
  */
   public function gather(Sandbox $sandbox) {
-    $directory = $this->getParameter('directory', '%root');
+    $directory = $this->interpolate($this->getParameter('directory', '%root'));
     $stat = $this->target['drush']->export();
 
     // Backwards compatibility. %paths is no longer present since Drush 8.
@@ -63,7 +63,7 @@ class FileListAnalysis extends AbstractAnalysis {
 
     $file_types = $this->getParameter('filetypes', []);
     if (!empty($file_types)) {
-      if (!$this->endsWith('/', $directory)) {
+      if (!$this->endsWith($directory, '/')) {
         $directory .= '/';
       }
       foreach ($file_types as $file_type) {
@@ -77,7 +77,7 @@ class FileListAnalysis extends AbstractAnalysis {
     // Add limit to command if applicable.
     $limit = $this->getParameter('limit', NULL);
     if (is_int($limit) && $limit >= 0) {
-      $command[] = '| head -' . ($limit + 1);
+      $command[] = '| head -' . $limit;
     }
 
     $command = implode(' ', $command);
