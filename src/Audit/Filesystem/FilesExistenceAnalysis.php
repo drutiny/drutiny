@@ -81,7 +81,7 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
       $command[] = "! -path '$filepath'";
     }
 
-    $command = implode(' ', $command);
+    $command = implode(' ', $command) . ' || exit 0';
     $this->logger->info('[' . __CLASS__ . '] ' . $command);
     
     $matches = $this->target->getService('exec')->run($command, function ($output) {
