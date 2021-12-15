@@ -25,9 +25,19 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
       'File names to include in the scan',
     );
     $this->addParameter(
-      'type',
+      'types',
       static::PARAMETER_OPTIONAL,
       'File type as per file system. Allowed values are b for block special, c for character special, d for directory, f for regular file, l for symbolic link, p for FIFO and s for socket files.',
+    );
+    $this->addParameter(
+      'groups',
+      static::PARAMETER_OPTIONAL,
+      'File owned group.',
+    );
+    $this->addParameter(
+      'users',
+      static::PARAMETER_OPTIONAL,
+      'File owned user.',
     );
     $this->addParameter(
       'exclude',
@@ -64,14 +74,42 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
       $command[] = '-maxdepth ' . $maxdepth;
     }
 
-    $filetype = $this->getParameter('type', 'f');
-    $command[] = "-type $filetype";
+    // Add filetype to command. Default will be type file.
+    $filetypes = $this->getParameter('types', ['f']);
+    if (!empty($filetypes)) {
+      $conditions = [];
+      foreach ($filetypes as $filetype) {
+        $conditions[] = '-type "' . $filetype . '"';
+      }
+      $command[] = '\( ' . implode(' -or ', $conditions) . ' \)';
+    }
 
+    // Add filenames to command if applicable.
     $files = $this->getParameter('filenames', []);
     if (!empty($files)) {
       $conditions = [];
       foreach ($files as $file) {
         $conditions[] = '-iname "' . $file . '"';
+      }
+      $command[] = '\( ' . implode(' -or ', $conditions) . ' \)';
+    }
+
+    // Add file group ownership option to command if applicable.
+    $groups = $this->getParameter('groups', []);
+    if (!empty($groups)) {
+      $conditions = [];
+      foreach ($groups as $group) {
+        $conditions[] = '-group "' . $group . '"';
+      }
+      $command[] = '\( ' . implode(' -or ', $conditions) . ' \)';
+    }
+
+    // Add file user ownership option to command if applicable.
+    $users = $this->getParameter('users', []);
+    if (!empty($groups)) {
+      $conditions = [];
+      foreach ($users as $user) {
+        $conditions[] = '-user "' . $user . '"';
       }
       $command[] = '\( ' . implode(' -or ', $conditions) . ' \)';
     }
