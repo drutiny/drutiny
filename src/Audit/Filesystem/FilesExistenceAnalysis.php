@@ -14,10 +14,10 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
   public function configure() {
     parent::configure();
     $this->addParameter(
-      'directory',
+      'directories',
       static::PARAMETER_OPTIONAL,
-      'Absolute filepath to directory to scan',
-      '%root'
+      'List of absolute filepath to directory to scan',
+      ['%root']
     );
     $this->addParameter(
       'filenames',
@@ -40,6 +40,16 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
       'File owned user.',
     );
     $this->addParameter(
+      'smaller_than',
+      static::PARAMETER_OPTIONAL,
+      'File size smaller than x size. Use k for Kilobytes, M Megabytes and G for Gigabytes. E.g. 100k or 100M or 1G.',
+    );
+    $this->addParameter(
+      'larger_than',
+      static::PARAMETER_OPTIONAL,
+      'File size larger than x size. Use k for Kilobytes, M Megabytes and G for Gigabytes. E.g. 100k or 100M or 1G.',
+    );
+    $this->addParameter(
       'exclude',
       static::PARAMETER_OPTIONAL,
       'Absolute file-paths to directories omit from scanning',
@@ -55,7 +65,7 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
  * @inheritdoc
  */
   public function gather(Sandbox $sandbox) {
-    $directory = $this->getParameter('directory', '%root');
+    $directories = $this->getParameter('directories', ['%root']);
     $stat = $this->target['drush']->export();
 
     // Backwards compatibility. %paths is no longer present since Drush 8.
@@ -65,8 +75,11 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
       }
     }
 
-    $directory =  strtr($directory, $stat['%paths']);
-    $command = ['find', $directory];
+    $processed_directories = [];
+    foreach ($directories as $directory) {
+      $processed_directories[] = strtr($directory, $stat['%paths']);
+    }
+    $command = ['find', implode(' ', $processed_directories)];
 
     // Add maxdepth to command if applicable.
     $maxdepth = $this->getParameter('maxdepth', NULL);
@@ -82,6 +95,20 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
         $conditions[] = '-type "' . $filetype . '"';
       }
       $command[] = '\( ' . implode(' -or ', $conditions) . ' \)';
+    }
+
+    // Add size parameter to command if applicable.
+    $size_smaller_than = $this->getParameter('smaller_than', NULL);
+    $size_larger_than = $this->getParameter('larger_than', NULL);
+    if ($size_larger_than || $size_smaller_than) {
+      $conditions = [];
+      if (!is_null($size_larger_than)) {
+        $conditions[] = '-size "+' . $size_larger_than . '"';
+      }
+      if (!is_null($size_smaller_than)) {
+        $conditions[] = '-size "-' . $size_smaller_than . '"';
+      }
+      $command[] = '\( ' . implode(' -and ', $conditions) . ' \)';
     }
 
     // Add filenames to command if applicable.
@@ -106,7 +133,7 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
 
     // Add file user ownership option to command if applicable.
     $users = $this->getParameter('users', []);
-    if (!empty($groups)) {
+    if (!empty($users)) {
       $conditions = [];
       foreach ($users as $user) {
         $conditions[] = '-user "' . $user . '"';
