@@ -1,6 +1,6 @@
 <?php
 
-namespace Drutiny\Audit\Database;
+namespace Drutiny\Plugin\Drupal8\Audit;
 
 use Drutiny\Audit\AbstractAnalysis;
 use Drutiny\Sandbox\Sandbox;
