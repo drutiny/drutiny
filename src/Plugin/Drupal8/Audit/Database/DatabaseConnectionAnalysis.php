@@ -13,26 +13,20 @@ class DatabaseConnectionAnalysis extends AbstractAnalysis {
   public function gather(Sandbox $sandbox) {
     $db_connections = $this->target->getService('drush')
       ->runtime(function() {
-        return \Drupal\Core\Database\Database::getAllConnectionInfo();
-    });
-    $this->unset_user_pass($db_connections, ['username', 'password']);
+        $database_connections = \Drupal\Core\Database\Database::getAllConnectionInfo();
+        $unset_username_pass = function (array &$connections, array $unwanted_keys) use (&$unset_username_pass) {
+          foreach ($unwanted_keys as $unwanted_key) {
+            unset($connections[$unwanted_key]);
+          }
+          foreach ($connections as &$connection) {
+            if (is_array($connection)) {
+              $unset_username_pass($connection, $unwanted_keys);
+            }
+          }
+        };
+        $unset_username_pass($database_connections, ['username', 'password']);
+        return $database_connections;
+      });
     $this->set('database_connections', $db_connections);
   }
-
-  /**
-   * Helper function to unset non-required keys from connections array.
-   * @param array $connections
-   * @param array $unwanted_keys
-   */
-  public function unset_user_pass(array &$connections, array $unwanted_keys) {
-    foreach ($unwanted_keys as $unwanted_key) {
-      unset($connections[$unwanted_key]);
-    }
-    foreach ($connections as &$connection) {
-      if (is_array($connection)) {
-          $this->unset_user_pass($connection, $unwanted_keys);
-      }
-    }
-  }
-
 }
