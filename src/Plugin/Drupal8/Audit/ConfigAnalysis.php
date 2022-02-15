@@ -36,6 +36,6 @@ class ConfigAnalysis extends AbstractAnalysis
           return json_decode($output);
         });
 
-        $this->set('config', $config);
+        $this->set('config', (array) $config);
     }
 }
