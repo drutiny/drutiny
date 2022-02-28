@@ -4,24 +4,28 @@ namespace Drutiny\Target\Service;
 
 use Drutiny\Target\TargetInterface;
 use Drutiny\Entity\Exception\DataNotFoundException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LocalService implements ExecutionInterface {
+  use ContainerAwareTrait;
 
   protected $target;
   protected $isWin = FALSE;
   protected $cache;
   protected $logger;
 
-  public function __construct(CacheInterface $cache, LoggerInterface $logger)
+  public function __construct(CacheInterface $cache, LoggerInterface $logger, ContainerInterface $container)
   {
     $this->cache = $cache;
     $this->logger = $logger;
+    $this->setContainer($container);
   }
 
   public function setTarget(TargetInterface $target)
@@ -47,8 +51,9 @@ class LocalService implements ExecutionInterface {
       $item->expiresAfter($ttl);
       $this->logger->debug(__CLASS__ . ':MISS: ' . $cmd);
 
+      $process_timeout = $this->container->hasParameter('process.timeout') ? $this->container->getParameter('process.timeout') : 600;
       $process = Process::fromShellCommandline($cmd, null, $this->getEnvAll());
-      $process->setTimeout(600);
+      $process->setTimeout($process_timeout);
       try {
         $process->mustRun();
       }
