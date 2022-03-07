@@ -3,10 +3,10 @@
 <img src="https://github.com/drutiny/drutiny/raw/3.0.x/assets/logo.png" alt="Drutiny logo" align="right"/>
 
 [![Build Status](https://travis-ci.org/drutiny/drutiny.svg?branch=3.0.x)](https://travis-ci.org/drutiny/drutiny)
-[![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/drutiny/drutiny)
-[![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/drutiny/drutiny)
-[![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/drutiny/drutiny)
-[![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/drutiny/drutiny)
+[![Latest Stable Version](https://poser.pugx.org/drutiny/drutiny/v/stable)](https://packagist.org/packages/drutiny/drutiny)
+[![Total Downloads](https://poser.pugx.org/drutiny/drutiny/downloads)](https://packagist.org/packages/drutiny/drutiny)
+[![Latest Unstable Version](https://poser.pugx.org/drutiny/drutiny/v/unstable)](https://packagist.org/packages/drutiny/drutiny)
+[![License](https://poser.pugx.org/drutiny/drutiny/license)](https://packagist.org/packages/drutiny/drutiny)
 
 A generic Drupal site auditing and optional remediation tool.
 
