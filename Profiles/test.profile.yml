@@ -1,4 +1,5 @@
 title: Test Profile
+description: Test profile to execute all test policies with severity configurations.
 policies:
   Test:Pass:
     severity: critical
