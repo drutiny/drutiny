@@ -66,7 +66,7 @@ class Application extends BaseApplication
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
-        $startTimer = time();
+        $startTimer = microtime(TRUE);
         switch ($output->getVerbosity()) {
           case OutputInterface::VERBOSITY_VERBOSE:
             $this->kernel->getContainer()->get('logger.logfile')->setLevel('NOTICE');
@@ -99,13 +99,13 @@ class Application extends BaseApplication
 
 
         $returnCode = parent::doRunCommand($command, $input, $output);
-        $endTimer = time();
+        $endTimer = microtime(TRUE);
 
         if ($this->registrationErrors) {
             $this->renderRegistrationErrors($input, $output);
             $this->registrationErrors = [];
         }
-        $this->kernel->getContainer()->get('logger')->notice("Application Command {command} complete.", [
+        $this->kernel->getContainer()->get('logger')->notice("Application Command {command} completed in {runtime} seconds.", [
           'command' => $command->getName(),
           'runtime' => ($endTimer-$startTimer),
         ]);
