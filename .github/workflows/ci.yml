@@ -1,0 +1,21 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup PHP
+      id: setup-php
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: 7.4
+        extensions: curl, json, pcntl
+    - uses: php-actions/composer@v6
+      with:
+        php-version: 7.4
+    - uses: php-actions/phpunit@v3
+      with:
+        php_version: 7.4
