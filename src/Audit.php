@@ -103,6 +103,7 @@ abstract class Audit implements AuditInterface
         }
         $this->policy = $policy;
         $response = new AuditResponse($policy);
+        $execution_start_time = new \DateTime();
         $this->logger->info('Auditing '.$policy->name.' with '.get_class($this));
         $outcome = AuditInterface::ERROR;
         try {
@@ -214,7 +215,9 @@ abstract class Audit implements AuditInterface
             // Set the response.
             $response->set($outcome ?? AuditInterface::ERROR, $tokens);
         }
-
+        $execution_end_time = new \DateTime();
+        $total_execution_time = $execution_start_time->diff($execution_end_time);
+        $this->logger->info($total_execution_time->format('Execution completed for policy "' . $policy->name . '" in %m month(s) %d day(s) %H hour(s) %i minute(s) %s second(s)'));
         return $response;
     }
 
