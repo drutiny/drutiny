@@ -11,11 +11,6 @@ class ProfileTest extends KernelTestCase {
 
   protected $target;
 
-  // protected function setUp(): void
-  // {
-  //     parent::setUp();
-  //     $this->target = $this->container->get('target.factory')->create('@none');
-  // }
 
   public function testUsage()
   {

@@ -26,7 +26,7 @@ class ApplicationTest extends KernelTestCase {
     $input = new ArrayInput([
       'command' => 'profile:run',
       'profile' => 'test',
-      'target' => '@none'
+      'target' => 'none:none'
     ]);
 
     $code = $this->application->run($input, $this->output);
@@ -82,7 +82,7 @@ class ApplicationTest extends KernelTestCase {
     $input = new ArrayInput([
       'command' => 'policy:audit',
       'policy' => 'Test:Pass',
-      'target' => '@none'
+      'target' => 'none:none'
     ]);
 
     $code = $this->application->run($input, $this->output);
@@ -109,7 +109,7 @@ class ApplicationTest extends KernelTestCase {
     $input = new ArrayInput([
       'command' => 'audit:run',
       'audit' => 'Drutiny\Audit\AlwaysPass',
-      'target' => '@none'
+      'target' => 'none:none'
     ]);
 
     $code = $this->application->run($input, $this->output);

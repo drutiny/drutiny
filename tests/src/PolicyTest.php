@@ -15,7 +15,7 @@ class PolicyTest extends KernelTestCase {
   protected function setUp(): void
   {
       parent::setUp();
-      $this->target = $this->container->get('target.factory')->create('@none');
+      $this->target = $this->container->get('target.factory')->create('none:none');
   }
 
   public function testPass()

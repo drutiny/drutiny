@@ -41,7 +41,7 @@ class EntityTest extends KernelTestCase {
 
   public function testTargetObjectUsage()
   {
-      $target = $this->container->get('target.factory')->create('@none');
+      $target = $this->container->get('target.factory')->create('none:none');
       $target->setUri('bar');
       $this->assertEquals($target->getProperty('uri'), 'bar');
   }
