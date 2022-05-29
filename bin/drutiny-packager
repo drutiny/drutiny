@@ -32,8 +32,8 @@ define('BUILD_DIRECTORY', getcwd() . '/.build');
 
         $package_yaml = $input->getOption('package-file');
         if (!file_exists($package_yaml)) {
-          $console->log('error', 'Drutiny package file not found: '.$package_yaml);
-          return 1;
+            $console->log('error', 'Drutiny package file not found: '.$package_yaml);
+            return 1;
         }
 
         $package = Yaml::parseFile($package_yaml);
@@ -42,8 +42,8 @@ define('BUILD_DIRECTORY', getcwd() . '/.build');
         $fs = new Filesystem();
 
         if ($fs->exists(BUILD_DIRECTORY)) {
-          $console->log('notice', 'Removing build directory: ' . BUILD_DIRECTORY);
-          $fs->remove(BUILD_DIRECTORY);
+            $console->log('notice', 'Removing build directory: ' . BUILD_DIRECTORY);
+            $fs->remove(BUILD_DIRECTORY);
         }
 
         $console->log('info', 'Creating build directory: ' . BUILD_DIRECTORY);
@@ -63,27 +63,28 @@ define('BUILD_DIRECTORY', getcwd() . '/.build');
           ->name('*.md');
 
         foreach ($docs as $doc) {
-          $console->log('info', 'Removing ' . $doc->getRealPath());
+            $console->log('info', 'Removing ' . $doc->getRealPath());
         }
 
         $fs->remove($docs);
 
         $phar_file = strtr('name-versionsuffix.phar', [
           'name' => $package['package'],
-          'version' => $version,
+          // Remove forward-slash references which will break writing the file.
+          'version' => str_replace('/', '_', $version),
           'suffix' => '-php'.phpversion(),
         ]);
 
         // Remove any old build.
         if ($fs->exists($phar_file)) {
-          $console->log('warning', $phar_file . ' already exists. Removing..');
-          $fs->remove($phar_file);
+            $console->log('warning', $phar_file . ' already exists. Removing..');
+            $fs->remove($phar_file);
         }
 
         $cwd = getcwd();
         chdir(BUILD_DIRECTORY);
 
-        file_put_contents('BUILD_DATETIME', serialize(new Datetime));
+        file_put_contents('BUILD_DATETIME', serialize(new Datetime()));
 
         $console->log('info', 'Copying stub...');
         copy(dirname(__DIR__)."/stub.php", "stub.php");
