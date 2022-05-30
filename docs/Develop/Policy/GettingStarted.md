@@ -1,4 +1,4 @@
-# Creating your own policies
+## Creating your own policies
 
 Policies are structured objects files that provide configuration and to
 power Drutiny's audit system. Polices are provided to Drutiny via Policy Sources.
@@ -6,7 +6,7 @@ power Drutiny's audit system. Polices are provided to Drutiny via Policy Sources
 By default, Drutiny comes with one Policy Source: the local filesystem (using YAML).
 Additional plugins may provide more policies from other sources.
 
-# Getting started with YAML policies
+## Getting started with YAML policies
 
 You can create your own policies locally by using a pre-defined YAML schema and
 storing the policy in a YAML file with a .policy.yml file extension anywhere
@@ -21,9 +21,7 @@ an existing policy as a template for a new policy or you can make local
 modifications to a downloaded policy to override its function as the policy
 source defines it.
 
-```
-drutiny policy:download Test:Pass
-```
+    drutiny policy:download Test:Pass
 
 ## Naming a policy
 
@@ -35,15 +33,15 @@ name: MyNewPolicy
 ```
 
 ## Updating policy registry
+
 Once the name has been changed, you'll need to run `policy:update` for Drutiny
 to rebuild the policy register and inherit the local filesystem changes. Drutiny
 should then find your new policy:
 
-```
-drutiny policy:update -s localfs
-```
+    drutiny policy:update -s localfs
 
 # Policy structure
+
 A policy has a number of properties that can be defined to inform Drutiny how
 to audit for the policy and what content to show based on the outcome.
 
@@ -52,6 +50,7 @@ field is missing or if a field's value is of the wrong format or value, a
 validation exception will be thrown and the drutiny command will error.
 
 ## title (required)
+
 The human readable name and title of a given policy. The title should accurately
 indicate what the audit is for in as few words as possible. An expanded context
 can be given in the **description** field.
@@ -61,6 +60,7 @@ title: Shield module is enabled
 ```
 
 ## name (required)
+
 The machine readable name of the policy. This is used to call the policy in
 `policy:audit` and to list in profiles. The naming convention is to use camel
 case and to delineate namespaces with colons.
@@ -70,6 +70,7 @@ name: Drupal:ShieldEnabled
 ```
 
 ## class (required)
+
 The audit class used to assess the policy. The entire namespace should be given
 including a leading forward slash. If this class does not exist, Drutiny will
 fail when attempting to use this policy.
@@ -79,6 +80,7 @@ class: \Drutiny\Audit\Drupal\ModuleEnabled
 ```
 
 ## type (default: audit)
+
 Policies can be of two types: audit (the default) or data.
 
 Audit types evaluate the target for a pass/fail result. Data types simply
@@ -97,13 +99,14 @@ policy type. This might be a preferred approach if the audit should return pass
 or fail in some scenarios.
 
 ## parameters
+
 Parameters allow a policy to define values for variables used by the Audit. They
 are also used in `policy:info` to inform on the parameters available to customize.
 A parameter consists of three key value pairs:
 
-- **default** (required): The actual value to pass through to the audit.
-- **type**: The data type of the parameter. Used to advise profile builders on how to use the parameter.
-- **description**: A description of what the parameter is used for. Used to advise profile builders.
+-   **default** (required): The actual value to pass through to the audit.
+-   **type**: The data type of the parameter. Used to advise profile builders on how to use the parameter.
+-   **description**: A description of what the parameter is used for. Used to advise profile builders.
 
 ```yaml
 parameters:
@@ -114,13 +117,14 @@ parameters:
 ```
 
 ## depends
+
 The depends directive allows policies to only apply if one or more conditions are
 meet such as an enabled module or the value of a target environmental variable (like OS).
 
 Dependencies can be evaluated in one of two languages:
 
-- [Symfony Expression Language](https://symfony.com/doc/3.4/components/expression_language.html)
-- [Twig](https://twig.symfony.com/) by Symfony
+-   [Symfony Expression Language](https://symfony.com/doc/3.4/components/expression_language.html)
+-   [Twig](https://twig.symfony.com/) by Symfony
 
 When no `syntax`is specified, `expression_language` is used for backwards
 compatibility. However, expression language should be considered deprecated.
@@ -139,14 +143,15 @@ Optionally, an `on_fail` property can be added to indicate the failure behaviour
 
 ## On fail
 
-Value |  Behaviour |
------ | ----------
-`omit`  | Omit policy from report
-`fail`  | Fail policy in report
-`error` | Report policy as error
-`report_only` | Report as not applicable
+| Value         | Behaviour                |
+| ------------- | ------------------------ |
+| `omit`        | Omit policy from report  |
+| `fail`        | Fail policy in report    |
+| `error`       | Report policy as error   |
+| `report_only` | Report as not applicable |
 
 ## description (required)
+
 A human readable description of the policy. The description should be informative
 enough for a human to read the description and be able to interpret the audit
 findings.
@@ -162,6 +167,7 @@ description: |
 ```
 
 ## success (required)
+
 The success message to provide if the audit returns successfully.
 
 This field is interpreted as [Markdown](https://daringfireball.net/projects/markdown/syntax)
@@ -174,6 +180,7 @@ success: The module {{module_name}} is enabled.
 ```
 
 ## failure (required)
+
 If the audit fails or is unable to complete due to an error, this message will
 
 This field is interpreted as [Markdown](https://daringfireball.net/projects/markdown/syntax)
@@ -186,6 +193,7 @@ failure: {{module_name}} is not enabled.
 ```
 
 ## tags
+
 The tags key is simply a mechanism to allow policies to be grouped together.
 For example "Drupal 9" or "Performance".
 
@@ -196,14 +204,15 @@ tags:
 ```
 
 ## severity
+
 Not all policies are of equal importance. Severity allows you to specify how
 critical a failure or warning is. Possible values in order of importance:
 
-* none (only option for `data` type policies)
-* low
-* medium (default)
-* high
-* critical
+-   none (only option for `data` type policies)
+-   low
+-   medium (default)
+-   high
+-   critical
 
 ```yaml
 severity: 'high'
@@ -259,24 +268,26 @@ chart:
 Charts use tabular data from the first sibling table in the DOM.
 
 ### Chart Properties
+
 `labels` and `series` use css selectors powered by jQuery to obtain the data to
 display in the chart.
 
-Property     | Description
------------- | -----------
-`type`       | The type of chart to render. Recommend `bar`, `pie` or `doughnut`.
-`labels`     | A css selector that returns an array of HTML elements whose text will become labels in a pie chart or x-axis in a bar graph.
-`hide-table` | A boolean to determine if the table used to read the tabular data should be hidden. Defaults to false.
-`title`      | The title of the graph
-`series`     | An array of css selectors that return the HTML elements whose text will become chart data.
-`height`     | The height of the graph area set as a CSS style on the `<canvas>` element.
-`width`      | The width of the graph area set as a CSS style on the `<canvas>` element.
-`x-axis`     | The label for the x-axis.
-`y-axis`     | The label for the y-axis.
-`legend`     | The position of the legend. Options are: top, bottom, left, right or none (to remove legend).
-`colors`     | An array of colors expressed using RGB syntax. E.g. `rgba(52, 73, 94,1.0)`.
+| Property     | Description                                                                                                                  |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `type`       | The type of chart to render. Recommend `bar`, `pie` or `doughnut`.                                                           |
+| `labels`     | A css selector that returns an array of HTML elements whose text will become labels in a pie chart or x-axis in a bar graph. |
+| `hide-table` | A boolean to determine if the table used to read the tabular data should be hidden. Defaults to false.                       |
+| `title`      | The title of the graph                                                                                                       |
+| `series`     | An array of css selectors that return the HTML elements whose text will become chart data.                                   |
+| `height`     | The height of the graph area set as a CSS style on the `<canvas>` element.                                                   |
+| `width`      | The width of the graph area set as a CSS style on the `<canvas>` element.                                                    |
+| `x-axis`     | The label for the x-axis.                                                                                                    |
+| `y-axis`     | The label for the y-axis.                                                                                                    |
+| `legend`     | The position of the legend. Options are: top, bottom, left, right or none (to remove legend).                                |
+| `colors`     | An array of colors expressed using RGB syntax. E.g. `rgba(52, 73, 94,1.0)`.                                                  |
 
 ### Rendering a Chart
+
 Rendered charts are available as a special `_chart` token to be used in success,
 failure, warning or remediation messages provided by the policy.
 
@@ -287,28 +298,30 @@ success: |
 ```
 
 # Using Tokens in message renders.
+
 Tokens are variables you can use in the render of policy messaging.
 This includes success, failure, warning and description fields defined in a policy.
 
 ## Available Tokens
+
 Use the `policy:info` command to identify which tokens are available in a policy
 for use in the render.
 
 ```bash
 $ drutiny policy:info fs:largeFiles
- ```
+```
 
  You can see in the above example output, that `fs:largeFiles` contains three
  tokens: `_max_size`, `issues` and `plural`. These tokens are available to use as
  template variables when writting messaging for a policy:
 
- ```yaml
- failure: |
-   Large public file{{plural}} found over {{max_size}}
-   {% for issue in issues %}
-      - {{issue}}
-   {% endfor %}
- ```
+```yaml
+failure: |
+  Large public file{{plural}} found over {{max_size}}
+  {% for issue in issues %}
+     - {{issue}}
+  {% endfor %}
+```
 
- These variables are rendered using Twig](https://twig.symfony.com/) templating.
+ These variables are rendered using [Twig](https://twig.symfony.com/) templating.
  The messages are also parsed by a markdown parser when rendering out to HTML.

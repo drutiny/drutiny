@@ -58,5 +58,9 @@
         "squizlabs/php_codesniffer": "3.*",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpspec/prophecy": "^1.15"
+    },
+    "scripts": {
+      "docs": "docker run --rm -it -p 8000:8000 -v ${PWD}:/docs squidfunk/mkdocs-material",
+      "docs:build": "docker run --rm -it -v ${PWD}:/docs squidfunk/mkdocs-material build"
     }
 }

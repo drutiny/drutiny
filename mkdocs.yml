@@ -1,0 +1,36 @@
+site_name: Drutiny
+repo_url: 'https://github.com/drutiny/drutiny'
+site_description: 'This is a generic Drupal site auditing and optional remediation tool.'
+
+nav:
+  - Home: README.md
+  - Usage:
+    - Setup: Usage/Setup.md
+    - Using a target: Usage/Target.md
+    - Using a policy: Usage/Policy.md
+    - Using a profile: Usage/Profile.md
+  - Develop:
+      - Policy Reference: Develop/Policy/GettingStarted.md
+      - Profile Reference: Develop/Profile/GettingStarted.md
+
+theme:
+  name: material
+  palette:
+    primary: blue grey
+    accent: blue
+  logo: assets/drutiny-logo.svg
+  favicon: assets/favicon.ico
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - content.code.annotate
+    - content.tooltips
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
