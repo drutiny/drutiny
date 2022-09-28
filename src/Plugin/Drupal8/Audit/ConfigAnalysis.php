@@ -29,11 +29,13 @@ class ConfigAnalysis extends AbstractAnalysis
     {
         $collection = $this->getParameter('collection');
 
-        $config = $this->target->getService('drush')->configGet($collection, [
-        'format' => 'json',
-        'include-overridden' => true,
-        ])->run(function ($output) {
-          return json_decode($output);
+        $drush = $this->getTarget()->getService('drush');
+        $command = $drush->configGet($collection, [
+          'format' => 'json',
+          'include-overridden' => true,
+        ]);
+        $config = $command->run(function ($output) {
+          return json_decode($output, true);
         });
 
         $this->set('config', $config);
