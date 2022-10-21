@@ -17,23 +17,13 @@ class HttpAnalysis extends AbstractAnalysis
 
     public function configure()
     {
-        $this->addParameter(
-            'expression',
-            static::PARAMETER_OPTIONAL,
-            'The expression language to evaludate. See https://symfony.com/doc/current/components/expression_language/syntax.html',
-            true
-        );
-        $this->addParameter(
-            'not_applicable',
-            static::PARAMETER_OPTIONAL,
-            'The expression language to evaludate if the analysis is not applicable. See https://symfony.com/doc/current/components/expression_language/syntax.html',
-            false
-        );
+        parent::configure();
         $this->addParameter(
             'send_warming_request',
             static::PARAMETER_OPTIONAL,
             'Send a warming request and store headers into cold_headers parameter.'
         );
+
         $this->HttpTrait_configure();
     }
 
