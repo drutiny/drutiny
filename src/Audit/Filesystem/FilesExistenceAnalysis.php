@@ -95,7 +95,7 @@ class FilesExistenceAnalysis extends AbstractAnalysis {
       $directories = $processed_directories;
     }
 
-    $command = ['find', implode(' ', $directories)];
+    $command = ['find -L', implode(' ', $directories)];
 
     // Add maxdepth to command if applicable.
     $maxdepth = $this->getParameter('maxdepth', NULL);
