@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         {% for result in assessment.results|sort((a, b) => a.severityCode <=> b.severityCode) %}
-        {% if result.hasWarning or result.hasError or not result.isSuccessful and not result.notApplicable %}
+        {% if result.hasWarning or result.hasError or not result.isSuccessful and not result.notApplicable and not result.isIrrelevant %}
         <tr class="{% if result.isNotice %}{% elseif result.isSuccessful %}has-success{% elseif result.hasWarning %}has-warning{% else %}has-error{% endif %}">
           <th><a href="#{{ result.policy.name }}">{{ result.policy.title }}</a></th>
           <td>{{ result.severity }}</td>
