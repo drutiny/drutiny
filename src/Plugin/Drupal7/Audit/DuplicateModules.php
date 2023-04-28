@@ -38,7 +38,7 @@ CMD;
       ];
     }
 
-    $sandbox->setParameter('modules', $modules);
+    $this->set('modules', $modules);
     return count($modules) === 0;
   }
 

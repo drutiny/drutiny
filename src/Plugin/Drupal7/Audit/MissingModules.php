@@ -21,7 +21,7 @@ class MissingModules extends Audit {
    * @inheritdoc
    */
   public function audit(Sandbox $sandbox) {
-    $rows = $sandbox->drush()->evaluate(function () {
+    $rows = $this->target->getService('drush')->runtime(function () {
       $rows = [];
 
       // Grab all the modules in the system table.
@@ -49,11 +49,9 @@ class MissingModules extends Audit {
       return $rows;
     });
 
-    $sandbox->setParameter('messages', array_values(array_map(function ($row) {
-      return "Cannot file {$row['type']} `{$row['name']}`. Expected to be in {$row['filename']}.";
+    $this->set('messages', array_values(array_map(function ($row) {
+      return "Cannot find {$row['type']} `{$row['name']}`. Expected to be in {$row['filename']}.";
     }, $rows)));
-
-    print_r($sandbox->getParameter('messages'));
 
     return empty($rows);
   }

@@ -4,6 +4,7 @@ namespace Drutiny\Plugin\Drupal7\Audit;
 
 use Drutiny\Audit\AbstractAnalysis;
 use Drutiny\Sandbox\Sandbox;
+use Symfony\Component\Process\Process;
 
 /**
  * Check a configuration is set correctly.
@@ -52,8 +53,15 @@ class VariableAnalysis extends AbstractAnalysis
 
         $vars = $this->target->getService('drush')->variableGet($key, [
             'format' => 'json',
-          ])->run(function ($output) {
-              return json_decode($output, true);
+          ])->run(function (Process $process) {
+            $output = $process->getOutput();
+            if ($process->isSuccessful()) {
+                return json_decode($output, true);
+            }
+            else {
+                return [];
+            }
+            
           });
 
         $this->set($key, $vars[$key] ?? null);
