@@ -52,7 +52,7 @@ class Helper {
     foreach (get_object_vars($chart) as $name => $key) {
       $name = strtolower(preg_replace('/[A-Z]/', '-$0', $name));
       $value = is_array($key) ? implode(',', $key) : $key;
-      $element .= 'data-chart-'.$name . '='.json_encode($value).' ' ;
+      $element .= 'data-chart-'.$name . '='.json_encode($value, JSON_UNESCAPED_UNICODE).' ' ;
     }
     return $element . "><canvas class=\"placeholder\"></canvas>\n\n$data_table\n</div>";
   }
