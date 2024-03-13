@@ -1,0 +1,2160 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="This is a generic Drupal site auditing and optional remediation tool.">
+      
+      
+      
+      
+        <link rel="prev" href="../../../Usage/Profile/">
+      
+      
+        <link rel="next" href="../DynamicParameters/">
+      
+      
+      <link rel="icon" href="../../../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+    
+    
+      
+        <title>Getting started - Drutiny</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7e359304.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue-grey" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#creating-your-own-policies" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Drutiny" class="md-header__button md-logo" aria-label="Drutiny" data-md-component="logo">
+      
+  <img src="../../../assets/drutiny-logo.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Drutiny
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Getting started
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/drutiny/drutiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../Usage/Setup/" class="md-tabs__link">
+          
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  Develop
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Drutiny" class="md-nav__button md-logo" aria-label="Drutiny" data-md-component="logo">
+      
+  <img src="../../../assets/drutiny-logo.svg" alt="logo">
+
+    </a>
+    Drutiny
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/drutiny/drutiny" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Usage/Setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Usage/Target/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using a target
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Usage/Policy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using a policy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Usage/Profile/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Using a profile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Develop
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Develop
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_1" id="__nav_3_1_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Policy reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Policy reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Getting started
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Getting started
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-your-own-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating your own policies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-yaml-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting started with YAML policies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#downloading-an-existing-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Downloading an existing policy.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-a-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Naming a policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating-policy-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updating policy registry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#title-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      title (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      name (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      class (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-default-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      type (default: audit)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersvariables" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.variables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="parameters.variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersfailif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.failIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameterswarningif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.warningIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersomitif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.omitIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersexpression" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.expression
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="parameters.expression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersnot_applicable" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.not_applicable
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersseveritycriticalif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.severityCriticalIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersseverityhighif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.severityHighIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersseveritynormalif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.severityNormalIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build_parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      build_parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depends" class="md-nav__link">
+    <span class="md-ellipsis">
+      depends
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-fail" class="md-nav__link">
+    <span class="md-ellipsis">
+      On fail
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      description (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#success-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      success (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      failure (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#severity" class="md-nav__link">
+    <span class="md-ellipsis">
+      severity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit_build_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      audit_build_info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      chart
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="chart">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chart Properties
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rendering-a-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rendering a Chart
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-tokens-in-message-renders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Tokens in message renders.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Tokens in message renders.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available Tokens
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../DynamicParameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dynamic parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Pipelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pipelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TwigExtensions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Twig extensions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Profile/GettingStarted/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Profile reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Audit reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Audit reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Audit/GettingStarted/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Audit/Parameters/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Audit/Dependencies/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dependencies
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Audit/Version/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Version
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creating-your-own-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creating your own policies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started-with-yaml-policies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Getting started with YAML policies
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#downloading-an-existing-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Downloading an existing policy.
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-a-policy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Naming a policy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#updating-policy-registry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Updating policy registry
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#policy-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Policy structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Policy structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#title-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      title (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      name (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#class-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      class (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#type-default-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      type (default: audit)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersvariables" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.variables
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="parameters.variables">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersfailif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.failIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parameterswarningif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.warningIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersomitif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.omitIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersexpression" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.expression
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="parameters.expression">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#return-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Return types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersnot_applicable" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.not_applicable
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersseveritycriticalif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.severityCriticalIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersseverityhighif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.severityHighIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parametersseveritynormalif" class="md-nav__link">
+    <span class="md-ellipsis">
+      parameters.severityNormalIf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build_parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      build_parameters
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#depends" class="md-nav__link">
+    <span class="md-ellipsis">
+      depends
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-fail" class="md-nav__link">
+    <span class="md-ellipsis">
+      On fail
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#description-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      description (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#success-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      success (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#failure-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      failure (required)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tags" class="md-nav__link">
+    <span class="md-ellipsis">
+      tags
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#severity" class="md-nav__link">
+    <span class="md-ellipsis">
+      severity
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit_build_info" class="md-nav__link">
+    <span class="md-ellipsis">
+      audit_build_info
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      chart
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="chart">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#chart-properties" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chart Properties
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rendering-a-chart" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rendering a Chart
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-tokens-in-message-renders" class="md-nav__link">
+    <span class="md-ellipsis">
+      Using Tokens in message renders.
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Using Tokens in message renders.">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#available-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Available Tokens
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h2 id="creating-your-own-policies">Creating your own policies</h2>
+<p>Policies are structured objects files that provide configuration and to
+power Drutiny's audit system. Polices are provided to Drutiny via Policy Sources.</p>
+<p>By default, Drutiny comes with one Policy Source: the local filesystem (using YAML).
+Additional plugins may provide more policies from other sources.</p>
+<h2 id="getting-started-with-yaml-policies">Getting started with YAML policies</h2>
+<p>You can create your own policies locally by using a pre-defined YAML schema and
+storing the policy in a YAML file with a .policy.yml file extension anywhere
+under the directory structure you call Drutiny within.</p>
+<h2 id="downloading-an-existing-policy">Downloading an existing policy.</h2>
+<p>A great way to start is to download an existing policy that might be similar to
+what you're interested in auditing. You can use the <code>policy:download</code> command to
+download a policy into the local filesystem. This method can be used to download
+an existing policy as a template for a new policy or you can make local
+modifications to a downloaded policy to override its function as the policy
+source defines it.</p>
+<div class="highlight"><pre><span></span><code>drutiny policy:download Test:Pass
+</code></pre></div>
+<h2 id="naming-a-policy">Naming a policy</h2>
+<p>If you want to create a new policy, be sure to change the <code>name</code> attribute in
+the .policy.yml file so Drutiny registers it as a new policy.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MyNewPolicy</span>
+</code></pre></div>
+<h2 id="updating-policy-registry">Updating policy registry</h2>
+<p>Once the name has been changed, you'll need to run <code>policy:update</code> for Drutiny
+to rebuild the policy register and inherit the local filesystem changes. Drutiny
+should then find your new policy:</p>
+<div class="highlight"><pre><span></span><code>drutiny policy:update -s localfs
+</code></pre></div>
+<h1 id="policy-structure">Policy structure</h1>
+<p>A policy has a number of properties that can be defined to inform Drutiny how
+to audit for the policy and what content to show based on the outcome.</p>
+<p>Policies have mandatory (required) fields and optional fields. If a mandatory
+field is missing or if a field's value is of the wrong format or value, a
+validation exception will be thrown and the drutiny command will error.</p>
+<h2 id="title-required">title (required)</h2>
+<p>The human readable name and title of a given policy. The title should accurately
+indicate what the audit is for in as few words as possible. An expanded context
+can be given in the <strong>description</strong> field.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Shield module is enabled</span>
+</code></pre></div>
+<h2 id="name-required">name (required)</h2>
+<p>The machine readable name of the policy. This is used to call the policy in
+<code>policy:audit</code> and to list in profiles. The naming convention is to use camel
+case and to delineate namespaces with colons.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Drupal:ShieldEnabled</span>
+</code></pre></div>
+<h2 id="class-required">class (required)</h2>
+<p>The audit class used to assess the policy. The entire namespace should be given
+including a leading forward slash. If this class does not exist, Drutiny will
+fail when attempting to use this policy.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">class</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">\Drutiny\Audit\Drupal\ModuleEnabled</span>
+</code></pre></div>
+<h2 id="type-default-audit">type (default: audit)</h2>
+<p>Policies can be of two types: audit (the default) or data.</p>
+<p>Audit types evaluate the target for a pass/fail result. Data types simply
+collect and display the data.</p>
+<p>This property helps define how to best display the policy in an HTML report.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+</code></pre></div>
+<p>If the type is set to <code>data</code>then the audit cannot return a pass or fail outcome.
+However, an <code>audit</code> type policy will allow the audit to return
+<code>Drutiny\Audit\AuditInterface::NOTICE</code> and effectively function like a data
+policy type. This might be a preferred approach if the audit should return pass
+or fail in some scenarios.</p>
+<h2 id="parameters">parameters</h2>
+<p>Parameters allow a policy to define values for variables used by the Audit. An audit
+typically defines parameters as "arguments" and the policy sets these by declaring
+them as parameters under this declaration.</p>
+<p>The available parameters vary by audit which is depended by the <code>class</code> declaration.
+Use the <code>audit:info</code> command to learn more about the available arguments to configure
+the audit class with.</p>
+<p>Parameters are statically set and are typically used for configuring the audit
+specifically for how the policy wished to evaluate the target. If the parameters
+need to be dynamically set, then use <code>build_parameters</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">dblog</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">status</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Enabled</span>
+</code></pre></div>
+<h2 id="parametersvariables">parameters.variables</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>variables</code> key under
+the <code>parameters</code> declaration that will be evaluated after the audit to help process audit data into
+formats that are easier to render policy messaging. <code>variables</code> are sequentially rendered using Twig
+syntax and preceeding variables can be used in proceeding variable renders.</p>
+<p>⚠️ Symfony ExpressionLanguage is no longer supported.</p>
+<h3 id="example">Example</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">  </span><span class="nt">variables</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">      </span><span class="nt">core_needs_update</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;not</span><span class="nv"> </span><span class="s">((core.releases|first).version</span><span class="nv"> </span><span class="s">=</span><span class="nv"> </span><span class="s">core.version)&#39;</span>
+</code></pre></div>
+<h2 id="parametersfailif">parameters.failIf</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>failIf</code> key under
+the <code>parameters</code> declaration that when evaluated will fail the audit if the expression returns true. 
+<code>failIf</code> uses Twig syntax.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">  </span><span class="c1"># Fail the policy if any alerts are detected.</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">  </span><span class="nt">failIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alerts|length &gt; 0</span>
+</code></pre></div>
+<p>💡 Note: The <code>failIf</code> directive and the <code>expression</code> directive are mutually exclusive with <code>failIf</code> taking
+precedence. If the <code>failIf</code> parameter is declared in the policy, then the <code>expression</code> parameter will not
+be acted on.</p>
+<h2 id="parameterswarningif">parameters.warningIf</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>warningIf</code> key under
+the <code>parameters</code> declaration that when evaluated will add a warning to the audit outcome if the expression returns true. </p>
+<p>When a warning is added to an outcome, the <code>warning</code> messaging from the policy is added to policy response messaging.</p>
+<p>⚠️ This only applies to audit outcomes that fail or pass. Error and not applicable outcome states do not support warnings.</p>
+<p><code>warningIf</code> uses Twig syntax.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">  </span><span class="c1"># Raise a warning if results were successfully obtained, but errors were too.</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">  </span><span class="nt">warningIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">response.errors|length &gt; 0</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">  </span><span class="nt">failIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">response.results|length == 0</span>
+</code></pre></div>
+<p>In the example above, irrespective of whether the policy passes or fails a warning can be raised if errors were found
+while obtaining the results.</p>
+<h2 id="parametersomitif">parameters.omitIf</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide an <code>omitIf</code> key under
+the <code>parameters</code> declaration that when evaluated to true, will return the policy prematurely with an "Irrelevant"
+state which will omit the policy result from a report.</p>
+<p>⚠️ omitIf is evaluated before variables in parameters.variables are evaluated so you cannot use those variables in your
+omitIf evaluation.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span><span class="c1"># Omit if the &quot;response&quot; variable given by the audit class did not get defined.</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span><span class="c1"># E.g. a condition was not met to produce this variable in the audit.</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span><span class="nt">omitIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">response is undefined</span>
+</code></pre></div>
+<h2 id="parametersexpression">parameters.expression</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>expression</code> key under
+the <code>parameters</code> declaration that when evaluated should return the audit outcome.</p>
+<p>This can be used instead of <code>failIf</code> when determining the audit outcome is more complicated
+than satisfying a single condition as a failure.</p>
+<p>The expression should return a predefined variable that represents the outcome.</p>
+<h3 id="return-types">Return types</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SUCCESS</code></td>
+<td>true</td>
+<td>The policy successfully passed the audit.</td>
+</tr>
+<tr>
+<td><code>PASS</code></td>
+<td>1</td>
+<td>The same outcome as <code>SUCCESS</code></td>
+</tr>
+<tr>
+<td><code>FAIL</code></td>
+<td>false</td>
+<td>The same outcome as <code>FAILURE</code></td>
+</tr>
+<tr>
+<td><code>FAILURE</code></td>
+<td>0</td>
+<td>The policy failed to pass the audit.</td>
+</tr>
+<tr>
+<td><code>NOTICE</code></td>
+<td>2</td>
+<td>An audit returned non-assertive information.</td>
+</tr>
+<tr>
+<td><code>WARNING</code></td>
+<td>4</td>
+<td>An audit returned success with a warning.</td>
+</tr>
+<tr>
+<td><code>WARNING_FAIL</code></td>
+<td>8</td>
+<td>An audit returned failure with a warning.</td>
+</tr>
+<tr>
+<td><code>ERROR</code></td>
+<td>16</td>
+<td>An audit did not complete and returned an error.</td>
+</tr>
+<tr>
+<td><code>NOT_APPLICABLE</code></td>
+<td>-1</td>
+<td>An audit was not applicable to the target.</td>
+</tr>
+<tr>
+<td><code>IRRELEVANT</code></td>
+<td>-2</td>
+<td>An audit that is irrelevant to the assessment and should be omitted.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example_1">Example</h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">expression</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="no">response.results is defined </span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="no">? ( response.results|length &gt; 0 ? SUCCESS : FAILURE ) </span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="no">: IRRELEVANT</span>
+</code></pre></div>
+<p>In the above example, we use shorthand twig syntax (<code>condition ? thisIfTrue : elseThis</code>) twice to determine 
+one of three outcomes (<code>SUCCESS</code>, <code>FAILURE</code> or <code>IRRELEVANT</code>).</p>
+<p>💡 Note: You can use the <code>parameters.not_applicable</code> expression to predetermine if results make the policy not applicable.
+This maybe preferable in combination with the <code>failIf</code> expression.</p>
+<h2 id="parametersnot_applicable">parameters.not_applicable</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>not_applicable</code> key under
+the <code>parameters</code> declaration that when evaluated as true should return the audit outcome as not applicable.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">not_applicable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">error.message is defined and &quot;incompatible&quot; in error.message</span>
+</code></pre></div>
+<p>In the example above, if a output token called <code>error</code> contains a property called <code>message</code> and
+that message contains the word "incompatible", then the policy outcome will become not applicable.</p>
+<p>⚠️ This directive is evaluated before <code>expression</code>, <code>failIf</code> and <code>warningIf</code> expressions. If <code>not_applicable</code>
+is satisfied (evaluates to <code>true</code>), this these other directives will not be evaluated.</p>
+<h2 id="parametersseveritycriticalif">parameters.severityCriticalIf</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>severityCriticalIf</code> parameter 
+that when evaluated as true will increase the policy severity to critical.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;high&#39;</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">  </span><span class="nt">failIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 5</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">  </span><span class="nt">severityCriticalIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 30</span>
+</code></pre></div>
+<p>In the example above, the policy has a severity level of "high" and will fail when the error count goes above 5.
+When the error count goes above 30, then the severity will go from "high" to "critical".</p>
+<p>💡 Note: <code>severityCriticalIf</code> can only raise the severity and not decrease it. Policies should be written with the
+lowest severity statically defined and then use <code>severityCriticalIf</code> to conditionally raise the severity to critical.</p>
+<h2 id="parametersseverityhighif">parameters.severityHighIf</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>severityHighIf</code> parameter 
+that when evaluated as true will increase the policy severity to high.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;normal&#39;</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">  </span><span class="nt">failIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 5</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">  </span><span class="nt">severityHighIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 10</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">  </span><span class="nt">severityCriticalIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 30</span>
+</code></pre></div>
+<p>In the example above, the policy has a severity level of "normal" and will fail when the error count goes above 5.
+When the error count goes above 10, then the severity will go from "normal" to "high". When the error count goes above
+30, then the severity will go from "high" to "critical".</p>
+<p>💡 Note: <code>severityHighIf</code> can only raise the severity and not decrease it. Policies should be written with the
+lowest severity statically defined and then use <code>severityHighIf</code> to conditionally raise the severity to high.</p>
+<h2 id="parametersseveritynormalif">parameters.severityNormalIf</h2>
+<p>For audit classes that extend <code>Drutiny\Audit\AbstractAnalysis</code>, you can provide a <code>severityNormalIf</code> parameter 
+that when evaluated as true will increase the policy severity to normal.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;low&#39;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">parameters</span><span class="p">:</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">failIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 1</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">severityNormalIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 5</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="nt">severityHighIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 10</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">  </span><span class="nt">severityCriticalIf</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">errors|length &gt; 30</span>
+</code></pre></div>
+<p>In the example above, the policy has a severity level of "low" and will fail when the error count goes above 1.
+When the error count goes above 5, then the severity will go from "low" to "normal". When the error count goes
+above 10, then the severity will go from "normal" to "high". When the error count goes above 30, then the 
+severity will go from "high" to "critical".</p>
+<p>💡 Note: <code>severityNormalIf</code> can only raise the severity and not decrease it. Policies should be written with the
+lowest severity statically defined and then use <code>severityNormalIf</code> to conditionally raise the severity to normal.</p>
+<h2 id="build_parameters">build_parameters</h2>
+<p>If you need to dynamically produce your parameters inside the policy you can do so with <code>build_parameters</code>.
+This is often required when a policy must provide arguments to its audit class but needs
+an opportunity to do so before policy <code>variables</code> are executed (exclusive to <code>Drutiny\Audit\AbstractAnalysis</code>).
+<code>build_parameters</code> consists of key value pairs where the values are executed through the twig engine
+and the result is set as a parameter for the provided key.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="nt">build_parameters</span><span class="p">:</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">domain</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;parse_url(target.url,</span><span class="nv"> </span><span class="s">1)&#39;</span>
+</code></pre></div>
+<p>In the example above, the <code>domain</code> is dynamically provided based on the url of the target object. Since that data comes
+from the target, it cannot be statically defined in the <code>parameters</code> section of the policy. So we use the <code>build_parameters</code>
+feature to set parameters based on their evaluated value rather than their static value.</p>
+<h2 id="depends">depends</h2>
+<p>The depends directive allows policies to only apply if one or more conditions are
+meet such as an enabled module or the value of a target environmental variable (like OS).</p>
+<p>Dependencies can be evaluated in <a href="https://twig.symfony.com/">Twig</a> syntax.</p>
+<p>⚠️ ExpressionLanguage is no longer supported.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="nt">depends</span><span class="p">:</span>
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">expression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Policy.succeeds(&#39;fs:largeFiles&#39;)&#39;</span>
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="nt">on_fail</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;error&#39;</span>
+<a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">expression</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Drupal.moduleIsEnabled(&#39;syslog&#39;) &amp;&amp; Drupal.moduleVersionSatisfies(&#39;purge&#39;, &#39;^4.0&#39;)</span>
+</code></pre></div>
+<p>Each depends item must have an associated <code>expression</code> key with the expression to evaluate.
+Optionally, an <code>on_fail</code> property can be added to indicate the failure behaviour:</p>
+<h2 id="on-fail">On fail</h2>
+<table>
+<thead>
+<tr>
+<th>Value</th>
+<th>Behaviour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>omit</code></td>
+<td>Omit policy from report</td>
+</tr>
+<tr>
+<td><code>fail</code></td>
+<td>Fail policy in report</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>Report policy as error</td>
+</tr>
+<tr>
+<td><code>report_only</code></td>
+<td>Report as not applicable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="description-required">description (required)</h2>
+<p>A human readable description of the policy. The description should be informative
+enough for a human to read the description and be able to interpret the audit
+findings.</p>
+<p>This field is interpreted as <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
+You can use <a href="https://twig.symfony.com/">Twig</a> templating to render dynamic content.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="w">  </span><span class="no">Using the pipe (|) symbol in yaml,</span>
+<a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="w">  </span><span class="no">I&#39;m able to provide my description</span>
+<a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="w">  </span><span class="no">across multiple lines.</span>
+</code></pre></div>
+<h2 id="success-required">success (required)</h2>
+<p>The success message to provide if the audit returns successfully.</p>
+<p>This field is interpreted as <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
+You can use <a href="https://twig.symfony.com/">Twig</a> templating to render dynamic content.</p>
+<p>Available variables are those passed in as parameters or set as tokens by the audit class.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="nt">success</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The module {{module_name}} is enabled.</span>
+</code></pre></div>
+<h2 id="failure-required">failure (required)</h2>
+<p>If the audit fails or is unable to complete due to an error, this message will</p>
+<p>This field is interpreted as <a href="https://daringfireball.net/projects/markdown/syntax">Markdown</a>
+You can use <a href="https://twig.symfony.com/">Twig</a> templating to render dynamic content.</p>
+<p>Available variables are those passed in as parameters or set as tokens by the audit class.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="nt">failure</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="nv">module_name</span><span class="p p-Indicator">}}</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">is not enabled.</span>
+</code></pre></div>
+<h2 id="tags">tags</h2>
+<p>The tags key is simply a mechanism to allow policies to be grouped together.
+For example "Drupal 9" or "Performance".</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="nt">tags</span><span class="p">:</span>
+<a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Drupal 9</span>
+<a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Performance</span>
+</code></pre></div>
+<h2 id="severity">severity</h2>
+<p>Not all policies are of equal importance. Severity allows you to specify how
+critical a failure or warning is. Possible values in order of importance:</p>
+<ul>
+<li>none (only option for <code>data</code> type policies)</li>
+<li>low</li>
+<li>medium (default)</li>
+<li>high</li>
+<li>critical</li>
+</ul>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;high&#39;</span>
+</code></pre></div>
+<h2 id="audit_build_info">audit_build_info</h2>
+<p>audit_build_info is metadata attached to a policy indicating the audit classes
+the policy was built with and their versions. This is used to determine if the 
+policy can be run within the current runtime. This is useful if the runtime where
+you're running the policy is different the runtime you create the policy in or
+if your version of drutiny changes overtime.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="nt">audit_build_info</span><span class="p">:</span>
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;Drutiny\Audit\AbstractAnalysis:1.0&#39;</span>
+</code></pre></div>
+<p>The above example shows that the policy was built with the audit class <code>Drutiny\Audit\AbstractAnalysis</code>
+when it was at version 1.0. Future versions of this class will be able to evaluate
+this policy by its version to determine if it can still run the policy.</p>
+<p>For more information see <a href="../../Audit/Version/">Audit Versions</a>.</p>
+<h2 id="chart">chart</h2>
+<p>Charts in Drutiny are an HTML format feature that allows rendered tabular data
+in a policy to be visualized in a chart inside of the HTML generated report.</p>
+<p>Under the hood, Drutiny uses <a href="https://www.chartjs.org/">chart.js</a> to render charts.</p>
+<p>A chart is defined inside of a <a href="policy.md">Policy</a> as metadata and rendered
+inside of either the success, failure, warning or remediation messages also
+provided by the policy.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nt">chart</span><span class="p">:</span>
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="w">  </span><span class="nt">requests</span><span class="p">:</span>
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="w">    </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">doughnut</span>
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tr td:first-child</span>
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="nt">hide-table</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+<a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="w">    </span><span class="nt">title</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Request Distribution by Domain</span>
+<a id="__codelineno-23-7" name="__codelineno-23-7" href="#__codelineno-23-7"></a><span class="w">    </span><span class="nt">height</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span>
+<a id="__codelineno-23-8" name="__codelineno-23-8" href="#__codelineno-23-8"></a><span class="w">    </span><span class="nt">width</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">400</span>
+<a id="__codelineno-23-9" name="__codelineno-23-9" href="#__codelineno-23-9"></a><span class="w">    </span><span class="nt">legend</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">left</span>
+<a id="__codelineno-23-10" name="__codelineno-23-10" href="#__codelineno-23-10"></a><span class="w">    </span><span class="nt">colors</span><span class="p">:</span>
+<a id="__codelineno-23-11" name="__codelineno-23-11" href="#__codelineno-23-11"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rgba(46, 204, 113,1.0)</span>
+<a id="__codelineno-23-12" name="__codelineno-23-12" href="#__codelineno-23-12"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rgba(192, 57, 43,1.0)</span>
+<a id="__codelineno-23-13" name="__codelineno-23-13" href="#__codelineno-23-13"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rgba(230, 126, 34,1.0)</span>
+<a id="__codelineno-23-14" name="__codelineno-23-14" href="#__codelineno-23-14"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rgba(241, 196, 15,1.0)</span>
+<a id="__codelineno-23-15" name="__codelineno-23-15" href="#__codelineno-23-15"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rgba(52, 73, 94,1.0)</span>
+<a id="__codelineno-23-16" name="__codelineno-23-16" href="#__codelineno-23-16"></a><span class="w">    </span><span class="nt">series</span><span class="p">:</span>
+<a id="__codelineno-23-17" name="__codelineno-23-17" href="#__codelineno-23-17"></a><span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">tr td:nth-child(4)</span>
+<a id="__codelineno-23-18" name="__codelineno-23-18" href="#__codelineno-23-18"></a><span class="nt">success</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-23-19" name="__codelineno-23-19" href="#__codelineno-23-19"></a><span class="w">  </span><span class="no">Here is a doughnut chart:</span>
+<a id="__codelineno-23-20" name="__codelineno-23-20" href="#__codelineno-23-20"></a><span class="w">  </span><span class="no">{{_chart.requests|chart}}</span>
+</code></pre></div>
+<h3 id="configuration">Configuration</h3>
+<p>Any given policy may have a <code>chart</code> property defined in its <code>.policy.yml</code> file.
+The <code>chart</code> property contains a arbitrarily keyed set of chart definitions.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nt">chart</span><span class="p">:</span>
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a><span class="w">  </span><span class="nt">my_chart_1</span><span class="p">:</span>
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a><span class="w">    </span><span class="c1"># ....</span>
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="w">  </span><span class="nt">my_chart_2</span><span class="p">:</span>
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a><span class="w">    </span><span class="c1"># ....</span>
+</code></pre></div>
+<p>Charts use tabular data from the first sibling table in the DOM.</p>
+<h3 id="chart-properties">Chart Properties</h3>
+<p><code>labels</code> and <code>series</code> use css selectors powered by jQuery to obtain the data to
+display in the chart.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>The type of chart to render. Recommend <code>bar</code>, <code>pie</code> or <code>doughnut</code>.</td>
+</tr>
+<tr>
+<td><code>labels</code></td>
+<td>A css selector that returns an array of HTML elements whose text will become labels in a pie chart or x-axis in a bar graph.</td>
+</tr>
+<tr>
+<td><code>hide-table</code></td>
+<td>A boolean to determine if the table used to read the tabular data should be hidden. Defaults to false.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>The title of the graph</td>
+</tr>
+<tr>
+<td><code>series</code></td>
+<td>An array of css selectors that return the HTML elements whose text will become chart data.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>The height of the graph area set as a CSS style on the <code>&lt;canvas&gt;</code> element.</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td>The width of the graph area set as a CSS style on the <code>&lt;canvas&gt;</code> element.</td>
+</tr>
+<tr>
+<td><code>x-axis</code></td>
+<td>The label for the x-axis.</td>
+</tr>
+<tr>
+<td><code>y-axis</code></td>
+<td>The label for the y-axis.</td>
+</tr>
+<tr>
+<td><code>legend</code></td>
+<td>The position of the legend. Options are: top, bottom, left, right or none (to remove legend).</td>
+</tr>
+<tr>
+<td><code>colors</code></td>
+<td>An array of colors expressed using RGB syntax. E.g. <code>rgba(52, 73, 94,1.0)</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rendering-a-chart">Rendering a Chart</h3>
+<p>Rendered charts are available as a special <code>_chart</code> token to be used in success,
+failure, warning or remediation messages provided by the policy.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="nt">success</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">  </span><span class="no">Here is the chart:</span>
+<a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">  </span><span class="no">{{_chart.my_chart_1|chart}}</span>
+</code></pre></div>
+<h1 id="using-tokens-in-message-renders">Using Tokens in message renders.</h1>
+<p>Tokens are variables you can use in the render of policy messaging.
+This includes success, failure, warning and description fields defined in a policy.</p>
+<h2 id="available-tokens">Available Tokens</h2>
+<p>Use the <code>policy:info</code> command to identify which tokens are available in a policy
+for use in the render.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>$<span class="w"> </span>drutiny<span class="w"> </span>policy:info<span class="w"> </span>fs:largeFiles
+</code></pre></div>
+<p>You can see in the above example output, that <code>fs:largeFiles</code> contains three
+ tokens: <code>_max_size</code>, <code>issues</code> and <code>plural</code>. These tokens are available to use as
+ template variables when writting messaging for a policy:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="nt">failure</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">  </span><span class="no">Large public file{{plural}} found over {{max_size}}</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">  </span><span class="no">{% for issue in issues %}</span>
+<a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">     </span><span class="no">- {{issue}}</span>
+<a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">  </span><span class="no">{% endfor %}</span>
+</code></pre></div>
+<p>These variables are rendered using <a href="https://twig.symfony.com/">Twig</a> templating.
+ The messages are also parsed by a markdown parser when rendering out to HTML.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "content.code.annotate", "content.tooltips"], "search": "../../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      
+    
+  </body>
+</html>
