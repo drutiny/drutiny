@@ -273,6 +273,7 @@ services:
         - [addFilter, ['@twig.filters.yaml_dump']]
         - [addFilter, ['@twig.filters.semver']]
         - [addFunction, ['@twig.functions.chartTable']]
+        - [addFunction, ['@twig.functions.PieTable']]
         - [addFunction, ['@twig.functions.combine']]
         - [addFunction, ['@twig.functions.base64File']]
         - [addFunction, ['@twig.function.bootstrapColorMap']]
@@ -429,6 +430,13 @@ services:
       arguments:
         - 'chart_and_table'
         - ['Drutiny\Report\Twig\Helper', 'filterChartTable']
+        - is_safe: ['html']
+
+    twig.functions.PieTable:
+      class: Twig\TwigFunction
+      arguments:
+        - 'pie_and_table'
+        - ['Drutiny\Report\Twig\Helper', 'filterPieTable']
         - is_safe: ['html']
 
     # makes classes in src/ available to be used as services

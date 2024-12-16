@@ -235,3 +235,11 @@ Format:
       - rows
       - chartObj
     return: string
+  pie_and_table:
+    description: Render a Doughnut or Pie chart HTML and the table that will provide the tabular data.
+    expression: pie_and_table(headers, rows, chartObj)
+    arguments:
+      - headers
+      - rows
+      - chartObj
+    return: string

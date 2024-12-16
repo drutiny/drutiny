@@ -96,6 +96,37 @@ class Helper {
   }
 
   /**
+   * Render a table and a pie or doughnut chart in a twig templated message.
+   * 
+   * Each column in the table is a new series of data.
+   */
+  public static function filterPieTable(array $headers, array $rows, Chart|array $chart, string $pad = '') {
+    if (is_array($chart)) {
+      $chart = Chart::fromArray($chart, $chart['id'] ?? 'chart' . mt_rand(1000, 9999));
+    }
+
+    $chart = $chart->addSeries("tbody tr td")->addPieLabels("thead tr th");
+
+    $header_keys = array_is_list($headers) ? $headers : array_keys($headers);
+
+    $element = [implode(' | ', $headers)];
+    $element[] = implode(' | ', array_map(fn($h) => str_pad('', strlen($h), '-'), $headers));
+    foreach ($rows as $row) {
+      if (!array_is_list($row)) {
+        // If rows are keyed by header value, then we should pad any absent key.
+        foreach ($header_keys as $header) {
+          $row[$header] ??= $pad;
+        }
+        // Ensure the row order reflects the header order.
+        $row = array_map(fn($h) => $row[$h], $header_keys);
+      }
+
+      $element[] = implode(' | ', $row);
+    }
+    return self::filterChart($chart, implode(PHP_EOL, $element)) . "\n\n";
+  }
+
+  /**
    * Twig policy_result function.
    */
   public static function renderAuditReponse(Environment $twig, AuditResponse $response, Assessment $assessment, ?string $style = null):string
