@@ -189,7 +189,7 @@ class ProcessManager {
      * Create a process to run a Drutiny command.
      */
     public static function create(array $args, ...$opts):Process {
-        $cmd = $GLOBALS['_composer_bin_dir'] . '/drutiny';
+        $cmd = isset($GLOBALS['_composer_bin_dir']) ? $GLOBALS['_composer_bin_dir'] . '/drutiny' : $_SERVER['PHP_SELF'];
         array_unshift($args, $cmd);
 
         if (!array_key_exists('timeout', $opts)) {
