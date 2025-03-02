@@ -8,6 +8,7 @@ use Drutiny\Entity\DataBag;
 use Drutiny\Target\DdevTarget;
 use Drutiny\Target\DrushTarget;
 use Drutiny\Target\LandoTarget;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\PropertyAccess\Exception\InvalidPropertyPathException;
 
 class TargetTest extends KernelTestCase
@@ -138,5 +139,16 @@ class TargetTest extends KernelTestCase
 
         $this->assertEquals($target['drush.drupal-version'], '9.5.2');
         $this->assertEquals($target->getUri(), 'https://env.app.com');
+    }
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if (!file_exists(getenv('HOME') . '/.ddev/bin/docker-compose')) {
+            $fs = new Filesystem;
+            $fs->mkdir(getenv('HOME') . '/.ddev/bin');
+            $fs->touch(getenv('HOME') . '/.ddev/bin/docker-compose');
+        }
     }
 }
