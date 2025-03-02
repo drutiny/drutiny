@@ -81,6 +81,8 @@ abstract class KernelTestCase extends TestCase
     {
         // Dependency factory loads the target from the twigEvaluator.
         $twigEvaluator = $this->container->get(TwigEvaluator::class);
+
+        /** @var \Drutiny\Target\TargetFactory $targetFactory */
         $targetFactory = $this->container->get(TargetFactory::class);
 
 

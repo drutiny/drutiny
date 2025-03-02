@@ -29,4 +29,7 @@ docs/audits
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 
-tests/.cache
+tests/
+.cache
+.container-extensions.json
+.phpunit.cache/

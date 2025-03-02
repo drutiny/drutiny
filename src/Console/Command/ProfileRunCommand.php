@@ -15,6 +15,7 @@ use Drutiny\Report\FormatFactory;
 use Drutiny\Report\Report;
 use Drutiny\Report\ReportFactory;
 use Drutiny\Report\StoreFactory;
+use Drutiny\Settings;
 use Drutiny\Target\Exception\InvalidTargetException;
 use Drutiny\Target\Exception\TargetLoadingException;
 use Drutiny\Target\Exception\TargetNotFoundException;
@@ -50,6 +51,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
         protected PolicyFactory $policyFactory,
         protected ProfileFactory $profileFactory,
         protected ReportFactory $reportFactory,
+        protected Settings $settings,
         protected DomainSource $domainSource,
         protected TargetFactory $targetFactory,
         protected LoggerInterface $logger,
@@ -285,7 +287,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
 
     protected function asyncExecuteWithUpdates(InputInterface $input, ConsoleOutput $output, array $uris):array
     {
-        $processManager = new ProcessManager($this->logger);
+        $processManager = new ProcessManager($this->logger, $this->settings);
         $processManager->maxConcurrency = 3;
         foreach ($uris as $uri) {
             // Grab all options excluding domain-source options.
@@ -320,7 +322,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
                 }
             }
             $cmd[] = '--pipe';
-            $processManager->add(ProcessManager::create($cmd), name: $uri);
+            $processManager->add($processManager->create($cmd), name: $uri);
         }
         $processManager->then(function (array $processes) {
             return array_map(function (Process $process) {

@@ -84,28 +84,18 @@ class DdevTarget extends DrushTarget implements TargetInterface, TargetSourceInt
      */
     protected function loadTransport(): TransportInterface
     {
-        $status_cmd = sprintf('ddev describe %s -j', $this->getId());
-
-        try {
-            $ddev = $this->localCommand->run($status_cmd, function ($output) {
-                $json = json_decode(trim($output), true);
-                return $json['raw'];
-            });
-        } catch (ProcessFailedException $e) {
-            throw new TargetSourceFailureException(message: "DDEV describe command failed to execute: $status_cmd.", previous: $e);
-        }
-
+        $approot = $this['ddev.approot'];
 
         $docker_compose_bin = getenv('HOME') . '/.ddev/bin/docker-compose';
         if (!file_exists($docker_compose_bin)) {
             throw new InvalidTargetException("Failed to find $docker_compose_bin. Perhaps the wrong version of DDEV is installed?");
         }
 
-        return Transport::create(function (Process $process, ?callable $processor = null) use ($ddev, $docker_compose_bin) {
+        return Transport::create(function (Process $process, ?callable $processor = null) use ($approot, $docker_compose_bin) {
             ProcessUtility::mergeEnv($process, $this->localCommand->getEnvVars());
             $command = strtr('%docker_compose_bin -f %approot/.ddev/.ddev-docker-compose-full.yaml exec web bash -c "%command"', [
                 '%docker_compose_bin' => $docker_compose_bin,
-                '%approot' => $ddev['approot'],
+                '%approot' => $approot,
                 '%command' => sprintf("echo %s | base64 --decode | sh", base64_encode(ProcessUtility::replacePlaceholders($process)->getCommandLine()))
             ]);
             return $this->localCommand->run(Process::fromShellCommandline($command), $processor);

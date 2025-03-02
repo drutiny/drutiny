@@ -19,6 +19,7 @@ use Drutiny\Policy\DependencyException;
 use Drutiny\PolicyFactory;
 use Drutiny\Profile;
 use Drutiny\Profile\PolicyDefinition;
+use Drutiny\Settings;
 use Drutiny\Target\TargetExport;
 use Drutiny\Target\TargetInterface;
 use Error;
@@ -37,6 +38,7 @@ class ReportFactory
         protected AuditFactory $auditFactory,
         protected PolicyFactory $policyFactory,
         protected SyntaxProcessor $syntaxProcessor,
+        protected Settings $settings,
         protected EventDispatcher $eventDispatcher,
         protected LanguageManager $languageManager,
         protected ProgressBar $progressBar,
@@ -87,7 +89,7 @@ class ReportFactory
 
     private function streamAudit(array $contexts, Profile $profile, TargetInterface $target, PolicyDefinition ...$definitions): ProcessManager
     {
-        $processManager = new ProcessManager($this->logger);
+        $processManager = new ProcessManager($this->logger, $this->settings);
         $audit_groups = [];
         $early_results = [];
         // Dependencies must be met for a policy to be audited.
@@ -132,7 +134,7 @@ class ReportFactory
                 $opts[] = '--no-ansi';
                 $opts[] = '--dtag=' . $profile->name;
 
-                $process = ProcessManager::create(['policy:audit:batch', $target_filepath, ...$opts]);
+                $process = $processManager->create(['policy:audit:batch', $target_filepath, ...$opts]);
 
                 $keys = array_keys($policies);
                 $name = array_shift($keys);

@@ -47,9 +47,6 @@ class LocalCommand
         $process_timeout = $this->settings->has('process.timeout') ? $this->settings->get('process.timeout') : 600;
         $cmd->setTimeout($process_timeout);
 
-        if (ProcessUtility::replacePlaceholders($cmd)->getCommandLine() == 'which ../vendor/drush/drush/drush || which drush-launcher || which drush.launcher || which drush') {
-            throw new Exception("Where did you come from?");
-        }
         $command = ProcessUtility::replacePlaceholders($cmd);
 
         return $this->cache->get($this->getCacheKey($command), function (CacheItemInterface $item) use ($command, $ttl, $outputProcessor) {

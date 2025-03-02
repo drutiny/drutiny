@@ -149,12 +149,13 @@ abstract class Target implements \ArrayAccess, TargetInterface
     }
 
     /**
-     * Backwards compatible support for run() method. Use send() instead.
+     * Backwards compatible support for run() method. Use execute() instead.
      *
      * @deprecated
      */
     public function run(string $cmd, ?callable $preProcess = null, int $ttl = 3600)
     {
+        $this->logger->warning("Deprecated method run() called on Target. Use execute() instead.");
         return $this->transport->send(Process::fromShellCommandline($cmd), $preProcess);
     }
 

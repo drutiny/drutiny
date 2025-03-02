@@ -2,6 +2,7 @@
 
 namespace Drutiny\Console;
 
+use Drutiny\Settings;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Process\Process;
@@ -36,7 +37,7 @@ class ProcessManager
      */
     protected array $promises = [];
 
-    public function __construct(protected LoggerInterface $logger)
+    public function __construct(protected LoggerInterface $logger, protected Settings $settings)
     {
     }
 
@@ -203,9 +204,16 @@ class ProcessManager
     /**
      * Create a process to run a Drutiny command.
      */
-    public static function create(array $args, ...$opts):Process
+    public function create(array $args, ...$opts):Process
     {
-        $cmd = isset($GLOBALS['_composer_bin_dir']) ? $GLOBALS['_composer_bin_dir'] . '/drutiny' : $_SERVER['PHP_SELF'];
+        if ($this->settings->get('drutiny_is_vendored')) {
+            $cmd = $GLOBALS['_composer_bin_dir'] . '/drutiny';
+        } else {
+            $cmd = $this->settings->get('drutiny.core.directory') . '/bin/drutiny';
+        }
+        if (!file_exists($cmd)) {
+            throw new InvalidArgumentException("Drutiny command not found at $cmd.");
+        }
         array_unshift($args, $cmd);
 
         if (!array_key_exists('timeout', $opts)) {

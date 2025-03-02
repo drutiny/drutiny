@@ -11,3 +11,6 @@ $container->setParameter('progress_bar.loading_message', $messages[array_rand($m
 
 // Unique identify used for things like localized caching.
 $container->setParameter('instance_id', hash('md5', __FILE__));
+
+$container->setParameter('drutiny.core.directory', __DIR__);
+$container->setParameter('drutiny_is_vendored', str_contains(__DIR__, 'vendor/drutiny/drutiny'));
