@@ -9,9 +9,11 @@ use Drutiny\Policy\Dependency;
 use Drutiny\Target\Service\Drush;
 
 #[Dependency('Drupal.moduleIsEnabled("purge_drush")')]
-class PurgeDiagnosticsAnalysis extends AbstractAnalysis {
+class PurgeDiagnosticsAnalysis extends AbstractAnalysis
+{
     #[DataProvider]
-    protected function runDiagnostics():void {
+    protected function runDiagnostics():void
+    {
         $drush = $this->target->getService('drush');
         assert($drush instanceof Drush);
 

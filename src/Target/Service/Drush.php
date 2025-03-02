@@ -18,9 +18,9 @@ class Drush implements ServiceInterface
     protected string $bin;
 
     protected const LAUNCHERS = [
-        '../vendor/drush/drush/drush', 
-        'drush-launcher', 
-        'drush.launcher', 
+        '../vendor/drush/drush/drush',
+        'drush-launcher',
+        'drush.launcher',
         'drush'
     ];
     protected $supportedCommandMap = [
@@ -129,7 +129,7 @@ class Drush implements ServiceInterface
 
     /**
      * Dynamically support drush calls listed in $supportedCommandMap.
-     * 
+     *
      * Usage: ->configGet('system.settings', ['format' => 'json'])
      * Executes: drush config:get 'system.settings' --format=json
      */
@@ -179,7 +179,9 @@ class Drush implements ServiceInterface
         // Return an object ready to run the command. This allows the caller
         // of this command to be able to specify the preprocess function easily.
         return (new class ($command, $this->transport) {
-            public function __construct(protected Process $cmd, protected TransportInterface $transport) {}
+            public function __construct(protected Process $cmd, protected TransportInterface $transport)
+            {
+            }
             public function run(?callable $outputProcessor = null)
             {
                 return $this->transport->send($this->cmd, $outputProcessor);

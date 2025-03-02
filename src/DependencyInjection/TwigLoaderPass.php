@@ -15,7 +15,7 @@ class TwigLoaderPass implements CompilerPassInterface
     {
         $definition = $container->getDefinition('twig.loader');
         foreach ($container->findTaggedServiceIds('twig.loader', true) as $id => $events) {
-          $definition->addMethodCall('addLoader', [new Reference($id)]);
+            $definition->addMethodCall('addLoader', [new Reference($id)]);
         }
     }
 }

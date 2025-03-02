@@ -8,8 +8,8 @@ class LocalTransport implements TransportInterface
 {
     public function __construct(
         protected LocalCommand $localCommand
-    )
-    {}
+    ) {
+    }
 
     /**
      * {@inheritdoc}

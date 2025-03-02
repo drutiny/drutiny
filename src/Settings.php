@@ -5,7 +5,8 @@ namespace Drutiny;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class Settings {
+class Settings
+{
     protected ParameterBagInterface $parameterBag;
 
     public function __construct(Container $container)
@@ -15,7 +16,7 @@ class Settings {
 
     /**
      * Get a single settings.
-     * 
+     *
      * Returns null if the parameter does not exist.
      */
     public function get($id)
@@ -36,7 +37,8 @@ class Settings {
     /**
      * Has a settings.
      */
-    public function has($id) {
+    public function has($id)
+    {
         return $this->parameterBag->has($id);
     }
 }

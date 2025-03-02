@@ -41,8 +41,7 @@ class DdevTarget extends DrushTarget implements TargetInterface, TargetSourceInt
                 $json = json_decode(trim($output), true);
                 return $json['raw'];
             });
-        }
-        catch (ProcessFailedException $e) {
+        } catch (ProcessFailedException $e) {
             throw new TargetSourceFailureException(message: "DDEV describe command failed to execute: $status_cmd.", previous: $e);
         }
 
@@ -92,8 +91,7 @@ class DdevTarget extends DrushTarget implements TargetInterface, TargetSourceInt
                 $json = json_decode(trim($output), true);
                 return $json['raw'];
             });
-        }
-        catch (ProcessFailedException $e) {
+        } catch (ProcessFailedException $e) {
             throw new TargetSourceFailureException(message: "DDEV describe command failed to execute: $status_cmd.", previous: $e);
         }
 
@@ -128,10 +126,10 @@ class DdevTarget extends DrushTarget implements TargetInterface, TargetSourceInt
         $targets = [];
         foreach ($aliases as $name => $info) {
             $targets[] = [
-          'id' => $name,
-          'uri' => $info['primary_url'] ?? '',
-          'name' => $name
-        ];
+            'id' => $name,
+            'uri' => $info['primary_url'] ?? '',
+            'name' => $name
+            ];
         }
         return $targets;
     }

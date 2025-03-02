@@ -11,7 +11,7 @@ class DependencyException extends \Exception
     public function __construct(Dependency $dependency, string $message = '', Throwable|null $previous = null)
     {
         $this->dependency = $dependency;
-        parent::__construct(sprintf("Policy dependency failed: %s (%s). %s",$dependency->description, $dependency->expression, $message), 0, $previous);
+        parent::__construct(sprintf("Policy dependency failed: %s (%s). %s", $dependency->description, $dependency->expression, $message), 0, $previous);
     }
 
     public function getDependency()

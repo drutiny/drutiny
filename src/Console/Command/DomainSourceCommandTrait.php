@@ -75,8 +75,8 @@ trait DomainSourceCommandTrait
     /**
      * Determine a default filepath.
      */
-      protected function getDomainSource():DomainSource
-      {
-          throw new \Exception("Unsupported method. Please use dependency injection for class: " . DomainSource::class);
-      }
+    protected function getDomainSource():DomainSource
+    {
+        throw new \Exception("Unsupported method. Please use dependency injection for class: " . DomainSource::class);
+    }
 }

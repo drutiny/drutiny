@@ -21,11 +21,10 @@ class DomainSourceListCommand extends Command
 
 
     public function __construct(
-        protected DomainSource $domainSource, 
+        protected DomainSource $domainSource,
         protected LoggerInterface $logger,
         protected TargetFactory $targetFactory
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -69,8 +68,8 @@ class DomainSourceListCommand extends Command
         foreach ($this->parseDomainSourceOptions($input) as $source => $options) {
             $this->logger->notice("Loading domains from $source.");
             foreach ($this->domainSource->getDomains($target, $source, $options) as $domain) {
-              $domains[] = [$source, $domain, isset($unique_domains[$domain]) ? implode(',', $unique_domains[$domain]) : ''];
-              $unique_domains[$domain][] = $source;
+                $domains[] = [$source, $domain, isset($unique_domains[$domain]) ? implode(',', $unique_domains[$domain]) : ''];
+                $unique_domains[$domain][] = $source;
             }
         }
 

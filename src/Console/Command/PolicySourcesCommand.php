@@ -18,11 +18,10 @@ class PolicySourcesCommand extends DrutinyBaseCommand
     use LanguageCommandTrait;
 
     public function __construct(
-      protected PolicyFactory $policyFactory,
-      protected LanguageManager $languageManager
-    )
-    {
-      parent::__construct();
+        protected PolicyFactory $policyFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
     }
   /**
    * @inheritdoc
@@ -41,9 +40,9 @@ class PolicySourcesCommand extends DrutinyBaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         foreach ($this->policyFactory->sources as $source) {
-          $driver = $this->policyFactory->getSource($source->name);
-          $pushable = ($driver instanceof PushablePolicySourceInterface) ? 'Yes' : 'No';
-          $rows[] = [$source->name, get_class($driver), $source->weight, $pushable];
+            $driver = $this->policyFactory->getSource($source->name);
+            $pushable = ($driver instanceof PushablePolicySourceInterface) ? 'Yes' : 'No';
+            $rows[] = [$source->name, get_class($driver), $source->weight, $pushable];
         }
 
         $io = new SymfonyStyle($input, $output);

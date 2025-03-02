@@ -11,14 +11,14 @@ use InvalidArgumentException;
 use ReflectionClass;
 use ReflectionException;
 
-class AuditClass {
+class AuditClass
+{
     public readonly Version|null $version;
 
     public function __construct(
         public readonly string $name,
         string|Version|null $version = null
-    )
-    {
+    ) {
         if (is_string($version)) {
             $version = new Version($version);
         }
@@ -28,7 +28,8 @@ class AuditClass {
     /**
      * Create a new AuditClass instance from an given class name.
      */
-    public static function fromClass(string $class_name): static {
+    public static function fromClass(string $class_name): static
+    {
         try {
             $reflection = new ReflectionClass($class_name);
             $attributes = $reflection->getAttributes(Version::class);
@@ -36,15 +37,15 @@ class AuditClass {
             foreach ($attributes as $attribute) {
                 return new static($class_name, $attribute->newInstance());
             }
-        }
-        catch (ReflectionException $e) {
+        } catch (ReflectionException $e) {
             // Class doesn't exist so can't pull local version information.
         }
        
         return new static($class_name);
     }
 
-    public static function fromBuilt(string $requirement): static {
+    public static function fromBuilt(string $requirement): static
+    {
         list($name, $version) = explode(':', $requirement, 2);
         $fromClass = self::fromClass($name);
 
@@ -52,7 +53,8 @@ class AuditClass {
         return new static($name, new Version($version, $fromClass->version->compatibilty));
     }
 
-    public function export(): array|string {
+    public function export(): array|string
+    {
         if ($this->version == null) {
             return $this->name;
         }
@@ -61,14 +63,16 @@ class AuditClass {
         return $vars;
     }
 
-    public function asBuilt(): string {
+    public function asBuilt(): string
+    {
         return sprintf('%s:%s', $this->name, $this->version?->version ?? '');
     }
 
     /**
      * Check if the instance is compatible with the current runtime class.
      */
-    public function isCompatible(): bool {
+    public function isCompatible(): bool
+    {
         // If version is not available then this is not a real compatibility check.
         // For backwards compatibility we'll return "true".
         if ($this->version === null) {

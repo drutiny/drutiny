@@ -8,17 +8,18 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Twig\Error\RuntimeError;
 
-class SyntaxProcessor {
+class SyntaxProcessor
+{
 
     public function __construct(
         protected TwigEvaluator $twigEvaluator,
         protected LoggerInterface $logger
-    )
-    {}
+    ) {
+    }
 
     /**
      * Process a named parameter.
-     * 
+     *
      * Parameter names starting with a ^ will be interpolated (token replacement).
      * Parameter names starting with a $ will be evaluated (twig rendered).
      * Parameter names starting with an ! will be passed through as static.
@@ -63,17 +64,19 @@ class SyntaxProcessor {
 
     /**
      * Clean off the processing indicators from the parameter name.
-     * 
+     *
      * @see static::processParameter().
      */
-    public function processParameterName(string $name): string {
+    public function processParameterName(string $name): string
+    {
         return DynamicParameterType::fromParameterName($name)->stripParameterName($name);
     }
 
     /**
      * Process an array of parameters for syntax evaluations.
      */
-    public function processParameters(array $parameters, array $contexts = [], ?InputDefinition $definition = null):array {
+    public function processParameters(array $parameters, array $contexts = [], ?InputDefinition $definition = null):array
+    {
         // Ensure default values are set.
         if (isset($definition)) {
             foreach ($definition->getParameters() as $parameter) {
@@ -104,11 +107,10 @@ class SyntaxProcessor {
             try {
                 $processed_parameters[$name] = $this->processParameter(
                     name: $preprocess->decorateParameterName($name),
-                    value: $value, 
+                    value: $value,
                     contexts: $contexts
                 );
-            }
-            catch (RuntimeError $e) {
+            } catch (RuntimeError $e) {
                 throw new InvalidArgumentException("Failed to create parameter '$name':\n$value\n" . $e->getMessage(), 0, $e);
             }
             

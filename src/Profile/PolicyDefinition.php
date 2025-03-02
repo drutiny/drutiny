@@ -11,7 +11,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 #[Autoconfigure(autowire:false)]
-class PolicyDefinition {
+class PolicyDefinition
+{
     #[Description('The parameter overrides to use for the policy in this profile.')]
     public readonly ParameterBagInterface $parameters;
 
@@ -31,8 +32,7 @@ class PolicyDefinition {
         ?string $severity = null,
         // Internal policy reference can be used to load a policy instead of using the PolicyFactory.
         protected Policy|null $policy = null
-    )
-    {
+    ) {
         $this->parameters = new FrozenParameterBag($parameters);
         $this->build_parameters = new FrozenParameterBag($build_parameters);
 
@@ -44,7 +44,8 @@ class PolicyDefinition {
     /**
      * A usort callback function to sort by weight.
      */
-    public function sort(PolicyDefinition $definition) {
+    public function sort(PolicyDefinition $definition)
+    {
         if ($definition->weight == $this->weight) {
             $alphasort = [$definition->name, $this->name];
             sort($alphasort);
@@ -56,7 +57,8 @@ class PolicyDefinition {
     /**
      * Create and load a policy.
      */
-    public static function fromPolicy(Policy $policy): static {
+    public static function fromPolicy(Policy $policy): static
+    {
         return new static(
             name: $policy->name,
             parameters: $policy->parameters->all(),

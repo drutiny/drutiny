@@ -9,11 +9,12 @@ use League\CommonMark\Extension\Table\TableParser;
 use Twig\Environment;
 use Twig\Extra\Markdown\MarkdownRuntime;
 
-class MarkdownTest extends KernelTestCase {
+class MarkdownTest extends KernelTestCase
+{
 
-    public function testTable() {
+    public function testTable()
+    {
         foreach ([/*'Format/table_full',*/ 'Format/table_null_col2', 'Format/table_partial_null_col2'] as $fixture) {
-
             $tbl = $this->parseTable($text = $this->getFixture($fixture, 'md'));
             $this->assertCount(3, $tbl['headers'], "$fixture has 3 headers");
             $this->assertIsArray($tbl['rows'], "$fixture has rows");
@@ -55,7 +56,8 @@ class MarkdownTest extends KernelTestCase {
         }
     }
 
-    protected function parseTable(string $table):array {
+    protected function parseTable(string $table):array
+    {
         $lines = array_map(fn ($line) => str_replace("\r", "", $line), explode("\n", $table));
         $lines = array_filter($lines);
         $table = [];
@@ -68,7 +70,8 @@ class MarkdownTest extends KernelTestCase {
         return $table;
     }
 
-    public function testMarkdownSyntax() {
+    public function testMarkdownSyntax()
+    {
         $text = $this->getFixture('Format/supported_syntax', 'md');
 
         $twig = $this->container->get(Environment::class);
@@ -113,7 +116,8 @@ class MarkdownTest extends KernelTestCase {
         $this->assertStringContainsString('<a href="', $html);
     }
 
-    public function testFilterChartTable() {
+    public function testFilterChartTable()
+    {
         $table = $this->parseTable($text = $this->getFixture('Format/table_null_col2', 'md'));
         $table['rows'] = array_map(fn($row) => array_map('trim', $row), $table['rows']);
 
@@ -182,8 +186,8 @@ class MarkdownTest extends KernelTestCase {
         // Support where headers have keys
 
         $headers = [
-            'step' => 'Step', 
-            'r1' => 'Runner 1', 
+            'step' => 'Step',
+            'r1' => 'Runner 1',
             'r2' => 'Runner 2'
         ];
         $rows = [
@@ -239,4 +243,3 @@ class MarkdownTest extends KernelTestCase {
         $this->assertEquals(2, substr_count($html, '<td></td>'));
     }
 }
-

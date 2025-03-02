@@ -33,6 +33,6 @@ trait LanguageCommandTrait
     protected function initLanguage(InputInterface $input)
     {
       // Set global language used by policy/profile sources.
-      $this->languageManager->setLanguage($input->getOption('language'));
+        $this->languageManager->setLanguage($input->getOption('language'));
     }
 }

@@ -38,7 +38,7 @@ class DirectoryAnalysis extends AbstractAnalysis
 
         [$usage, $disk, $inode] = $this->target->run($cmd, function ($output) {
               return array_values(explode(PHP_EOL, $output));
-            });
+        });
 
         // Remove all occurrences of the storage unit and '%' from the output.
         // This will allow the values to be used in conditional expressions.
@@ -50,7 +50,8 @@ class DirectoryAnalysis extends AbstractAnalysis
         [$inode_volume, $inode_capacity, $inode_used, $inode_free, $inode_usage, $inode_mountpoint] = array_values(array_filter(preg_split("/\t|\s/", $inode)));
 
         $this->set(
-            'filesystem', [
+            'filesystem',
+            [
                 'directory' => [
                     'volume' => $du_volume,
                     'size' => $du_size,

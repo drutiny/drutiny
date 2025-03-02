@@ -31,17 +31,16 @@ class Dependency
      */
       const ON_FAIL_REPORT_ONLY = 'report_only';
 
-      public readonly DependencyBehaviour $onFail;
-      public readonly string $expression;
-      public readonly string $syntax;
+    public readonly DependencyBehaviour $onFail;
+    public readonly string $expression;
+    public readonly string $syntax;
 
     public function __construct(
-      string $expression = 'true',
-      string $on_fail = self::ON_FAIL_DEFAULT,
-      string $syntax = 'expression_language',
-      public readonly string $description = ''
-      )
-    {
+        string $expression = 'true',
+        string $on_fail = self::ON_FAIL_DEFAULT,
+        string $syntax = 'expression_language',
+        public readonly string $description = ''
+    ) {
         $this->onFail = DependencyBehaviour::get($on_fail);
         
         // Gracefully port expression language syntax into twig.
@@ -68,7 +67,7 @@ class Dependency
      */
     public function getDescription():string
     {
-      return $this->description;
+        return $this->description;
     }
 
     /**
@@ -76,10 +75,10 @@ class Dependency
      */
     public static function fromString(string $dependency):Dependency
     {
-      return new static(
-        syntax: 'twig',
-        expression: sprintf('Policy.succeeds("%s")', $dependency),
-        description: "Ensure policy '$dependency' passes.",
-      );
+        return new static(
+            syntax: 'twig',
+            expression: sprintf('Policy.succeeds("%s")', $dependency),
+            description: "Ensure policy '$dependency' passes.",
+        );
     }
 }

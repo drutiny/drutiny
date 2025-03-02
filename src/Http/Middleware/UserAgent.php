@@ -10,7 +10,7 @@ use Psr\Http\Message\RequestInterface;
 
 #[Plugin(name: 'http:user_agent')]
 #[PluginField(
-    name:'user_agent' ,
+    name:'user_agent',
     description: "The User-Agent string for Drutiny to use on outbound HTTP requests."
 )]
 class UserAgent implements MiddlewareInterface
@@ -20,7 +20,6 @@ class UserAgent implements MiddlewareInterface
    */
     public function __construct(protected DrutinyPlugin $plugin)
     {
-
     }
 
   /**
@@ -29,7 +28,7 @@ class UserAgent implements MiddlewareInterface
     public function handle(RequestInterface $request)
     {
         if (!$this->plugin->isInstalled()) {
-          return $request;
+            return $request;
         }
         return $request->withHeader('User-Agent', $this->plugin->user_agent);
     }

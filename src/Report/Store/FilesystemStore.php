@@ -14,9 +14,12 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AsStore(name: 'fs')]
 #[AutoconfigureTag('store')]
-class FilesystemStore implements StoreInterface {
+class FilesystemStore implements StoreInterface
+{
 
-    public function __construct(protected LoggerInterface $logger) {}
+    public function __construct(protected LoggerInterface $logger)
+    {
+    }
 
     /**
      * {@inheritdoc}

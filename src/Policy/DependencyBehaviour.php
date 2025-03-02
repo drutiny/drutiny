@@ -5,7 +5,8 @@ namespace Drutiny\Policy;
 use Drutiny\Audit\AuditInterface;
 use Exception;
 
-enum DependencyBehaviour:int {
+enum DependencyBehaviour: int
+{
     case PASS = 0;
     case FAIL = 1;
     case OMIT = 4;
@@ -29,14 +30,15 @@ enum DependencyBehaviour:int {
     /**
      * That the higher of two DependencyBehaviour enums.
      */
-    public function higher(DependencyBehaviour $enum):DependencyBehaviour {
+    public function higher(DependencyBehaviour $enum):DependencyBehaviour
+    {
         return $this->value > $enum->value ? $this : $enum;
     }
 
     /**
      * Get an ENUM from a string value.
      */
-    static public function get(string $type):self
+    public static function get(string $type):self
     {
         return match ($type) {
             'fail' => DependencyBehaviour::FAIL,

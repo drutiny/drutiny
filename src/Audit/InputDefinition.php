@@ -15,7 +15,7 @@ use Symfony\Component\Console\Exception\LogicException;
  *         new Parameter('name', Parameter::REQUIRED),
  *     ]);
  */
-class InputDefinition 
+class InputDefinition
 {
     /**
      * @var Parameter[]
@@ -95,12 +95,13 @@ class InputDefinition
 
     /**
      * Get parameter values from an array of values.
-     * 
+     *
      * @throws InvalidArgumentException When a value key is not in the parameter definition.
      * @throws InvalidArgumentException When a required parameter is missing.
      */
-    public function fromValues(array $values):array {
-        // Ensure unsupported parameters are not passed in. 
+    public function fromValues(array $values):array
+    {
+        // Ensure unsupported parameters are not passed in.
         foreach (array_keys($values) as $name) {
             if (!$this->hasParameter($name)) {
                 throw new InvalidArgumentException(sprintf('The "%s" parameter does not exist.', $name));

@@ -10,12 +10,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Yaml\Yaml;
 
-class AuditPolicyLibraryCommand extends Command {
+class AuditPolicyLibraryCommand extends Command
+{
     public function __construct(
         protected PolicyFactory $policyFactory,
         protected AuditFactory $auditFactory
-    )
-    {
+    ) {
         parent::__construct();
     }
 

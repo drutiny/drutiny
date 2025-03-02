@@ -18,7 +18,8 @@ enum State: int
     /**
      * Get the state from int or boolean values.
      */
-    public static function fromValue(int|bool|string $value) {
+    public static function fromValue(int|bool|string $value)
+    {
         if (is_string($value)) {
             $value = is_numeric($value) ? (int) $value : (bool) $value;
         }
@@ -28,7 +29,8 @@ enum State: int
     /**
      * Special handling of state based on policy type.
      */
-    public function withPolicyType(PolicyType $type):static {
+    public function withPolicyType(PolicyType $type):static
+    {
         if ($type == PolicyType::AUDIT) {
             return $this;
         }
@@ -82,7 +84,7 @@ enum State: int
      */
     public function isFailure():bool
     {
-      return !$this->isSuccessful() && !$this->isIrrelevant() && !$this->isNotApplicable() && !$this->hasError();
+        return !$this->isSuccessful() && !$this->isIrrelevant() && !$this->isNotApplicable() && !$this->hasError();
     }
 
     /**

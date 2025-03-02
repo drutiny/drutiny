@@ -9,12 +9,13 @@ class PhpEnvironmentVariableAnalysis extends AbstractAnalysis
   /**
    * @inheritdoc
    */
-  public function gather() {
+    public function gather()
+    {
 
-    $env_vars = $this->target->getService('drush')->runtime(function () {
-        return getenv();
-    });
+        $env_vars = $this->target->getService('drush')->runtime(function () {
+            return getenv();
+        });
 
-    $this->set('environment_variables', $env_vars);
-  }
+        $this->set('environment_variables', $env_vars);
+    }
 }

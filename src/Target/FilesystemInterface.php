@@ -2,10 +2,11 @@
 
 namespace Drutiny\Target;
 
-interface FilesystemInterface extends TargetInterface {
+interface FilesystemInterface extends TargetInterface
+{
 
   /**
    * Return the path to the targeted directory.
    */
-  public function getDirectory():string;
+    public function getDirectory():string;
 }

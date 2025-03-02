@@ -89,7 +89,7 @@ interface AuditInterface
     
     /**
      * Execute an audit against a given policy.
-     * 
+     *
      * @param Policy $policy
      * @param bool $remediate (@deprecated)
      *
@@ -113,7 +113,7 @@ interface AuditInterface
 
     /**
      * Know if a parameter exists in the databag.
-     * 
+     *
      * To know if the parameter exists in the audit definition,
      * use Audit::getDefinition()->hasParameter($name).
      */
@@ -131,12 +131,12 @@ interface AuditInterface
 
     /**
      * Pass a policy to an audit class to prepare it for bulk auditing.
-     * 
+     *
      * When collections of policies use the same audit, some audit classes
      * may like to conduct data gathering in more effecient manners.
      * This prepare function is called for all policies that utilse the
      * same class.
-     * 
+     *
      * @return string|null a common identifier to batch policies on or null.
      */
     public function prepare(Policy $policy):?string;

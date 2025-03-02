@@ -30,7 +30,8 @@ use Symfony\Component\Process\Process;
     type: FieldType::STATE
 )]
 #[Autoconfigure(constructor: 'create')]
-class UpdateManager {
+class UpdateManager
+{
 
     protected GuzzleHttpClient $client;
 
@@ -43,8 +44,7 @@ class UpdateManager {
         protected DrutinyPlugin $plugin,
         protected LoggerInterface $logger,
         Client $httpClient,
-    )
-    {
+    ) {
         if (!$this->plugin->isInstalled()) {
             return;
         }
@@ -62,7 +62,8 @@ class UpdateManager {
         ]);
     }
 
-    static public function create(ContainerInterface $container, DrutinyPlugin $plugin):self {
+    public static function create(ContainerInterface $container, DrutinyPlugin $plugin):self
+    {
         $composer_json = json_decode(file_get_contents(DRUTINY_LIB . '/composer.json'), true);
 
         return new static(
@@ -74,7 +75,8 @@ class UpdateManager {
         );
     }
 
-    public function checkForUpdates(InputInterface $input, OutputInterface $output, ?array $args = null):int {
+    public function checkForUpdates(InputInterface $input, OutputInterface $output, ?array $args = null):int
+    {
         $io = new SymfonyStyle($input, $output);
 
         if (!$this->plugin->isInstalled()) {
@@ -91,7 +93,7 @@ class UpdateManager {
 
         if (!$release = $this->updatesAvailable()) {
           // $io->success("No new updates.");
-          return Command::INVALID;
+            return Command::INVALID;
         }
 
         $io->title('New update available: ' . $release['tag_name']);
@@ -111,14 +113,14 @@ class UpdateManager {
         return Command::SUCCESS;
     }
 
-    public function wrap(?array $args = null): int {
+    public function wrap(?array $args = null): int
+    {
         $bin = $GLOBALS['_composer_bin_dir'] . '/drutiny';
 
         if ($args == null) {
             $args ??= $_SERVER['argv'];
             $args[0] = $bin;
-        }
-        else {
+        } else {
             array_unshift($args, $bin);
         }
         $process = new Process($args);
@@ -133,7 +135,8 @@ class UpdateManager {
     /**
      * Get the latest update or false if current version is the latest.
      */
-    protected function updatesAvailable():bool|array {
+    protected function updatesAvailable():bool|array
+    {
         if (strpos($this->app->getVersion(), 'dev') !== false) {
             return false;
         }
@@ -146,7 +149,8 @@ class UpdateManager {
         return Comparator::greaterThan($new_version, $this->app->getVersion()) ? $latest_release : false;
     }
 
-    protected function install(string $name, string $id, string $content_type, ...$args): void {
+    protected function install(string $name, string $id, string $content_type, ...$args): void
+    {
         $tmpfile = tempnam(sys_get_temp_dir(), $name);
         $resource = fopen($tmpfile, 'w');
 

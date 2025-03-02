@@ -15,8 +15,7 @@ class SshTransport implements TransportInterface
 
     public function __construct(
         protected LocalCommand $localCommand
-    )
-    {
+    ) {
         $this->logger = $localCommand->logger;
         if ($this->logger instanceof Logger) {
             $ns = explode('\\', get_class($this));
@@ -48,8 +47,8 @@ class SshTransport implements TransportInterface
      */
     public function setConfig($key, $value)
     {
-      $this->sshConfig[$key] = $value;
-      return $this;
+        $this->sshConfig[$key] = $value;
+        return $this;
     }
   
     /**
@@ -57,13 +56,13 @@ class SshTransport implements TransportInterface
      */
     public function downloadFile($source, $location)
     {
-      return $this->send(Process::fromShellCommandline(sprintf('test -f % s && cat %s', $source, $source)), function ($output) use ($location) {
-        if (empty($output)) {
-          return false;
-        }
-        file_put_contents($location, $output);
-        return true;
-      }, 0);
+        return $this->send(Process::fromShellCommandline(sprintf('test -f % s && cat %s', $source, $source)), function ($output) use ($location) {
+            if (empty($output)) {
+                return false;
+            }
+            file_put_contents($location, $output);
+            return true;
+        }, 0);
     }
   
     /**
@@ -71,28 +70,28 @@ class SshTransport implements TransportInterface
      */
     protected function getRemoteCall($bin = 'ssh')
     {
-      $args = [$bin];
-      $options = $this->sshConfig;
-      if (!isset($this->sshConfig['Host'])) {
-        throw new \InvalidArgumentException("Missing 'Host' option in SSH Config.");
-      }
+        $args = [$bin];
+        $options = $this->sshConfig;
+        if (!isset($this->sshConfig['Host'])) {
+            throw new \InvalidArgumentException("Missing 'Host' option in SSH Config.");
+        }
   
       // Host is not a command line support option and must be passed as an argument.
-      $host = $this->sshConfig['Host'];
-      unset($options['Host']);
+        $host = $this->sshConfig['Host'];
+        unset($options['Host']);
 
       // Bespoke support for an SSH config file.
-      if (isset($options['File'])) {
-        $args[] = '-F';
-        $args[] = $options['File'];
-        unset($options['File']);
-      }
+        if (isset($options['File'])) {
+            $args[] = '-F';
+            $args[] = $options['File'];
+            unset($options['File']);
+        }
   
-      foreach ($options as $key => $value) {
-        $args[] = '-o';
-        $args[] = sprintf('%s=%s', $key, $value);
-      }
-      $args[] = $host;
-      return implode(' ', $args);
+        foreach ($options as $key => $value) {
+            $args[] = '-o';
+            $args[] = sprintf('%s=%s', $key, $value);
+        }
+        $args[] = $host;
+        return implode(' ', $args);
     }
 }

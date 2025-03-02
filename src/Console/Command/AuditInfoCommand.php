@@ -17,17 +17,15 @@ use Symfony\Component\Console\Helper\TableCell;
 use Symfony\Component\Console\Helper\TableCellStyle;
 use Symfony\Component\Yaml\Yaml;
 
-
 /**
  *
  */
 class AuditInfoCommand extends Command
 {
     public function __construct(
-      protected PolicyFactory $policyFactory,
-      protected AuditFactory $auditFactory,
-      )
-    {
+        protected PolicyFactory $policyFactory,
+        protected AuditFactory $auditFactory,
+    ) {
         parent::__construct();
     }
 
@@ -69,13 +67,13 @@ class AuditInfoCommand extends Command
         $params_by_class = [];
 
         foreach ($audit_instance->getDefinition()->getParameters() as $param) {
-          $params_by_class[$param->class][] = $param;
+            $params_by_class[$param->class][] = $param;
         }
 
         foreach ($params_by_class as $class => $params) {
-          $info[] = [ new TableCell("<info>Parameters from $class</info>", ['colspan' => 7]) ];
-          $info[] = new TableSeparator();
-          $info[] = [
+            $info[] = [ new TableCell("<info>Parameters from $class</info>", ['colspan' => 7]) ];
+            $info[] = new TableSeparator();
+            $info[] = [
             '<info>Parameters</info>',
             '<fg=yellow>Name</>',
             '<fg=yellow>Type</>',
@@ -83,19 +81,19 @@ class AuditInfoCommand extends Command
             '<fg=yellow>Preprocessing</>',
             '<fg=yellow>Description</>',
             '<fg=yellow>Default value</>'
-          ];
-          foreach ($params as $param) {
-            $info[] = [
-              '',
-              $param->name,
-              $param->type?->value,
-              $param->isRequired() ? '<fg=red>Required</>' : 'Optional',
-              $param->preprocess->getTitle(),
-              $param->description,
-              Yaml::dump($param->default),
             ];
-          }
-          $info[] = new TableSeparator();
+            foreach ($params as $param) {
+                $info[] = [
+                '',
+                $param->name,
+                $param->type?->value,
+                $param->isRequired() ? '<fg=red>Required</>' : 'Optional',
+                $param->preprocess->getTitle(),
+                $param->description,
+                Yaml::dump($param->default),
+                ];
+            }
+            $info[] = new TableSeparator();
         }
 
         $policy_list = array_filter($this->policyFactory->getPolicyList(), function ($policy) use ($audit) {
@@ -103,7 +101,7 @@ class AuditInfoCommand extends Command
         });
 
         $info[] = ['<info>Policies</info>', new TableCell($this->listing(array_map(function ($policy) {
-          return $policy['name'];
+            return $policy['name'];
         }, $policy_list)), ['colspan' => 4])];
 
         $info[] = new TableSeparator();
@@ -129,7 +127,8 @@ class AuditInfoCommand extends Command
     }
 
 
-    protected function listing($array) {
-      return  "* ".implode("\n* ", array_filter($array));
+    protected function listing($array)
+    {
+        return  "* ".implode("\n* ", array_filter($array));
     }
 }

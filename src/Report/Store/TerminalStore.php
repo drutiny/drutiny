@@ -12,9 +12,12 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AsStore(name: 'terminal')]
 #[AutoconfigureTag('store')]
-class TerminalStore implements StoreInterface {
+class TerminalStore implements StoreInterface
+{
 
-    public function __construct(protected OutputInterface $output) {}
+    public function __construct(protected OutputInterface $output)
+    {
+    }
 
     /**
      * {@inheritdoc}

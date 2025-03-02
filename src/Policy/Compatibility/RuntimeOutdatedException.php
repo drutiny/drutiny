@@ -2,4 +2,6 @@
 
 namespace Drutiny\Policy\Compatibility;
 
-class RuntimeOutdatedException extends PolicyCompatibilityException {}
+class RuntimeOutdatedException extends PolicyCompatibilityException
+{
+}

@@ -17,13 +17,12 @@ use Symfony\Contracts\Cache\CacheInterface;
 class LocalFs extends AbstractPolicySource
 {
     public function __construct(
-      protected Finder $finder, 
-      protected Settings $settings,
-      protected LoggerInterface $logger,
-      CacheInterface $cache,
-      AsSource $source
-    )
-    {
+        protected Finder $finder,
+        protected Settings $settings,
+        protected LoggerInterface $logger,
+        CacheInterface $cache,
+        AsSource $source
+    ) {
         parent::__construct(cache: $cache, source: $source);
 
         $dirs = $settings->get('extension.dirs');
@@ -50,8 +49,7 @@ class LocalFs extends AbstractPolicySource
         foreach ($this->finder as $file) {
             try {
                 $policy = Yaml::parse($file->getContents());
-            }
-            catch (ParseException $e) {
+            } catch (ParseException $e) {
                 $this->logger->error("YAML Parse error in " . $file . ": " . $e->getMessage());
                 continue;
             }

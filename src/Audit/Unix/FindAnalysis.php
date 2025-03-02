@@ -15,22 +15,24 @@ use Symfony\Component\Process\Process;
  * Run a `find` command on a unix server.
  */
 #[Parameter(
-    name: 'search_directory', 
+    name: 'search_directory',
     description: 'The location where the find command conduct the search.',
     type: Type::STRING,
     preprocess: DynamicParameterType::REPLACE,
     mode: Parameter::REQUIRED,
 )]
 #[Parameter(
-    name: 'command', 
+    name: 'command',
     description: 'The arguments and options passed through to the find command',
     type: Type::STRING,
     preprocess: DynamicParameterType::REPLACE,
     mode: Parameter::REQUIRED,
 )]
-class FindAnalysis extends AbstractAnalysis {
+class FindAnalysis extends AbstractAnalysis
+{
     #[DataProvider]
-    protected function find():void {
+    protected function find():void
+    {
         $banned_options = ['-delete', '-exec ', '-execdir'];
         $command = $this->getParameter('command');
         foreach ($banned_options as $option) {

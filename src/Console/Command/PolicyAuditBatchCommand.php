@@ -23,22 +23,21 @@ use Symfony\Component\Yaml\Yaml;
  */
 class PolicyAuditBatchCommand extends DrutinyBaseCommand
 {
-  use ReportingCommandTrait;
-  use LanguageCommandTrait;
+    use ReportingCommandTrait;
+    use LanguageCommandTrait;
 
-  public function __construct(
-    protected ProfileFactory $profileFactory,
-    protected PolicyFactory $policyFactory,
-    protected TargetFactory $targetFactory,
-    protected ReportFactory $reportFactory,
-    protected FormatFactory $formatFactory,
-    protected StoreFactory $storeFactory,
-    protected LoggerInterface $logger,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected ProfileFactory $profileFactory,
+        protected PolicyFactory $policyFactory,
+        protected TargetFactory $targetFactory,
+        protected ReportFactory $reportFactory,
+        protected FormatFactory $formatFactory,
+        protected StoreFactory $storeFactory,
+        protected LoggerInterface $logger,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -74,8 +73,8 @@ class PolicyAuditBatchCommand extends DrutinyBaseCommand
           /**
            * @var \Drutiny\Profile\PolicyDefinition
            */
-          $policy_definition = unserialize(base64_decode($encoded));
-          $polices[$policy_definition->name] = $policy_definition;
+            $policy_definition = unserialize(base64_decode($encoded));
+            $polices[$policy_definition->name] = $policy_definition;
         }
 
         $this->logger->info("Loading profile...");

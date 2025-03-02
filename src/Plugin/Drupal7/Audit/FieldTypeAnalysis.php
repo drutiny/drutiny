@@ -8,16 +8,18 @@ use Drutiny\Sandbox\Sandbox;
 /**
  * Views Analysis
  */
-class FieldTypeAnalysis extends AbstractAnalysis {
+class FieldTypeAnalysis extends AbstractAnalysis
+{
 
   /**
    * {@inheritdoc}
    */
-  public function gather(Sandbox $sandbox) {
-    $data = $this->target->getService('drush')->runtime(function () {
-      return field_info_field_types();
-    });
+    public function gather(Sandbox $sandbox)
+    {
+        $data = $this->target->getService('drush')->runtime(function () {
+            return field_info_field_types();
+        });
 
-    $this->set('field_types', $data);
-  }
+        $this->set('field_types', $data);
+    }
 }

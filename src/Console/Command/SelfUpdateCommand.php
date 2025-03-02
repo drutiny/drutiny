@@ -31,12 +31,12 @@ class SelfUpdateCommand extends AbstractBaseCommand
      */
     protected function doExecute(InputInterface $input, OutputInterface $output):int
     {
-      $exit = $this->updateManager->checkForUpdates($input, $output, []);
+        $exit = $this->updateManager->checkForUpdates($input, $output, []);
 
-      if ($exit === Command::INVALID) {
-        $output->writeln("<info>No updates available.</info>");
-        return Command::SUCCESS;
-      }
-      return $exit;
+        if ($exit === Command::INVALID) {
+            $output->writeln("<info>No updates available.</info>");
+            return Command::SUCCESS;
+        }
+        return $exit;
     }
 }

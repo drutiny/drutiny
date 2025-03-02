@@ -10,7 +10,7 @@ use Drutiny\Report\Report;
 #[AsFormat(
     name: 'terminal',
     extension: 'md'
-  )]
+)]
 class Terminal extends Markdown
 {
     /**
@@ -18,7 +18,7 @@ class Terminal extends Markdown
      */
     public function setDependencyReport()
     {
-      $this->definition = $this->definition->with(content: $this->loadTwigTemplate('report/dependency'));
+        $this->definition = $this->definition->with(content: $this->loadTwigTemplate('report/dependency'));
     }
 
     /**

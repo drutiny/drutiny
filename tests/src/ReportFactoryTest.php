@@ -12,7 +12,8 @@ use Drutiny\Report\ReportFactory;
 use Error;
 use Exception;
 
-class ReportFactoryTest extends KernelTestCase {
+class ReportFactoryTest extends KernelTestCase
+{
 
     public function testCreateReport()
     {
@@ -68,5 +69,4 @@ class ReportFactoryTest extends KernelTestCase {
     {
         return $this->container->get(ReportFactory::class);
     }
-
 }

@@ -10,9 +10,11 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 #[Parameter(name: 'command', description: 'The unix command to time', mode: Parameter::REQUIRED, type: Type::STRING)]
-class TimeCommandAnalysis extends AbstractAnalysis {
+class TimeCommandAnalysis extends AbstractAnalysis
+{
     #[DataProvider]
-    protected function timeCommand() {
+    protected function timeCommand()
+    {
         $timing_command = '/usr/bin/time -f "%e %C" ';
         $unix_command = $this->getParameter('command');
         $output = $this->target->execute(Process::fromShellCommandline($timing_command . ' ' . $unix_command), function (Process $process) {

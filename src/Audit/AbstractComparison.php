@@ -13,7 +13,7 @@ abstract class AbstractComparison extends Audit
 
     public function configure():void
     {
-      $this->setDeprecated();
+        $this->setDeprecated();
     }
 
     protected function compare($reading, $value, Sandbox $sandbox)

@@ -17,7 +17,8 @@ use Drutiny\Target\Service\Drush;
     mode: Parameter::REQUIRED
 )]
 #[Dependency(expression: 'Drupal.isVersion8orLater')]
-class StateAnalysis extends AbstractAnalysis {
+class StateAnalysis extends AbstractAnalysis
+{
     protected array $states = [];
 
     /**
@@ -30,7 +31,8 @@ class StateAnalysis extends AbstractAnalysis {
     }
 
     #[DataProvider]
-    protected function getState():void {
+    protected function getState():void
+    {
         $drush = $this->target->getService('drush');
         assert($drush instanceof Drush);
 
@@ -40,7 +42,7 @@ class StateAnalysis extends AbstractAnalysis {
 
         $states = $drush->runtime(function (array $states) {
             return \Drupal::state()->getMultiple($states);
-        }, 
+        },
         $keys);
 
         $this->set('value', $states[$key] ?? null);

@@ -17,13 +17,13 @@ class SslCertificateAnalysis extends AbstractAnalysis
     {
         parent::configure();
         $this->addParameter(
-            'domain', 
-            AuditInterface::PARAMETER_REQUIRED, 
+            'domain',
+            AuditInterface::PARAMETER_REQUIRED,
             'A domain to gather SSL information from.'
         );
         $this->addParameter(
-            'servers', 
-            AuditInterface::PARAMETER_OPTIONAL, 
+            'servers',
+            AuditInterface::PARAMETER_OPTIONAL,
             'An array of hosts to attempt to retrieve SSL information on a given domain from',
             []
         );
@@ -44,8 +44,7 @@ class SslCertificateAnalysis extends AbstractAnalysis
             try {
                 $certinfo = $this->getSslInformationFromUrl($url, $domain);
                 break;
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->warning($e->getMessage());
             }
         }

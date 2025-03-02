@@ -2,7 +2,8 @@
 
 namespace Drutiny\Audit;
 
-class TwigEvaluatorFunction {
+class TwigEvaluatorFunction
+{
     public function __construct(
         public readonly string $description,
         public readonly ?string $expression = null,
@@ -11,11 +12,12 @@ class TwigEvaluatorFunction {
         public readonly string $return = 'bool',
         public readonly array $depends = [],
         public readonly mixed $default = null
-    )
-    {}
+    ) {
+    }
 
-    public function returnValue(mixed $value):mixed {
-        return match($this->return) {
+    public function returnValue(mixed $value):mixed
+    {
+        return match ($this->return) {
             'bool' => (bool) $value,
             'array' => (array) $value,
             'string' => (string) $value,
@@ -28,7 +30,7 @@ class TwigEvaluatorFunction {
 
     /**
      * Argument Spec
-     * 
+     *
      * The name of an argument to pass into an expression:
      * - arg1
      *
@@ -39,10 +41,11 @@ class TwigEvaluatorFunction {
      * $arg1: arg1
      *
      * This allows us to pass in variables from the twig runtime into function
-     * provided the dependency definition specifies which keys to map the order 
+     * provided the dependency definition specifies which keys to map the order
      * of arguments passed into the function.
      */
-    public function buildContexts(array $args = []):array {
+    public function buildContexts(array $args = []):array
+    {
         $contexts = [];
         foreach ($this->arguments as $param) {
             $contexts[$param] = array_shift($args);

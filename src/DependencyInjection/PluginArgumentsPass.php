@@ -19,7 +19,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class PluginArgumentsPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container) {
+    public function process(ContainerBuilder $container)
+    {
         $registry = [];
         $useServices = [];
         $pluginCollections = [];
@@ -40,7 +41,7 @@ class PluginArgumentsPass implements CompilerPassInterface
                 $useServices[$id] = $useAttributes;
             }
             if (empty($attributes)) {
-               continue;
+                continue;
             }
             $pluginAttribute = $attributes[0]->newInstance();
             $pluginAttribute->buildFieldAttributes($class);

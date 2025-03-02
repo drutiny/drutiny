@@ -73,5 +73,4 @@ class SettingCompare extends AbstractComparison
 
         return $this->compare($reading, $value, $sandbox);
     }
-
 }

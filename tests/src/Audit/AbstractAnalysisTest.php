@@ -12,7 +12,8 @@ use Drutiny\Target\TargetFactory;
 use Drutiny\Target\TargetInterface;
 use DrutinyTests\KernelTestCase;
 
-class AbstractAnalysisTest extends KernelTestCase {
+class AbstractAnalysisTest extends KernelTestCase
+{
     protected TargetInterface $target;
 
     protected function setUp(): void
@@ -37,11 +38,11 @@ class AbstractAnalysisTest extends KernelTestCase {
   
     public function testPass()
     {
-      $policy = $this->getPolicyStub();
-      $response = $this->audit($policy);
+        $policy = $this->getPolicyStub();
+        $response = $this->audit($policy);
 
-      $this->assertFalse($response->state->hasError());
-      $this->assertTrue($response->state->isSuccessful());
+        $this->assertFalse($response->state->hasError());
+        $this->assertTrue($response->state->isSuccessful());
     }
 
     public function testExpression()
@@ -146,7 +147,8 @@ class AbstractAnalysisTest extends KernelTestCase {
         $this->assertFalse($response->state->hasWarning());
     }
 
-    public function testNotApplicable() {
+    public function testNotApplicable()
+    {
         $parameters = ['not_applicable' => 'true'];
         $policy = $this->getPolicyStub()->with(parameters: $parameters);
         $response = $this->audit($policy);
@@ -157,7 +159,8 @@ class AbstractAnalysisTest extends KernelTestCase {
         $this->assertFalse($response->state->isNotice());
     }
 
-    public function testSeverityCriticalIf() {
+    public function testSeverityCriticalIf()
+    {
         $parameters = ['severityCriticalIf' => 'true'];
         $policy = $this->getPolicyStub()->with(parameters: $parameters, severity: Severity::NORMAL);
         $response = $this->audit($policy);
@@ -174,7 +177,8 @@ class AbstractAnalysisTest extends KernelTestCase {
         $this->assertEquals(Severity::CRITICAL, $response->policy->severity, "Severity changes when policy is unsuccessful");
     }
 
-    public function testSeverityHighIf() {
+    public function testSeverityHighIf()
+    {
         $parameters = ['severityHighIf' => 'true'];
         $policy = $this->getPolicyStub()->with(parameters: $parameters, severity: Severity::NORMAL);
         $response = $this->audit($policy);
@@ -198,7 +202,8 @@ class AbstractAnalysisTest extends KernelTestCase {
         $this->assertNotEquals(Severity::HIGH, $response->policy->severity, "Severity doesn't lower from high severity levels.");
     }
 
-    public function testSeverityNormalIf() {
+    public function testSeverityNormalIf()
+    {
         $parameters = ['severityNormalIf' => 'true'];
         $policy = $this->getPolicyStub()->with(parameters: $parameters, severity: Severity::LOW);
         $response = $this->audit($policy);
@@ -221,5 +226,4 @@ class AbstractAnalysisTest extends KernelTestCase {
         $this->assertTrue($response->state->isFailure());
         $this->assertNotEquals(Severity::NORMAL, $response->policy->severity, "Severity doesn't lower from high severity levels.");
     }
-
 }

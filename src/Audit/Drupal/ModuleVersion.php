@@ -12,8 +12,9 @@ use Drutiny\Annotation\Param;
 class ModuleVersion extends Audit
 {
 
-    public function configure():void {
-      $this->setDeprecated();
+    public function configure():void
+    {
+        $this->setDeprecated();
     }
 
     public function audit(Sandbox $sandbox)

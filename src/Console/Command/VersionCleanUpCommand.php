@@ -20,15 +20,14 @@ use Symfony\Component\Finder\Finder;
  * Self update command.
  */
 #[AsCommand(
-    name: 'version:clean', 
+    name: 'version:clean',
     description: 'Remove old versions of drutiny releases.',
 )]
 class VersionCleanUpCommand extends DrutinyBaseCommand
 {
     public function __construct(
         protected Settings $settings
-    )
-    {
+    ) {
         parent::__construct();
     }
 

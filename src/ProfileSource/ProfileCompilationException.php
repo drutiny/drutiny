@@ -4,6 +4,7 @@ namespace Drutiny\ProfileSource;
 
 use Exception;
 
-class ProfileCompilationException extends Exception {
+class ProfileCompilationException extends Exception
+{
     
 }

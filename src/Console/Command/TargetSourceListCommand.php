@@ -19,12 +19,11 @@ use Drutiny\Target\TargetSourceInterface;
 class TargetSourceListCommand extends DrutinyBaseCommand
 {
 
-  public function __construct(
-    protected TargetFactory $targetFactory
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected TargetFactory $targetFactory
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -50,7 +49,7 @@ class TargetSourceListCommand extends DrutinyBaseCommand
         $target = $this->targetFactory->mock($input->getArgument('source'));
 
         if (!($target instanceof TargetSourceInterface)) {
-          throw new InvalidTargetException('Target source does not support listing available targets: ' . $source);
+            throw new InvalidTargetException('Target source does not support listing available targets: ' . $source);
         }
 
         $io = new SymfonyStyle($input, $output);
@@ -58,8 +57,8 @@ class TargetSourceListCommand extends DrutinyBaseCommand
         $rows = [];
 
         foreach ($target->getAvailableTargets() as $info) {
-          $info += ['id' => '', 'uri' => '', 'name' => ''];
-          $rows[] = [$source . ':' . $info['id'], $info['uri'], $info['name']];
+            $info += ['id' => '', 'uri' => '', 'name' => ''];
+            $rows[] = [$source . ':' . $info['id'], $info['uri'], $info['name']];
         }
         $io->table(['Target', 'URI', 'Name'], $rows);
 

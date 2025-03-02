@@ -4,7 +4,8 @@ namespace Drutiny\Helper;
 
 use InvalidArgumentException;
 
-class TextCleaner {
+class TextCleaner
+{
     /**
      * Clean a JSON object or array reponse.
      */
@@ -21,12 +22,10 @@ class TextCleaner {
         if ($has_array === false) {
             $open = '{';
             $close = '}';
-        }
-        elseif ($has_object === false) {
+        } elseif ($has_object === false) {
             $open = '[';
             $close = ']';
-        }
-        else {
+        } else {
             // Figure out if the array or object came first.
             $open = min($has_array, $has_object) == $has_array ? '[' : '{';
             $close = min($has_array, $has_object) == $has_array ? ']' : '}';

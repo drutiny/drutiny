@@ -8,7 +8,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 #[Autoconfigure(autowire:false)]
-class ArrayType {
+class ArrayType
+{
     public readonly string $type;
 
     public function __construct(string $type, public readonly ?string $of = null)
@@ -19,8 +20,9 @@ class ArrayType {
         $this->type = $type;
     }
 
-    public function validate(array $value):bool {
-        $correct_type = match($this->type) {
+    public function validate(array $value):bool
+    {
+        $correct_type = match ($this->type) {
             'keyed' => !array_is_list($value),
             'indexed' => array_is_list($value)
         };

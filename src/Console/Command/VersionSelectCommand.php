@@ -17,8 +17,7 @@ class VersionSelectCommand extends DrutinyBaseCommand
 {
     public function __construct(
         protected Settings $settings
-    )
-    {
+    ) {
         parent::__construct();
     }
 

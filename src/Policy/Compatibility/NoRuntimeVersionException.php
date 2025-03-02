@@ -2,4 +2,6 @@
 
 namespace Drutiny\Policy\Compatibility;
 
-class NoRuntimeVersionException extends PolicyCompatibilityException {}
+class NoRuntimeVersionException extends PolicyCompatibilityException
+{
+}

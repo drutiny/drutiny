@@ -8,20 +8,21 @@ use Drutiny\Target\TargetInterface;
 use Drutiny\Target\FilesystemInterface;
 
 #[AsTarget(name: 'git')]
-class GitTarget extends Target implements FilesystemInterface, GitInterface {
+class GitTarget extends Target implements FilesystemInterface, GitInterface
+{
     use GitTrait;
     protected string $id;
 
     /**
      * {@inheritdoc}
      */
-    public function parse(string $data, ?string $uri = NULL):TargetInterface
+    public function parse(string $data, ?string $uri = null):TargetInterface
     {
-      $data = is_dir($data) ? realpath($data) : $data;
-      $this->setLocation($data);
-      $this->id = $data;
-      $this->setUri($data);
-      return $this;
+        $data = is_dir($data) ? realpath($data) : $data;
+        $this->setLocation($data);
+        $this->id = $data;
+        $this->setUri($data);
+        return $this;
     }
 
     /**
@@ -29,7 +30,7 @@ class GitTarget extends Target implements FilesystemInterface, GitInterface {
      */
     public function getId():string
     {
-      return $this->id;
+        return $this->id;
     }
 
     /**
@@ -37,7 +38,7 @@ class GitTarget extends Target implements FilesystemInterface, GitInterface {
      */
     public function getDirectory():string
     {
-      return $this->useLocal()->getProperty('vcs.git.location');
+        return $this->useLocal()->getProperty('vcs.git.location');
     }
 
     /**
@@ -45,6 +46,6 @@ class GitTarget extends Target implements FilesystemInterface, GitInterface {
      */
     public function gitIsLocal():bool
     {
-      return $this->gitIsLocal;
+        return $this->gitIsLocal;
     }
 }

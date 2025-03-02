@@ -19,9 +19,9 @@ use Symfony\Component\Yaml\Yaml;
 class PluginListCommand extends Command
 {
     public function __construct(
-      protected Settings $settings, 
-      protected ContainerInterface $container)
-    {
+        protected Settings $settings,
+        protected ContainerInterface $container
+    ) {
         parent::__construct();
     }
 
@@ -48,7 +48,7 @@ class PluginListCommand extends Command
             $plugin = $this->container->get($id);
             
             if ($plugin->isHidden()) {
-              continue;
+                continue;
             }
 
             $state = $plugin->isInstalled() ? 'Installed' : 'Not Installed';
@@ -57,9 +57,9 @@ class PluginListCommand extends Command
         ksort($rows);
 
         $output->write(match ($input->getOption('format')) {
-          'json' => json_encode($rows),
-          'yaml' => Yaml::dump($rows),
-          default => $io->table(['Namespace', 'Status'], $rows) ?? ''
+            'json' => json_encode($rows),
+            'yaml' => Yaml::dump($rows),
+            default => $io->table(['Namespace', 'Status'], $rows) ?? ''
         });
 
         return 0;

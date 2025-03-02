@@ -11,37 +11,38 @@ use Symfony\Component\Yaml\Yaml;
  * Duplicate modules.
  */
 #[Dependency('Drupal.isVersion7', Dependency::ON_FAIL_OMIT)]
-class DuplicateModules extends Audit {
+class DuplicateModules extends Audit
+{
 
   /**
    * @inheritdoc
    */
-  public function audit(Sandbox $sandbox) {
-    $config = $sandbox->drush(['format' => 'json'])->status();
-    $docroot = $config['root'];
+    public function audit(Sandbox $sandbox)
+    {
+        $config = $sandbox->drush(['format' => 'json'])->status();
+        $docroot = $config['root'];
 
-    $command = <<<CMD
+        $command = <<<CMD
 find $docroot -name '*.module' -type f |\
 grep -Ev 'drupal_system_listing_(in)?compatible_test' |\
 grep -oe '[^/]*\.module' | grep -Ev '^\.module' | cut -d'.' -f1 | sort |\
 uniq -c | sort -nr | awk '{print $2": "$1}'
 CMD;
 
-    $output = $sandbox->exec($command);
-    $duplicateModules = array_filter(Yaml::parse($output), function ($count) {
-      return $count > 1;
-    });
+        $output = $sandbox->exec($command);
+        $duplicateModules = array_filter(Yaml::parse($output), function ($count) {
+            return $count > 1;
+        });
 
-    $modules = [];
-    foreach ($duplicateModules as $module => $count) {
-      $modules[] = [
-        'module' => $module,
-        'count' => $count,
-      ];
+        $modules = [];
+        foreach ($duplicateModules as $module => $count) {
+            $modules[] = [
+            'module' => $module,
+            'count' => $count,
+            ];
+        }
+
+        $this->set('modules', $modules);
+        return count($modules) === 0;
     }
-
-    $this->set('modules', $modules);
-    return count($modules) === 0;
-  }
-
 }

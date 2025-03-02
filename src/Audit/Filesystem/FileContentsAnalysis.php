@@ -16,33 +16,35 @@ use Symfony\Component\Yaml\Yaml;
  */
 #[Dependency(expression: "Target.typeOf('Drutiny\\\Target\\\FilesystemInterface')")]
 #[Parameter(
-  name: 'filepath', 
-  description: "specify the explicit filepath to get contents from.", 
-  type: Type::STRING,
-  mode: Parameter::REQUIRED
+    name: 'filepath',
+    description: "specify the explicit filepath to get contents from.",
+    type: Type::STRING,
+    mode: Parameter::REQUIRED
 )]
 #[Parameter(
-  name: 'format', 
-  description: "A format to parse the output through", 
-  type: Type::STRING,
-  mode: Parameter::OPTIONAL,
-  default: 'raw',
-  enums: ['raw', 'json', 'yaml']
+    name: 'format',
+    description: "A format to parse the output through",
+    type: Type::STRING,
+    mode: Parameter::OPTIONAL,
+    default: 'raw',
+    enums: ['raw', 'json', 'yaml']
 )]
-class FileContentsAnalysis extends AbstractAnalysis {
-  #[DataProvider]
-  public function getContents(): void {
-    $filepath = $this->getParameter('filepath');
+class FileContentsAnalysis extends AbstractAnalysis
+{
+    #[DataProvider]
+    public function getContents(): void
+    {
+        $filepath = $this->getParameter('filepath');
 
-    $command = Process::fromShellCommandline('test ! -f ' . $filepath . ' ||  cat ' . $filepath);
-    $contents = $this->target->execute($command, function ($output) {
-      return trim($output);
-    });
+        $command = Process::fromShellCommandline('test ! -f ' . $filepath . ' ||  cat ' . $filepath);
+        $contents = $this->target->execute($command, function ($output) {
+            return trim($output);
+        });
 
-    $this->set('contents', match ($this->getParameter('format')) {
-      'json' => TextCleaner::decodeDirtyJson($contents),
-      'yaml' => Yaml::parse($contents),
-      default => $contents
-    });
-  }
+        $this->set('contents', match ($this->getParameter('format')) {
+            'json' => TextCleaner::decodeDirtyJson($contents),
+            'yaml' => Yaml::parse($contents),
+            default => $contents
+        });
+    }
 }

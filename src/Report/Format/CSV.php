@@ -13,8 +13,8 @@ use Fiasco\TabularOpenapi\TableManager;
 use Symfony\Component\Console\Output\BufferedOutput;
 
 #[AsFormat(
-  name: 'csv',
-  extension: 'csv'
+    name: 'csv',
+    extension: 'csv'
 )]
 class CSV extends FilesystemFormat implements FilesystemFormatInterface
 {
@@ -29,7 +29,7 @@ class CSV extends FilesystemFormat implements FilesystemFormatInterface
         $target['date'] = $report->reportingPeriodEnd->format('c');
 
         foreach ($report->target->getPropertyList() as $property_name) {
-          $target[$property_name] = $report->target[$property_name];
+            $target[$property_name] = $report->target[$property_name];
         }
 
         $this->tabularSchema = new TableManager(OpenApi::getFilename());
@@ -43,13 +43,13 @@ class CSV extends FilesystemFormat implements FilesystemFormatInterface
 
         $lookup_table = $this->tabularSchema->buildLookupTable();
         if ($lookup_table->getRowsTotal()) {
-          yield new RenderedReport($lookup_table->name . '__' . $this->namespace, $this->writeTable($lookup_table), RenderedReport::EXISTS_APPEND);
+            yield new RenderedReport($lookup_table->name . '__' . $this->namespace, $this->writeTable($lookup_table), RenderedReport::EXISTS_APPEND);
         }
 
         // Append new rows.
         foreach ($this->tabularSchema->getTables() as $table) {
             if (!$table->getRowsTotal()) {
-              continue;
+                continue;
             }
             yield new RenderedReport($table->name . '__' . $this->namespace, $this->writeTable($table), RenderedReport::EXISTS_APPEND);
         }
@@ -62,17 +62,17 @@ class CSV extends FilesystemFormat implements FilesystemFormatInterface
         $writer->setNewline("\r\n");
         $headers = false;
         foreach ($table->fetchAll() as $values) {
-          $values['_table'] = $table->uuid;
-          if (!$headers) {
-            $headers = array_keys($values);
-            $writer->insertOne($headers);
-          }
-          $row = [];
+            $values['_table'] = $table->uuid;
+            if (!$headers) {
+                $headers = array_keys($values);
+                $writer->insertOne($headers);
+            }
+            $row = [];
           // Ensure the table values come out the right way.
-          foreach ($headers as $header) {
-            $row[$header] = $values[$header];
-          }
-          $writer->insertOne($row);
+            foreach ($headers as $header) {
+                $row[$header] = $values[$header];
+            }
+            $writer->insertOne($row);
         }
         $filepath = $this->directory . '/' . $table->name . '__' . $this->namespace . '.' . $this->getExtension();
         $stream = new BufferedOutput();

@@ -17,11 +17,11 @@ use Twig\Extension\CoreExtension;
 abstract class TwigFormat extends FilesystemFormat implements FilesystemFormatInterface
 {
     public function __construct(
-      protected Environment $twig, 
-      OutputInterface $output, 
-      LoggerInterface $logger)
-    {
-      parent::__construct($output, $logger);
+        protected Environment $twig,
+        OutputInterface $output,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($output, $logger);
     }
 
     public function configure()
@@ -34,29 +34,28 @@ abstract class TwigFormat extends FilesystemFormat implements FilesystemFormatIn
         // Ensure Twig's timezone reflects that of the report.
         $this->twig->getExtension(CoreExtension::class)->setTimezone($report->reportingPeriodStart->getTimezone());
         try {
-          $template = $this->definition->template;
+            $template = $this->definition->template;
           // 2.x backwards compatibility.
-          if (strpos($template, '.twig') === false) {
-            $this->logger->warning("Deprecated template declaration found: $template. Templates should explicitly specify extension (e.g. .md.twig).");
-            $template .= '.'.$this->getExtension().'.twig';
-          }
-          $this->logger->debug("Rendering ".$this->getName()." with template $template.");
+            if (strpos($template, '.twig') === false) {
+                $this->logger->warning("Deprecated template declaration found: $template. Templates should explicitly specify extension (e.g. .md.twig).");
+                $template .= '.'.$this->getExtension().'.twig';
+            }
+            $this->logger->debug("Rendering ".$this->getName()." with template $template.");
           
-          $vars = get_object_vars($report);
+            $vars = get_object_vars($report);
           // Backward compatibility
-          $vars['assessment'] = new Assessment($report);
-          $vars['settings'] = $this->twig->getRuntime(Settings::class)->getAll();
-          $vars['userIdentity'] = $this->twig->getRuntime(User::class)->getIdentity();
-          $vars['sections'] = $this->prepareContent($vars);
-          $this->buffer->write($this->twig->render($template, $vars));
-        }
-        catch (Error $e) {
-          $this->logTwigError($e);
-          throw $e;
+            $vars['assessment'] = new Assessment($report);
+            $vars['settings'] = $this->twig->getRuntime(Settings::class)->getAll();
+            $vars['userIdentity'] = $this->twig->getRuntime(User::class)->getIdentity();
+            $vars['sections'] = $this->prepareContent($vars);
+            $this->buffer->write($this->twig->render($template, $vars));
+        } catch (Error $e) {
+            $this->logTwigError($e);
+            throw $e;
         }
 
         return new RenderedReport($report->getName(), $this->buffer);
-      }
+    }
 
     /**
      * Attempt to load a twig template based on the provided format extension.
@@ -68,7 +67,7 @@ abstract class TwigFormat extends FilesystemFormat implements FilesystemFormatIn
      */
     final protected function loadTwigTemplate($name)
     {
-      return $this->twig->load(sprintf('%s.%s.twig', $name, $this->getExtension()));
+        return $this->twig->load(sprintf('%s.%s.twig', $name, $this->getExtension()));
     }
 
     /**
@@ -77,18 +76,19 @@ abstract class TwigFormat extends FilesystemFormat implements FilesystemFormatIn
     abstract protected function prepareContent(array $vars):array;
 
 
-    protected function logTwigError(Error $e):void {
-      $message[] = $e->getMessage();
-      foreach ($e->getTrace() as $stack) {
-        $message[] = strtr('file:line', $stack);
-      }
-      $this->logger->error(implode("\n", $message));
-      if ($source = $e->getSourceContext()) {
-        $lines = [];
-        foreach (explode(PHP_EOL, $source->getCode()) as $idx => $line) {
-          $lines[] = ($idx+1) . ":\t" . $line;
+    protected function logTwigError(Error $e):void
+    {
+        $message[] = $e->getMessage();
+        foreach ($e->getTrace() as $stack) {
+            $message[] = strtr('file:line', $stack);
         }
-        $this->logger->info(PHP_EOL . implode(PHP_EOL, $lines));
-      }
+        $this->logger->error(implode("\n", $message));
+        if ($source = $e->getSourceContext()) {
+            $lines = [];
+            foreach (explode(PHP_EOL, $source->getCode()) as $idx => $line) {
+                $lines[] = ($idx+1) . ":\t" . $line;
+            }
+            $this->logger->info(PHP_EOL . implode(PHP_EOL, $lines));
+        }
     }
 }

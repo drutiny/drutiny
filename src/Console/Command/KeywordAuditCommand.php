@@ -24,23 +24,22 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class KeywordAuditCommand extends DrutinyBaseCommand
 {
-  use ReportingCommandTrait;
-  use LanguageCommandTrait;
+    use ReportingCommandTrait;
+    use LanguageCommandTrait;
 
-  public function __construct(
-    protected ProfileFactory $profileFactory,
-    protected PolicyFactory $policyFactory,
-    protected TargetFactory $targetFactory,
-    protected FormatFactory $formatFactory,
-    protected ReportFactory $reportFactory,
-    protected LoggerInterface $logger,
-    protected ProgressBar $progressBar,
-    protected StoreFactory $storeFactory,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected ProfileFactory $profileFactory,
+        protected PolicyFactory $policyFactory,
+        protected TargetFactory $targetFactory,
+        protected FormatFactory $formatFactory,
+        protected ReportFactory $reportFactory,
+        protected LoggerInterface $logger,
+        protected ProgressBar $progressBar,
+        protected StoreFactory $storeFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -73,11 +72,13 @@ class KeywordAuditCommand extends DrutinyBaseCommand
             'x',
             InputOption::VALUE_OPTIONAL,
             'Send an exit code to the console if a policy of a given severity fails. Defaults to none (exit code 0). (Options: none, low, normal, high, critical)',
-            FALSE
+            false
         )
         ->addOption(
-          'yes', 'y', InputOption::VALUE_NONE,
-          'Implicity answer yes to any confirmation prompts.'
+            'yes',
+            'y',
+            InputOption::VALUE_NONE,
+            'Implicity answer yes to any confirmation prompts.'
         );
         parent::configure();
         $this->configureReporting();
@@ -110,28 +111,27 @@ class KeywordAuditCommand extends DrutinyBaseCommand
         }
 
         if (empty($unique_policies)) {
-          $io->warning("No policies found with keywords: " . implode(', ', $input->getOption('keyword')));
-          return 0;
+            $io->warning("No policies found with keywords: " . implode(', ', $input->getOption('keyword')));
+            return 0;
         }
         $io->text("Audit these policies:");
         $io->table(['policy', 'name', 'class', 'tags'], $rows);
         if (!$input->getOption('yes') && !$io->confirm("Are you sure you want to audit these policies?")) {
-          $io->text('Cancelling');
-          return 0;
-        }
-        else {
-          $io->text('Keyword audit will run these policies.');
-          $io->text('');
+            $io->text('Cancelling');
+            return 0;
+        } else {
+            $io->text('Keyword audit will run these policies.');
+            $io->text('');
         }
 
         $profile = $this->profileFactory->loadProfileByName('empty')->with(
-          title: 'Keyword audit',
-          name: '_keyword_audit',
-          uuid: '_keyword_audit',
-          source: 'keyword:audit',
-          description: 'Wrapper profile for keyword:audit',
-          policies: $unique_policies,
-          format: [
+            title: 'Keyword audit',
+            name: '_keyword_audit',
+            uuid: '_keyword_audit',
+            source: 'keyword:audit',
+            description: 'Wrapper profile for keyword:audit',
+            policies: $unique_policies,
+            format: [
             'terminal' => [
               'content' => "
               {% block audit %}
@@ -139,12 +139,12 @@ class KeywordAuditCommand extends DrutinyBaseCommand
                     {{ policy_result(response, assessment) }}
                 {% endfor %}
               {% endblock %}"
-          ]]
+            ]]
         );
 
         // Get the URLs.
         if ($uri = $input->getOption('uri')) {
-          $target->setUri($uri);
+            $target->setUri($uri);
         }
 
         $profile->setReportingPeriod($this->getReportingPeriodStart($input), $this->getReportingPeriodEnd($input));
@@ -158,13 +158,13 @@ class KeywordAuditCommand extends DrutinyBaseCommand
 
         $rows = [];
         foreach ((new Assessment($report))->getStatsByResult() as $type => $frequency) {
-          $rows[] = [ucwords($type, " -"), $frequency];
+            $rows[] = [ucwords($type, " -"), $frequency];
         }
 
         $io->title('Policy result summary');
         $io->table(
-          ['Result', 'Frequency'],
-          $rows
+            ['Result', 'Frequency'],
+            $rows
         );
 
         $this->formatReport($report, $io, $input);
@@ -173,7 +173,7 @@ class KeywordAuditCommand extends DrutinyBaseCommand
 
         // Do not use a non-zero exit code when no severity is set (Default).
         $exit_severity = $input->getOption('exit-on-severity');
-        if ($exit_severity === FALSE) {
+        if ($exit_severity === false) {
             return 0;
         }
         $this->logger->info("Exiting with max severity code.");

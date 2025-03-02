@@ -25,7 +25,7 @@ use Psr\Http\Message\ResponseInterface;
 class HttpAnalysis extends AbstractAnalysis
 {
     #[DataProvider]
-    protected function makeHttpRequest (Client $client): void
+    protected function makeHttpRequest(Client $client): void
     {
         $use_cache = $this->getParameter('use_cache', false);
         // For checking caching functionality, add a listener
@@ -48,11 +48,12 @@ class HttpAnalysis extends AbstractAnalysis
     /**
      * Retrieve a URL to request.
      */
-    protected function prepareUrl():string {
+    protected function prepareUrl():string
+    {
         // This allows policies to specify urls that still contain a domain.
         $url = $this->getParameter('url');
 
-        if (strpos($url, 'http') === FALSE) {
+        if (strpos($url, 'http') === false) {
             $url = 'https://' . $url;
         }
 

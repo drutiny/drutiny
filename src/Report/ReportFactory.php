@@ -30,7 +30,8 @@ use Symfony\Component\Process\Process;
 use Twig\Error\RuntimeError;
 use UnexpectedValueException;
 
-class ReportFactory {
+class ReportFactory
+{
     public function __construct(
         protected LoggerInterface $logger,
         protected AuditFactory $auditFactory,
@@ -39,8 +40,8 @@ class ReportFactory {
         protected EventDispatcher $eventDispatcher,
         protected LanguageManager $languageManager,
         protected ProgressBar $progressBar,
-    )
-    {}
+    ) {
+    }
 
     /**
      * Execute audits from profile policies and present the results as a Report object.
@@ -48,8 +49,7 @@ class ReportFactory {
     public function create(
         Profile $profile,
         TargetInterface $target
-    ):Report
-    {
+    ):Report {
         $contexts = $this->buildContexts($target);
 
         $start = time();
@@ -73,7 +73,7 @@ class ReportFactory {
             language: $this->languageManager->getCurrentLanguage(),
         );
 
-        // Validate the number of results reflects the number of policies that were 
+        // Validate the number of results reflects the number of policies that were
         // provided by the profile.
         $expected_results = count($report->type == ReportType::ASSESSMENT ? $profile->policies : $profile->dependencies);
         if (count($report->results) != $expected_results) {
@@ -91,7 +91,7 @@ class ReportFactory {
         $audit_groups = [];
         $early_results = [];
         // Dependencies must be met for a policy to be audited.
-        // If they generate a response then that response is used 
+        // If they generate a response then that response is used
         // as the policy's AuditResponse and the policy is omitted from auditing.
         foreach ($definitions as $definition) {
             $policy = $definition->getPolicy($this->policyFactory);
@@ -118,8 +118,7 @@ class ReportFactory {
                 $batch_id = $this->prepareAudit($audit, $policy->getPolicy($this->policyFactory), $errors);
                 if (is_string($batch_id)) {
                     $batch[$batch_id][$policy->name] = $policy;
-                }
-                elseif (is_null($batch_id)) {
+                } elseif (is_null($batch_id)) {
                     $batch[] = [$policy->name => $policy];
                 }
             }
@@ -142,7 +141,7 @@ class ReportFactory {
                 }
 
                 $processManager->add(
-                    process: $process, 
+                    process: $process,
                     name: $name
                 );
             }
@@ -158,7 +157,6 @@ class ReportFactory {
                     return [];
                 }
                 return $response;
-
             }, $procs);
         })->then(function (array $result_sets) {
             return call_user_func_array('array_merge', array_values($result_sets));
@@ -167,7 +165,8 @@ class ReportFactory {
         return $processManager;
     }
 
-    public function promise(Profile $profile, TargetInterface $target):Report|ProcessManager {
+    public function promise(Profile $profile, TargetInterface $target):Report|ProcessManager
+    {
         $contexts = $this->buildContexts($target);
 
         $start = time();
@@ -217,7 +216,7 @@ class ReportFactory {
         $results = [];
 
         // Dependencies must be met for a policy to be audited.
-        // If they generate a response then that response is used 
+        // If they generate a response then that response is used
         // as the policy's AuditResponse and the policy is omitted from auditing.
         foreach ($definitions as $definition) {
             $policy = $definition->getPolicy($this->policyFactory);
@@ -242,11 +241,9 @@ class ReportFactory {
                     }
                     $this->logger->info("Auditing $policy->title");
                     $response = $this->policyAudit($policy, $audit, $start, $end);
-                }
-                catch (Error|Exception $e) {
+                } catch (Error|Exception $e) {
                     $response = $this->handleError($e, $policy);
-                }
-                finally {
+                } finally {
                     $this->eventDispatcher->dispatch($response, 'policy.audit.response');
                 }
                 $results[] = $response;
@@ -266,16 +263,16 @@ class ReportFactory {
      * Prepare an audit with a given policy.
      *
      * @param \Drutiny\AuditResponse[] $errors
-     * 
+     *
      * @return null means there was no batching suggested for the policy.
      * @return string is an identifier to batch the policy with.
      * @return false is an error and the policy should not be processed further.
      */
-    private function prepareAudit(AuditInterface $audit, Policy $policy, array &$errors):null|string|bool {
+    private function prepareAudit(AuditInterface $audit, Policy $policy, array &$errors):null|string|bool
+    {
         try {
             return $audit->prepare($policy);
-        }
-        catch (AuditException $e) {
+        } catch (AuditException $e) {
             $errors[] = new AuditResponse(
                 policy: $policy,
                 state: $e->state,
@@ -294,7 +291,8 @@ class ReportFactory {
     /**
      * Audit a policy.
      */
-    private function policyAudit(Policy $policy, AuditInterface $audit, DateTimeInterface $start, DateTimeInterface $end): AuditResponse {
+    private function policyAudit(Policy $policy, AuditInterface $audit, DateTimeInterface $start, DateTimeInterface $end): AuditResponse
+    {
         $audit->setParameter('reporting_period_start', $start);
         $audit->setParameter('reporting_period_end', $end);
         return $audit->execute($policy);
@@ -303,7 +301,8 @@ class ReportFactory {
     /**
      * Handle and error occuring when trying to build an AuditResponse.
      */
-    private function handleError(Error|Exception $e, Policy $policy):AuditResponse {
+    private function handleError(Error|Exception $e, Policy $policy):AuditResponse
+    {
         $response = new AuditResponse(
             policy: $policy,
             state: State::ERROR,
@@ -329,8 +328,7 @@ class ReportFactory {
         foreach ($policy->depends as $dependency) {
             try {
                 $this->requireDependency($dependency, $contexts);
-            }
-            catch (DependencyException $e) {
+            } catch (DependencyException $e) {
                 $onFail = $onFail->higher($dependency->onFail);
                 if ($onFail === $dependency->onFail) {
                     $exception = $e->getMessage();
@@ -364,11 +362,9 @@ class ReportFactory {
             if (($return === 1) || ($return === true)) {
                 return true;
             }
-        }
-        catch (RuntimeError $e) {
+        } catch (RuntimeError $e) {
             throw new DependencyException($dependency, $e->getMessage(), $e);
-        }
-        catch (UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             throw new DependencyException($dependency, $e->getMessage(), $e);
         }
         // UnexpectedValueException

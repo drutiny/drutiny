@@ -15,16 +15,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class ProfileListCommand extends DrutinyBaseCommand
 {
-  use LanguageCommandTrait;
+    use LanguageCommandTrait;
 
-  public function __construct(
-    protected ProgressBar $progressBar,
-    protected ProfileFactory $profileFactory,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected ProgressBar $progressBar,
+        protected ProfileFactory $profileFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -57,8 +56,12 @@ class ProfileListCommand extends DrutinyBaseCommand
         if ($source_filter = $input->getOption('source')) {
             $this->progressBar->setMessage("Filtering profiles by source: $source_filter");
             $profiles = array_filter($profiles, function ($profile) use ($source_filter) {
-                if ($source_filter == $profile['source']) return true;
-                if ($source_filter == preg_replace('/\<.+\>/U', '', $profile['source'])) return true;
+                if ($source_filter == $profile['source']) {
+                    return true;
+                }
+                if ($source_filter == preg_replace('/\<.+\>/U', '', $profile['source'])) {
+                    return true;
+                }
                 return false;
             });
         }

@@ -17,7 +17,7 @@ class RequirementsAnalysis extends AbstractAnalysis
 {
     public function prepare(Policy $policy): ?string
     {
-      return static::class;
+        return static::class;
     }
 
     #[DataProvider]

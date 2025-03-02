@@ -25,17 +25,16 @@ use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 class PolicyDiffCommand extends DrutinyBaseCommand
 {
 
-  public function __construct(
-    protected Environment $twigEnvironment,
-    protected PolicyFactory $policyFactory,
-    protected ProfileFactory $profileFactory,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected Environment $twigEnvironment,
+        protected PolicyFactory $policyFactory,
+        protected ProfileFactory $profileFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
-  use LanguageCommandTrait;
+    use LanguageCommandTrait;
 
   /**
    * @inheritdoc
@@ -88,8 +87,7 @@ class PolicyDiffCommand extends DrutinyBaseCommand
             );
             $source1 = $policy_sources[$source];
             unset($policy_sources[$source]);
-        }
-        else {
+        } else {
             $source1 = $this->policyFactory->getSource($input->getArgument('source1'));
             if (isset($policy_sources)) {
                 unset($policy_sources[$source1->name]);
@@ -98,14 +96,12 @@ class PolicyDiffCommand extends DrutinyBaseCommand
 
         if ($input->getArgument('source2') === null && empty($policy_sources)) {
             throw new LogicException("There are not enough sources to diff this policy.");
-        }
-        elseif ($input->getArgument('source2') === null) {
+        } elseif ($input->getArgument('source2') === null) {
             $source2 = count($policy_sources) == 1 ? array_shift($policy_sources) : $policy_sources[$io->choice(
                 question: "Which source to diff as the comparative policy?",
                 choices: array_keys($policy_sources),
             )];
-        }
-        else {
+        } else {
             $source2 = $this->policyFactory->getSource($input->getArgument('source2'));
         }
 
@@ -149,7 +145,8 @@ class PolicyDiffCommand extends DrutinyBaseCommand
     /**
      * @return \Drutiny\PolicySource\AbstractPolicySource[]
      */
-    protected function getSourcesByPolicyName(string $policy_name):array {
+    protected function getSourcesByPolicyName(string $policy_name):array
+    {
         $policy_sources = [];
 
         foreach ($this->policyFactory->sources as $source) {
@@ -162,7 +159,8 @@ class PolicyDiffCommand extends DrutinyBaseCommand
         return $policy_sources;
     }
 
-    protected function preparePolicy(Policy $policy) {
+    protected function preparePolicy(Policy $policy)
+    {
         $export = $policy->export();
 
         unset($export['source']);

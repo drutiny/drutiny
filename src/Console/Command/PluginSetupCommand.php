@@ -87,7 +87,6 @@ class PluginSetupCommand extends Command
         }
         $ask = sprintf("%s<info>[%s] </info>%s: ", $extra, $field->name, ucfirst($field->description));
         do {
-
             $value = match ($field->ask) {
                 Question::CHOICE => $io->choice($ask, $field->choices, $default_value),
                 Question::CONFIRMATION => $io->confirm($ask, $default_value ?? true),
@@ -99,8 +98,7 @@ class PluginSetupCommand extends Command
                 continue;
             }
             break;
-        }
-        while (true);
+        } while (true);
         return $value;
     }
 }

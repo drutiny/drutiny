@@ -7,8 +7,10 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
 #[Autoconfigure(autowire: false)]
-class Deprecated {
+class Deprecated
+{
     public function __construct(
-        public readonly string $note, 
-    ) {}
+        public readonly string $note,
+    ) {
+    }
 }

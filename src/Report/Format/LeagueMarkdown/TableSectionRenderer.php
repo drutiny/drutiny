@@ -29,5 +29,4 @@ final class TableSectionRenderer implements NodeRendererInterface
         }
         $node->data->set('attributes', $attrs);
     }
-
 }

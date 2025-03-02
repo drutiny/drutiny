@@ -11,22 +11,22 @@ use Psr\Cache\CacheItemInterface;
  * Audit the first row returned from a SQL query.
  */
 #[Parameter(
-  name: 'query',
-  mode: Parameter::REQUIRED, 
-  description: 'The SQL query to run. Can use the audit context for variable replace. E.g. {drush.db-name}.',
-  type: Type::STRING
+    name: 'query',
+    mode: Parameter::REQUIRED,
+    description: 'The SQL query to run. Can use the audit context for variable replace. E.g. {drush.db-name}.',
+    type: Type::STRING
 )]
 #[Parameter(
-  name: 'db_level_query', 
-  type: Type::BOOLEAN, 
-  default: false,
-  description: 'When true, this will cause an error if the SQL query cannot successfully extract field names from the SELECT query.',
+    name: 'db_level_query',
+    type: Type::BOOLEAN,
+    default: false,
+    description: 'When true, this will cause an error if the SQL query cannot successfully extract field names from the SELECT query.',
 )]
 #[Parameter(
-  name: 'ttl', 
-  type: Type::INTEGER, 
-  default: 3600,
-  description: 'Cache time-to-live where other policies may reuse the result.',
+    name: 'ttl',
+    type: Type::INTEGER,
+    default: 3600,
+    description: 'Cache time-to-live where other policies may reuse the result.',
 )]
 class SqlResultAudit extends AbstractAnalysis
 {
@@ -38,18 +38,17 @@ class SqlResultAudit extends AbstractAnalysis
         $query = $this->getParameter('query');
         $db_level_query = $this->getParameter('db_level_query');
         if (!$db_level_query) {
-          if (!preg_match_all('/^SELECT( DISTINCT)? (.*) FROM/', $query, $fields)) {
-            throw new \Exception("Could not parse fields from SQL query: $query.");
-          }
-          $fields = array_map('trim', explode(',', $fields[2][0]));
-          foreach ($fields as &$field) {
-            if ($idx = strpos($field, ' as ')) {
-              $field = substr($field, $idx + 4);
+            if (!preg_match_all('/^SELECT( DISTINCT)? (.*) FROM/', $query, $fields)) {
+                throw new \Exception("Could not parse fields from SQL query: $query.");
             }
-            elseif (preg_match('/[ \(\)]/', $field)) {
-              throw new \Exception("SQL query contains an non-table field without an alias: '$field.'");
+            $fields = array_map('trim', explode(',', $fields[2][0]));
+            foreach ($fields as &$field) {
+                if ($idx = strpos($field, ' as ')) {
+                    $field = substr($field, $idx + 4);
+                } elseif (preg_match('/[ \(\)]/', $field)) {
+                    throw new \Exception("SQL query contains an non-table field without an alias: '$field.'");
+                }
             }
-          }
         }
 
         // Migrate 2.x queries to 3.x
@@ -68,9 +67,9 @@ class SqlResultAudit extends AbstractAnalysis
               // Convert each line into cells by exploding on tab seperated values (tsv).
               array_walk($data, function (&$line) {
                   $line = array_map('trim', explode("\t", $line));
-                  if (empty($line) || count(array_filter($line)) == 0) {
-                      $line = false;
-                  }
+                if (empty($line) || count(array_filter($line)) == 0) {
+                    $line = false;
+                }
               });
 
               // Filter out $line = false.
@@ -97,7 +96,7 @@ class SqlResultAudit extends AbstractAnalysis
 
     /**
      * Parse out fields from the SQL query.
-     * 
+     *
      * @param  string $query SQL query string.
      * @return array fields parsed from the SQL query.
      */

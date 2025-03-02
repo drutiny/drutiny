@@ -23,7 +23,8 @@ use ReflectionClass;
 use ReflectionEnum;
 use ReflectionProperty;
 
-class OpenApi {
+class OpenApi
+{
 
     public static function getFilename():string
     {
@@ -80,7 +81,8 @@ class OpenApi {
         return $api;
     }
 
-    public static function buildClass(ReflectionClass $reflection, array $references = []) {
+    public static function buildClass(ReflectionClass $reflection, array $references = [])
+    {
         $schema = [
             'type' => 'object',
             'properties' => self::buildClassProperties($reflection, $references),
@@ -92,7 +94,8 @@ class OpenApi {
         return new Schema($schema);
     }
 
-    public static function buildClassProperties(ReflectionClass $reflection, array $references = []):array {
+    public static function buildClassProperties(ReflectionClass $reflection, array $references = []):array
+    {
         $properties = [];
         foreach ($reflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
             $properties[$property->name] = self::buildProperty($property, $references);
@@ -100,7 +103,8 @@ class OpenApi {
         return $properties;
     }
 
-    public static function buildProperty(ReflectionProperty $property, array $references = []) {
+    public static function buildProperty(ReflectionProperty $property, array $references = [])
+    {
         $schema = [
             'title' => $property->name,
             'type' => class_exists($property->getType()) || interface_exists($property->getType()) ? 'object' : match ((string) $property->getType()) {
@@ -146,14 +150,12 @@ class OpenApi {
                 $schema['format'] = 'date-time';
                 unset($schema['properties']);
             }
-        }
-        elseif (($schema['type'] == 'array') && !empty($attribute = $property->getAttributes(ArrayType::class))) {
+        } elseif (($schema['type'] == 'array') && !empty($attribute = $property->getAttributes(ArrayType::class))) {
             $type = $attribute[0]->newInstance();
             $schema['type'] = $type->type == 'keyed' ? 'object' : 'array';
             if ($type->of !== null) {
                 $schema[$type->type == 'keyed' ? 'additionalProperties' : 'items']['$ref'] = '#/components/schemas/'.$references[$type->of] ?? $type->of;
-            }
-            elseif ($schema['type'] == 'object') {
+            } elseif ($schema['type'] == 'object') {
                 $schema['additionalProperties'] = true;
             }
         }
@@ -161,7 +163,8 @@ class OpenApi {
         return $schema;
     }
 
-    public static function convertNamespace($namespace) {
+    public static function convertNamespace($namespace)
+    {
         $bits = explode('\\', $namespace);
         array_shift($bits);
         return implode($bits);

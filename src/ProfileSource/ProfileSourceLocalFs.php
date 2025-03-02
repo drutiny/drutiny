@@ -22,21 +22,20 @@ class ProfileSourceLocalFs extends AbstractProfileSource
         parent::__construct(source: $source, cache: $cache, profileFactory: $profileFactory);
 
         try {
-          $dirs = $settings->get('extension.dirs');
-          $dirs[] = realpath($settings->get('profile.library.fs'));
-          $dirs[] = getcwd() . DIRECTORY_SEPARATOR . $settings->get('profile.library.fs');
+            $dirs = $settings->get('extension.dirs');
+            $dirs[] = realpath($settings->get('profile.library.fs'));
+            $dirs[] = getcwd() . DIRECTORY_SEPARATOR . $settings->get('profile.library.fs');
 
-          $dirs = array_filter(array_unique($dirs), fn ($f) => $f && is_dir($f));
+            $dirs = array_filter(array_unique($dirs), fn ($f) => $f && is_dir($f));
 
           // Ensure the profile directory is available.
 
-          $this->finder
+            $this->finder
               ->files()
               ->depth('<=1')
               ->in($dirs)
               ->name('*.profile.yml');
-        }
-        catch (DirectoryNotFoundException $e) {
+        } catch (DirectoryNotFoundException $e) {
           // Ignore not finding an existing config dir.
         }
     }
@@ -54,7 +53,7 @@ class ProfileSourceLocalFs extends AbstractProfileSource
             $profile['language'] = $profile['language'] ?? $languageManager->getDefaultLanguage();
 
             if ($languageManager->getCurrentLanguage() != $profile['language']) {
-              continue;
+                continue;
             }
 
             $profile['filepath'] = $filename;
@@ -70,13 +69,13 @@ class ProfileSourceLocalFs extends AbstractProfileSource
      */
     protected function doLoad(array $definition):Profile
     {
-      $filepath = $definition['filepath'];
+        $filepath = $definition['filepath'];
 
-      $info = Yaml::parse(file_get_contents($filepath));
-      $info['name'] = str_replace('.profile.yml', '', pathinfo($filepath, PATHINFO_BASENAME));
-      $info['uuid'] = $filepath;
-      $info['uri'] = $filepath;
+        $info = Yaml::parse(file_get_contents($filepath));
+        $info['name'] = str_replace('.profile.yml', '', pathinfo($filepath, PATHINFO_BASENAME));
+        $info['uuid'] = $filepath;
+        $info['uri'] = $filepath;
 
-      return parent::doLoad($info);
+        return parent::doLoad($info);
     }
 }

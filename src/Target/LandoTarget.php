@@ -19,39 +19,38 @@ class LandoTarget extends DrushTarget implements TargetInterface, TargetSourceIn
   /**
    * {@inheritdoc}
    */
-  public function getId():string
-  {
-    return $this['lando.name'];
-  }
+    public function getId():string
+    {
+        return $this['lando.name'];
+    }
 
   /**
    * @inheritdoc
    * Implements Target::parse().
    */
-    public function parse(string $alias, ?string $uri = NULL):TargetInterface
+    public function parse(string $alias, ?string $uri = null):TargetInterface
     {
 
         $this['lando.name'] = $alias;
 
         try {
-          $lando = $this->localCommand->run('lando list --format=json', function ($output) {
-            $data = json_decode($output, true);
-            if ($data === null) {
-              throw new TargetSourceFailureException(message: "Could not decode output from `lando list`. Perhaps an update to lando is required?");
-            }
-            return $data;
-          });
+            $lando = $this->localCommand->run('lando list --format=json', function ($output) {
+                $data = json_decode($output, true);
+                if ($data === null) {
+                    throw new TargetSourceFailureException(message: "Could not decode output from `lando list`. Perhaps an update to lando is required?");
+                }
+                return $data;
+            });
+        } catch (ProcessFailedException $e) {
+            throw new TargetSourceFailureException(message: "Lando `list` command failed unexpectedly.", previous: $e);
         }
-        catch (ProcessFailedException $e) {
-          throw new TargetSourceFailureException(message: "Lando `list` command failed unexpectedly.", previous: $e);
-        }       
 
         $apps = array_filter($lando, function ($instance) use ($alias) {
-          return ($instance['service'] == 'appserver') && ($instance['app'] == $alias);
+            return ($instance['service'] == 'appserver') && ($instance['app'] == $alias);
         });
 
         if (empty($apps)) {
-          throw new TargetNotFoundException(message: "Lando site '$alias' either doesn't exist or is not currently active.");
+            throw new TargetNotFoundException(message: "Lando site '$alias' either doesn't exist or is not currently active.");
         }
 
         $this['lando.app'] = array_shift($apps);
@@ -63,18 +62,17 @@ class LandoTarget extends DrushTarget implements TargetInterface, TargetSourceIn
         $dir = dirname($this['lando.app']['src'][0]);
 
         try {
-          $info = $this->localCommand->run(sprintf('cd %s && lando info --format=json', $dir), function ($output) {
-            return json_decode($output, true);
-          });
-        }
-        catch (ProcessFailedException $e) {
-          throw new TargetLoadingException(message: "failed to run `lando info` command in $dir.", previous: $e);
+            $info = $this->localCommand->run(sprintf('cd %s && lando info --format=json', $dir), function ($output) {
+                return json_decode($output, true);
+            });
+        } catch (ProcessFailedException $e) {
+            throw new TargetLoadingException(message: "failed to run `lando info` command in $dir.", previous: $e);
         }
 
         $urls = [];
         foreach ($info as $service) {
-          $this['lando.'.$service['service']] = $service;
-          $urls += $service['urls'] ?? [];
+            $this['lando.'.$service['service']] = $service;
+            $urls += $service['urls'] ?? [];
         }
         $urls[] = $uri;
 
@@ -90,28 +88,28 @@ class LandoTarget extends DrushTarget implements TargetInterface, TargetSourceIn
      */
     public function getAvailableTargets():array
     {
-      $lando = $this->localCommand->run('lando list --format=json', function ($output, CacheItemInterface $cache) {
-        $cache->expiresAfter(1);
-        return json_decode($output, true);
-      });
-
-      $apps = array_filter($lando, function ($instance) {
-        return $instance['service'] == 'appserver';
-      });
-
-      $targets = [];
-      foreach ($apps as $app) {
-        $dir = dirname($app['src'][0]);
-        $edge = $this->localCommand->run(sprintf('cd %s && lando info --format=json', $dir), function ($output) {
-          return array_filter(json_decode($output, true), fn ($d) => isset($d['urls']));
+        $lando = $this->localCommand->run('lando list --format=json', function ($output, CacheItemInterface $cache) {
+            $cache->expiresAfter(1);
+            return json_decode($output, true);
         });
 
-        $targets[] = [
-          'id' => $app['app'],
-          'uri' => end($edge[0]['urls']),
-          'name' => $app['app']
-        ];
-      }
-      return $targets;
+        $apps = array_filter($lando, function ($instance) {
+            return $instance['service'] == 'appserver';
+        });
+
+        $targets = [];
+        foreach ($apps as $app) {
+            $dir = dirname($app['src'][0]);
+            $edge = $this->localCommand->run(sprintf('cd %s && lando info --format=json', $dir), function ($output) {
+                return array_filter(json_decode($output, true), fn ($d) => isset($d['urls']));
+            });
+
+            $targets[] = [
+            'id' => $app['app'],
+            'uri' => end($edge[0]['urls']),
+            'name' => $app['app']
+            ];
+        }
+        return $targets;
     }
 }

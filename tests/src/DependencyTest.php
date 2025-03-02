@@ -7,11 +7,11 @@ use Drutiny\AuditFactory;
 use Drutiny\Audit\TwigEvaluator;
 use Drutiny\Target\TargetFactory;
 
-
 /**
  * Test policy.depends field.
  */
-class DependencyTest extends KernelTestCase {
+class DependencyTest extends KernelTestCase
+{
 
     public function testBase():void
     {
@@ -38,7 +38,8 @@ class DependencyTest extends KernelTestCase {
 
     public function testAudit():void
     {
-        $target = $this->loadMockTarget('none',
+        $target = $this->loadMockTarget(
+            'none',
             '/usr/local/bin/drush',
             ['syslog' => [
                 'status' => 'enabled'
@@ -64,7 +65,8 @@ class DependencyTest extends KernelTestCase {
         $this->assertTrue($audit->execute($policy, $target)->isSuccessful(), "Dependency check passes.");
     }
 
-    protected function getPolicyWithDepends(...$expressions):Policy {
+    protected function getPolicyWithDepends(...$expressions):Policy
+    {
         $depends = [];
         foreach ($expressions as $expression) {
             $depends[] = [
@@ -90,5 +92,4 @@ class DependencyTest extends KernelTestCase {
         ]);
         return $policy;
     }
-
 }

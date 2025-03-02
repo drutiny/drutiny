@@ -33,8 +33,7 @@ class DnsAuthority extends AbstractAnalysis
                 $host = implode('.', $host_parts);
                 $host_ns_records = dns_get_record($host, DNS_NS);
                 array_shift($host_parts);
-            }
-            while (empty($host_ns_records) && !empty($host_parts));
+            } while (empty($host_ns_records) && !empty($host_parts));
             $ns_records = array_merge($ns_records, $host_ns_records);
         }
 

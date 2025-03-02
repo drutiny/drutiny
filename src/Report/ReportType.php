@@ -2,7 +2,8 @@
 
 namespace Drutiny\Report;
 
-enum ReportType:string {
+enum ReportType: string
+{
     case ASSESSMENT = 'assessment';
     case DEPENDENCIES = 'dependencies';
 }

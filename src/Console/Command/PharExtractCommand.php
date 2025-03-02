@@ -88,7 +88,8 @@ class PharExtractCommand extends DrutinyBaseCommand
         return $this->callExtracted($bin);
     }
 
-    protected function callExtracted($bin):int {
+    protected function callExtracted($bin):int
+    {
         $args = $_SERVER['argv'];
         $args[0] = $bin;
         $process = new Process($args);

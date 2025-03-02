@@ -20,7 +20,6 @@ class TagCollectionPass implements CompilerPassInterface
      */
     public function __construct(protected string $tag, protected string $parameter, protected $keyableInterface = KeyableAttributeInterface::class)
     {
-      
     }
     /**
      * You can modify the container here before it is dumped to PHP code.
@@ -38,8 +37,7 @@ class TagCollectionPass implements CompilerPassInterface
             }
             if (isset($key)) {
                 $registry[$key] = $id;
-            }
-            else {
+            } else {
                 $registry[] = $id;
             }
         }

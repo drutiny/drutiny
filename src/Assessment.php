@@ -19,7 +19,7 @@ class Assessment implements ExportableInterface, AssessmentInterface, \Serializa
 {
     use ReportingPeriodTrait;
     use SerializableExportableTrait {
-      import as importUnserialized;
+        import as importUnserialized;
     }
 
     protected array $statsByResult = [];
@@ -27,8 +27,7 @@ class Assessment implements ExportableInterface, AssessmentInterface, \Serializa
 
     public function __construct(
         public readonly Report $report
-    )
-    {
+    ) {
         $this->setReportingPeriod($report->reportingPeriodStart, $report->reportingPeriodEnd);
         array_map(fn($r) => $this->captureStats($r), $report->results);
     }
@@ -154,7 +153,7 @@ class Assessment implements ExportableInterface, AssessmentInterface, \Serializa
         'errorCode' => $this->getSeverityCode(),
         'targetReference' => $this->report->target->getTargetName(),
         'report' => serialize($this->report)
-      ];
+        ];
     }
 
     public function import(array $export)
@@ -162,7 +161,8 @@ class Assessment implements ExportableInterface, AssessmentInterface, \Serializa
         $this->report = unserialize($export['report']);
     }
 
-    public function getRequestTime(): int {
+    public function getRequestTime(): int
+    {
         return REQUEST_TIME;
     }
 }

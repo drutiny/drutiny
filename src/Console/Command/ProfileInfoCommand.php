@@ -19,17 +19,17 @@ use Twig\Environment;
 class ProfileInfoCommand extends Command
 {
 
-  protected ProfileFactory $profileFactory;
-  protected PolicyFactory $policyFactory;
-  protected Environment $twig;
+    protected ProfileFactory $profileFactory;
+    protected PolicyFactory $policyFactory;
+    protected Environment $twig;
 
-  public function __construct(ProfileFactory $factory, Environment $twig, PolicyFactory $policyFactory)
-  {
-      $this->profileFactory = $factory;
-      $this->policyFactory = $policyFactory;
-      $this->twig = $twig;
-      parent::__construct();
-  }
+    public function __construct(ProfileFactory $factory, Environment $twig, PolicyFactory $policyFactory)
+    {
+        $this->profileFactory = $factory;
+        $this->policyFactory = $policyFactory;
+        $this->twig = $twig;
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -66,20 +66,21 @@ class ProfileInfoCommand extends Command
         $render->block('drutiny profile:run ' . $profile->name . ' <target>');
 
         if (!empty($dependencies)) {
-          $render->section('Dependencies');
-          $headers = ['Title', 'Name', 'Class', 'Source'];
-          $render->block(
-          'These are dependency policies. All of these policies must pass for the'
-          .' profile to be assessed on the target.');
-          $render->table($headers, array_map(function (Policy $policy) {
-            return [$policy->title, $policy->name, $policy->class, $policy->source];
-          }, $dependencies));
+            $render->section('Dependencies');
+            $headers = ['Title', 'Name', 'Class', 'Source'];
+            $render->block(
+                'These are dependency policies. All of these policies must pass for the'
+                .' profile to be assessed on the target.'
+            );
+            $render->table($headers, array_map(function (Policy $policy) {
+                return [$policy->title, $policy->name, $policy->class, $policy->source];
+            }, $dependencies));
         }
 
         $render->section('Policies');
         $headers = ['Title', 'Name', 'Severity', 'Class', 'Source'];
         $render->table($headers, $rows = array_map(function (Policy $policy) {
-          return [$policy->title, $policy->name, $policy->severity->value, $policy->class, $policy->source];
+            return [$policy->title, $policy->name, $policy->severity->value, $policy->class, $policy->source];
         }, $policies));
 
         $render->text(count($rows) . ' policies.');

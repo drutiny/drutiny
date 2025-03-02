@@ -18,8 +18,8 @@ use Twig\Error\RuntimeError;
 use Twig\Extension\CoreExtension;
 
 #[AsFormat(
-  name: 'json',
-  extension: 'json'
+    name: 'json',
+    extension: 'json'
 )]
 class JSON extends FilesystemFormat implements FilesystemFormatInterface
 {
@@ -28,12 +28,12 @@ class JSON extends FilesystemFormat implements FilesystemFormatInterface
     protected $data;
 
     public function __construct(
-      protected Environment $twig,
-      protected ConverterInterface $converter,
-      OutputInterface $output, 
-      LoggerInterface $logger)
-    {
-      parent::__construct($output, $logger);
+        protected Environment $twig,
+        protected ConverterInterface $converter,
+        OutputInterface $output,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($output, $logger);
     }
 
     protected function prepareContent(Report $report):array
@@ -50,10 +50,10 @@ class JSON extends FilesystemFormat implements FilesystemFormatInterface
         $this->data['reporting_period_end'] = $report->reportingPeriodEnd->format('Y-m-d H:i:s e');
 
         foreach ($report->results as $name => $response) {
-          $this->data['results'][$name]['policy']['rendered'] = $this->preRenderPolicy($response);
-          $this->data['policy'][] = $this->data['results'][$name]['policy'];
-          $total = $this->data['totals'][$response->getType()] ?? 0;
-          $this->data['totals'][$response->getType()] = $total+1;
+            $this->data['results'][$name]['policy']['rendered'] = $this->preRenderPolicy($response);
+            $this->data['policy'][] = $this->data['results'][$name]['policy'];
+            $total = $this->data['totals'][$response->getType()] ?? 0;
+            $this->data['totals'][$response->getType()] = $total+1;
         }
 
         $this->data['total'] = array_sum($this->data['totals'] ?? []);
@@ -66,40 +66,42 @@ class JSON extends FilesystemFormat implements FilesystemFormatInterface
     public function render(Report $report):RenderedReport
     {
         $this->twig->getExtension(CoreExtension::class)->setTimezone($report->reportingPeriodStart->getTimezone());
-        $this->buffer->write(json_encode(
-          $this->prepareContent($report),
-          JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        ),
-        false,
-        BufferedOutput::OUTPUT_RAW);
+        $this->buffer->write(
+            json_encode(
+                $this->prepareContent($report),
+                JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+            ),
+            false,
+            BufferedOutput::OUTPUT_RAW
+        );
         return new RenderedReport($report->getName(), $this->buffer);
     }
 
-    protected function preRenderPolicy(AuditResponse $response): array {
+    protected function preRenderPolicy(AuditResponse $response): array
+    {
 
-      $keys = ['title', 'description', 'success', 'warning', 'failure', 'remediation', 'notes'];
-      $values = [
+        $keys = ['title', 'description', 'success', 'warning', 'failure', 'remediation', 'notes'];
+        $values = [
         'name' => $response->policy->name
-      ];
+        ];
 
-      foreach ($keys as $key) {
-        if (!property_exists($response->policy, $key)) {
-          $values[$key] = null;
-          continue;
+        foreach ($keys as $key) {
+            if (!property_exists($response->policy, $key)) {
+                $values[$key] = null;
+                continue;
+            }
+            try {
+                $values[$key] = $this->converter->convert(
+                    $this->twig->render(
+                        name: $this->twig->createTemplate($response->policy->{$key}),
+                        context: $response->tokens
+                    )
+                )->getContent();
+            } catch (RuntimeError $e) {
+              // Ignore.
+            }
         }
-        try {
-          $values[$key] = $this->converter->convert(
-            $this->twig->render(
-              name: $this->twig->createTemplate($response->policy->{$key}),
-              context: $response->tokens
-            )
-          )->getContent();
-        }
-        catch (RuntimeError $e) {
-          // Ignore.
-        }
-      }
 
-      return $values;
+        return $values;
     }
 }

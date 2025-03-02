@@ -12,28 +12,28 @@ trait HttpTrait
 {
     public function configure():void
     {
-      $this->addParameter(
-        'use_cache',
-        static::PARAMETER_OPTIONAL,
-        'Indicator if Guzzle client should use cache middleware.'
-      );
-      $this->addParameter(
-        'options',
-        static::PARAMETER_OPTIONAL,
-        'An options array passed to the Guzzle client request method.'
-      );
-      $this->addParameter(
-        'force_ssl',
-        static::PARAMETER_OPTIONAL,
-        'Whether to force SSL',
-        true
-      );
-      $this->addParameter(
-        'method',
-        static::PARAMETER_OPTIONAL,
-        'Which method to use.',
-        'GET'
-      );
+        $this->addParameter(
+            'use_cache',
+            static::PARAMETER_OPTIONAL,
+            'Indicator if Guzzle client should use cache middleware.'
+        );
+        $this->addParameter(
+            'options',
+            static::PARAMETER_OPTIONAL,
+            'An options array passed to the Guzzle client request method.'
+        );
+        $this->addParameter(
+            'force_ssl',
+            static::PARAMETER_OPTIONAL,
+            'Whether to force SSL',
+            true
+        );
+        $this->addParameter(
+            'method',
+            static::PARAMETER_OPTIONAL,
+            'Which method to use.',
+            'GET'
+        );
     }
 
     protected function getHttpResponse(Sandbox $sandbox)
@@ -42,8 +42,8 @@ trait HttpTrait
       // This allows policies to specify urls that still contain a domain.
         $url = $this->target->getUri();
 
-        if (strpos($url, 'http') === FALSE) {
-          $url = 'https://' . $url;
+        if (strpos($url, 'http') === false) {
+            $url = 'https://' . $url;
         }
 
         if ($this->getParameter('force_ssl', false)) {

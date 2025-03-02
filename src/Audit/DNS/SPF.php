@@ -53,14 +53,15 @@ class SPF extends Audit
         ]);
 
         $values = $this->target->getService('local')->run($cmd, function ($output) {
-          $output = array_map('trim', explode(PHP_EOL, $output));
-          return array_filter($output);
+            $output = array_map('trim', explode(PHP_EOL, $output));
+            return array_filter($output);
         });
 
         $matching_value = $this->getParameter('matching_value') ?? $this->get('matching_value');
         return (bool) count(
             array_filter(
-                $values, function ($txt) use ($matching_value) {
+                $values,
+                function ($txt) use ($matching_value) {
                     return strpos($txt, $matching_value) !== false;
                 }
             )

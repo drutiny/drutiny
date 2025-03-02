@@ -2,7 +2,8 @@
 
 namespace Drutiny\Audit;
 
-enum DynamicParameterType:string {
+enum DynamicParameterType: string
+{
     case REPLACE = '^';
     case EVALUATE = '$';
     case STATIC = '!';
@@ -11,8 +12,9 @@ enum DynamicParameterType:string {
     /**
      * Determine the enum value from a parameter name.
      */
-    static public function fromParameterName(string $name): static {
-        return match(substr($name, 0, 1)) {
+    public static function fromParameterName(string $name): static
+    {
+        return match (substr($name, 0, 1)) {
             static::REPLACE->value => static::REPLACE,
             static::EVALUATE->value => static::EVALUATE,
             static::STATIC->value => static::STATIC,
@@ -23,21 +25,24 @@ enum DynamicParameterType:string {
     /**
      * Remove the token from the front of a parameeter name.
      */
-    public function stripParameterName(string $name): string {
+    public function stripParameterName(string $name): string
+    {
         return (strlen($this->value) > 0 && strpos($name, $this->value) === 0) ? substr($name, 1) : $name;
     }
 
     /**
      * Add the token to the front of a parameter name.
      */
-    public function decorateParameterName(string $name): string {
+    public function decorateParameterName(string $name): string
+    {
         return $this->value . $name;
     }
 
     /**
      * Get the title of the dynamic parameter type.
      */
-    public function getTitle(): string {
+    public function getTitle(): string
+    {
         return match ($this) {
             static::REPLACE => 'Token replacement',
             static::EVALUATE => 'Twig runtime evaluation',

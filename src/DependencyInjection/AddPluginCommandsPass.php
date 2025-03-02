@@ -13,7 +13,8 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 #[CompilerPass(type: PassConfig::TYPE_OPTIMIZE)]
-class AddPluginCommandsPass implements CompilerPassInterface {
+class AddPluginCommandsPass implements CompilerPassInterface
+{
     public function process(ContainerBuilder $container)
     {
         foreach ($container->getParameter('plugin.collections') as $id => $class_name) {

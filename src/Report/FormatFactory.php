@@ -10,9 +10,9 @@ class FormatFactory
 {
 
     public function __construct(
-        protected ContainerInterface $container, 
-        protected Settings $settings)
-    {
+        protected ContainerInterface $container,
+        protected Settings $settings
+    ) {
     }
 
     public function create(string $format, FormatDefinition $definition):FormatInterface

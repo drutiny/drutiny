@@ -45,7 +45,6 @@ class VariableAnalysis extends AbstractAnalysis
                     return count(array_filter($this->keys, fn ($key) => strpos($k, $key) === 0));
                 },
                 ARRAY_FILTER_USE_KEY);
-
             });
         }
 

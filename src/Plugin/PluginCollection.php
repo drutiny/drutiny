@@ -13,7 +13,8 @@ use ReflectionClass;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class PluginCollection implements PluginInterface {
+class PluginCollection implements PluginInterface
+{
     protected array $keys;
     protected array $stores;
 
@@ -26,8 +27,7 @@ class PluginCollection implements PluginInterface {
         protected OutputInterface $output,
         protected LoggerInterface $logger,
         protected Settings $settings,
-    )
-    {
+    ) {
         $this->stores = [
             FieldType::CONFIG->key() => $pluginConfig,
             FieldType::CREDENTIAL->key() => $pluginCredentials,

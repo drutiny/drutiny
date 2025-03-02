@@ -15,7 +15,8 @@ use Drutiny\Target\TargetInterface;
 use DrutinyTests\KernelTestCase;
 use InvalidArgumentException;
 
-class AuditVersionTest extends KernelTestCase {
+class AuditVersionTest extends KernelTestCase
+{
 
     protected TargetInterface $target;
 
@@ -39,7 +40,8 @@ class AuditVersionTest extends KernelTestCase {
         return $audit->execute($policy);
     }
 
-    public function testPolicyVersionTooOld() {
+    public function testPolicyVersionTooOld()
+    {
         $policy = $this->getPolicyStub()
             ->with(audit_build_info: [
                 TestAudit::class . ':1.0'
@@ -51,7 +53,8 @@ class AuditVersionTest extends KernelTestCase {
         $this->assertEquals(IncompatibleVersionException::class, $response->tokens['exception_type']);
     }
 
-    public function testPolicyVersionTooNew() {
+    public function testPolicyVersionTooNew()
+    {
         $policy = $this->getPolicyStub()
             ->with(audit_build_info: [
                 TestAudit::class . ':100.0'
@@ -70,7 +73,8 @@ class AuditVersionTest extends KernelTestCase {
         $this->assertEquals(State::ERROR, $response->state);
     }
 
-    public function testPolicyUsingCorrectVersion() {
+    public function testPolicyUsingCorrectVersion()
+    {
         $policy = $this->getPolicyStub()
             ->with(audit_build_info: [
                 TestAudit::class . ':10.4'
@@ -79,7 +83,8 @@ class AuditVersionTest extends KernelTestCase {
         $this->assertEquals(State::SUCCESS, $response->state);
     }
 
-    public function testPolicyUsingCompatibleVersion() {
+    public function testPolicyUsingCompatibleVersion()
+    {
         $policy = $this->getPolicyStub()
             ->with(audit_build_info: [
                 TestAudit::class . ':9.9'
@@ -95,7 +100,8 @@ class AuditVersionTest extends KernelTestCase {
         $this->assertEquals(State::SUCCESS, $response->state);
     }
 
-    public function testPolicyMultiAuditInfo() {
+    public function testPolicyMultiAuditInfo()
+    {
         $policy = $this->getPolicyStub()
             ->with(audit_build_info: [
                 TestAudit::class . ':9.9',
@@ -105,7 +111,8 @@ class AuditVersionTest extends KernelTestCase {
         $this->assertEquals(State::SUCCESS, $response->state);
     }
 
-    public function testPolicyMultiAuditInfoOneFails() {
+    public function testPolicyMultiAuditInfoOneFails()
+    {
         $policy = $this->getPolicyStub()
             ->with(audit_build_info: [
                 TestAudit::class . ':9.9',

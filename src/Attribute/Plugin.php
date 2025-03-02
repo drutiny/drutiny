@@ -8,7 +8,8 @@ use InvalidArgumentException;
 use ReflectionClass;
 
 #[Attribute]
-class Plugin implements KeyableAttributeInterface {
+class Plugin implements KeyableAttributeInterface
+{
     protected PluginFieldCollection $fields;
     public function __construct(
         public readonly string $name,
@@ -18,7 +19,7 @@ class Plugin implements KeyableAttributeInterface {
         public readonly ?string $collectionKey = null
     ) {
         $this->fields = new PluginFieldCollection;
-    } 
+    }
 
     public function getKey():string
     {
@@ -30,11 +31,11 @@ class Plugin implements KeyableAttributeInterface {
      */
     public function buildFieldAttributes(string $class_name):self
     {
-      $reflection = new ReflectionClass($class_name);
-      foreach ($reflection->getAttributes(PluginField::class) as $attribute) {
-        $this->fields->add($attribute->newInstance());
-      }
-      return $this;
+        $reflection = new ReflectionClass($class_name);
+        foreach ($reflection->getAttributes(PluginField::class) as $attribute) {
+            $this->fields->add($attribute->newInstance());
+        }
+        return $this;
     }
 
     public function getFieldAttributes():array
@@ -42,7 +43,8 @@ class Plugin implements KeyableAttributeInterface {
         return $this->fields->getAll();
     }
 
-    public function hasField(string $name): bool {
+    public function hasField(string $name): bool
+    {
         return array_key_exists($name, $this->getFieldAttributes());
     }
 

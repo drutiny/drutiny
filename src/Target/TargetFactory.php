@@ -13,12 +13,11 @@ class TargetFactory
     protected array $targetMap;
 
     public function __construct(
-      protected ContainerInterface $container,
-      protected TwigEvaluator $twigEvaluator,
-      Settings $settings
-    )
-    {
-      $this->targetMap = $settings->get('target.registry');
+        protected ContainerInterface $container,
+        protected TwigEvaluator $twigEvaluator,
+        Settings $settings
+    ) {
+        $this->targetMap = $settings->get('target.registry');
     }
 
     /**
@@ -28,7 +27,7 @@ class TargetFactory
     {
         // A file reference means to load the target from a dump file.
         if (file_exists($target_reference)) {
-          return $this->fromExport(TargetExport::fromTemporaryFile($target_reference));
+            return $this->fromExport(TargetExport::fromTemporaryFile($target_reference));
         }
 
         // By default, assume a target is using drush.
@@ -40,13 +39,12 @@ class TargetFactory
             list($target_name, $target_data) = explode(':', $target_reference, 2);
         }
 
-        $target = $this->container->get($this->targetMap[$target_name] 
-          ?? throw new InvalidArgumentException("$target_name is not a valid target tag. Valid tags are: " . implode(', ', array_keys($this->targetMap)))
-        );
+        $target = $this->container->get($this->targetMap[$target_name]
+          ?? throw new InvalidArgumentException("$target_name is not a valid target tag. Valid tags are: " . implode(', ', array_keys($this->targetMap))));
         $target->setTargetName($target_reference);
         $target->load($target_data, $uri);
 
-        // This makes the target inherintly accessible by the twigEvaluator 
+        // This makes the target inherintly accessible by the twigEvaluator
         // in other services.
         $this->twigEvaluator->setContext('target', $target);
         return $target;
@@ -54,18 +52,20 @@ class TargetFactory
 
     public function mock($type):TargetInterface
     {
-      $this->targetMap[$type] ?? throw new InvalidTargetException("No such target type '$type'.");
-      return $this->container->get($this->targetMap[$type]);
+        $this->targetMap[$type] ?? throw new InvalidTargetException("No such target type '$type'.");
+        return $this->container->get($this->targetMap[$type]);
     }
 
-    public function export(TargetInterface $target) {
-      return TargetExport::create($target);
+    public function export(TargetInterface $target)
+    {
+        return TargetExport::create($target);
     }
 
     /**
      * Create a target from an export of properties.
      */
-    public function fromExport(TargetExport $export) {
+    public function fromExport(TargetExport $export)
+    {
         // By default, assume a target is using drush.
         $target_name = 'drush';
 
@@ -74,13 +74,12 @@ class TargetFactory
             list($target_name, ) = explode(':', $export->targetReference, 2);
         }
 
-        $target = $this->container->get($this->targetMap[$target_name] 
-          ?? throw new InvalidArgumentException("$target_name is not a valid target tag. Valid tags are: " . implode(', ', array_keys($this->targetMap)))
-        );
+        $target = $this->container->get($this->targetMap[$target_name]
+          ?? throw new InvalidArgumentException("$target_name is not a valid target tag. Valid tags are: " . implode(', ', array_keys($this->targetMap))));
         $target->setTargetName($export->targetReference);
         $target->loadByProperties($export->properties);
 
-        // This makes the target inherintly accessible by the twigEvaluator 
+        // This makes the target inherintly accessible by the twigEvaluator
         // in other services.
         $this->twigEvaluator->setContext('target', $target);
         return $target;
@@ -91,7 +90,7 @@ class TargetFactory
      */
     public function getTypes():array
     {
-      return $this->targetMap;
+        return $this->targetMap;
     }
 
     /**
@@ -99,6 +98,6 @@ class TargetFactory
      */
     public function typeOf(TargetInterface $target, string $name = TargetInterface::class): bool
     {
-      return $target instanceof ($this->targetMap[$name] ?? $name);
+        return $target instanceof ($this->targetMap[$name] ?? $name);
     }
 }

@@ -84,59 +84,60 @@ trait ReportingCommandTrait
 
     protected function getReportingTimeZone(InputInterface $input): \DateTimeZone
     {
-      return new \DateTimeZone($input->getOption('reporting-timezone'));
+        return new \DateTimeZone($input->getOption('reporting-timezone'));
     }
 
     /**
      * Determine a default filepath.
      */
-      protected function getReportNamespace(InputInterface $input, $uri = ''):string
-      {
-          return strtr('target-profile-uri-date.language', [
-            'uri' => strtr($uri, [
-              ':' => '',
-              '/' => '',
-              '?' => '',
-              '#' => '',
-              '&' => '',
-            ]),
-            'target' => preg_replace('/[^a-z0-9]/', '', strtolower($input->getArgument('target'))),
-            'profile' => $input->hasArgument('profile') ? $input->getArgument('profile') : '',
-            'date' => $this->getReportingPeriodStart($input)->format('Ymd-His'),
-            'language' => $this->languageManager->getCurrentLanguage(),
-          ]);
-      }
+    protected function getReportNamespace(InputInterface $input, $uri = ''):string
+    {
+        return strtr('target-profile-uri-date.language', [
+          'uri' => strtr($uri, [
+            ':' => '',
+            '/' => '',
+            '?' => '',
+            '#' => '',
+            '&' => '',
+          ]),
+          'target' => preg_replace('/[^a-z0-9]/', '', strtolower($input->getArgument('target'))),
+          'profile' => $input->hasArgument('profile') ? $input->getArgument('profile') : '',
+          'date' => $this->getReportingPeriodStart($input)->format('Ymd-His'),
+          'language' => $this->languageManager->getCurrentLanguage(),
+        ]);
+    }
 
       /**
        * @return \Drutiny\Report\FormatInterface[]
        */
-      protected function getFormats(InputInterface $input, Profile|null $profile, FormatFactory $formatFactory):array
-      {
+    protected function getFormats(InputInterface $input, Profile|null $profile, FormatFactory $formatFactory):array
+    {
         foreach ($input->getOption('format') as $format_option) {
-          $formats[$format_option] = $this->formatFactory->create($format_option, $profile->format[$format_option] ?? new FormatDefinition($format_option));
+            $formats[$format_option] = $this->formatFactory->create($format_option, $profile->format[$format_option] ?? new FormatDefinition($format_option));
 
-          if ($formats[$format_option] instanceof FilesystemFormatInterface) {
-            $formats[$format_option]->setWriteableDirectory($input->getOption('report-dir'));
-          }
+            if ($formats[$format_option] instanceof FilesystemFormatInterface) {
+                $formats[$format_option]->setWriteableDirectory($input->getOption('report-dir'));
+            }
         }
         return $formats;
-      }
+    }
 
-      protected function getStore(InputInterface $input): StoreInterface 
-      {
+    protected function getStore(InputInterface $input): StoreInterface
+    {
         if ($input->getOption('store') === null) {
           // Maintain backwards compatibility.
-          return match ($input->getOption('format')[0]) {
-            'html' => $this->storeFactory->get('fs'),
-            'json' => $this->storeFactory->get('fs'),
-            'csv' => $this->storeFactory->get('fs'),
-            default => $this->storeFactory->get('terminal'),
-          };
+            return match ($input->getOption('format')[0]) {
+                'html' => $this->storeFactory->get('fs'),
+                'json' => $this->storeFactory->get('fs'),
+                'csv' => $this->storeFactory->get('fs'),
+                default => $this->storeFactory->get('terminal'),
+            };
         }
         return $this->storeFactory->get($input->getOption('store'));
-      }
+    }
 
-      protected function formatReport(Report $report, SymfonyStyle $console, InputInterface $input): array {
+    protected function formatReport(Report $report, SymfonyStyle $console, InputInterface $input): array
+    {
         // If this wasn't the actual assessment, then it means the target
         // failed a dependency check. We'll render a dependency failure
         // report out to the terminal.
@@ -147,8 +148,7 @@ trait ReportingCommandTrait
                 $format->setDependencyReport();
             }
             $formats = [$format];
-        }
-        else {
+        } else {
             $formats = $this->getFormats($input, $report->profile, $this->formatFactory);
         }
 
@@ -176,56 +176,56 @@ trait ReportingCommandTrait
       /**
        * Get the reporting period start DateTime.
        */
-      protected function getReportingPeriodStart(InputInterface $input): \DateTime
-      {
+    protected function getReportingPeriodStart(InputInterface $input): \DateTime
+    {
         if (isset($this->reportingPeriodStart)) {
-          return $this->reportingPeriodStart;
+            return $this->reportingPeriodStart;
         }
         if ($this->buildReportingPeriod($input)) {
-          return $this->reportingPeriodStart;
+            return $this->reportingPeriodStart;
         }
         $this->reportingPeriodStart = new \DateTime($input->getOption('reporting-period-start'), $this->getReportingTimeZone($input));
         return $this->reportingPeriodStart;
-      }
+    }
 
       /**
        * Get the reporting period end DateTime
        */
-      protected function getReportingPeriodEnd(InputInterface $input): \DateTime
-      {
+    protected function getReportingPeriodEnd(InputInterface $input): \DateTime
+    {
         if (isset($this->reportingPeriodEnd)) {
-          return $this->reportingPeriodEnd;
+            return $this->reportingPeriodEnd;
         }
         if ($this->buildReportingPeriod($input)) {
-          return $this->reportingPeriodEnd;
+            return $this->reportingPeriodEnd;
         }
         $this->reportingPeriodEnd = new \DateTime($input->getOption('reporting-period-end'), $this->getReportingTimeZone($input));
         return $this->reportingPeriodEnd;
-      }
+    }
 
       /**
        * Attempt to build the reporting period time.
        */
-      protected function buildReportingPeriod(InputInterface $input): bool
-      {
-         if (!$range = $input->getOption('reporting-period')) {
-           return false;
-         }
-         $range = strtolower($range);
+    protected function buildReportingPeriod(InputInterface $input): bool
+    {
+        if (!$range = $input->getOption('reporting-period')) {
+            return false;
+        }
+          $range = strtolower($range);
          // Parse out format like: 02/02/2021 17:39:30 to 09/02/2021 18:39:30
-         if (!preg_match('/([0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}) to ([0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})/', $range, $matches)) {
-          throw new \InvalidArgumentException("Invalid range given: $range. Needs to follow a format like: 02/02/2021 17:39:30 to 09/02/2021 18:39:30.");
-         }
+        if (!preg_match('/([0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2}) to ([0-9]{2}\/[0-9]{2}\/[0-9]{4} [0-9]{2}:[0-9]{2}:[0-9]{2})/', $range, $matches)) {
+            throw new \InvalidArgumentException("Invalid range given: $range. Needs to follow a format like: 02/02/2021 17:39:30 to 09/02/2021 18:39:30.");
+        }
 
-         list($date, $time) = explode(' ', $matches[1]);
-         list($day, $month, $year) = explode('/', $date);
-         $datetime = "$year-$month-$day $time";
-         $this->reportingPeriodStart = new \DateTime($datetime, $this->getReportingTimeZone($input));
+          list($date, $time) = explode(' ', $matches[1]);
+          list($day, $month, $year) = explode('/', $date);
+          $datetime = "$year-$month-$day $time";
+          $this->reportingPeriodStart = new \DateTime($datetime, $this->getReportingTimeZone($input));
 
-         list($date, $time) = explode(' ', $matches[2]);
-         list($day, $month, $year) = explode('/', $date);
-         $datetime = "$year-$month-$day $time";
-         $this->reportingPeriodEnd = new \DateTime($datetime, $this->getReportingTimeZone($input));
-         return true;
-      }
+          list($date, $time) = explode(' ', $matches[2]);
+          list($day, $month, $year) = explode('/', $date);
+          $datetime = "$year-$month-$day $time";
+          $this->reportingPeriodEnd = new \DateTime($datetime, $this->getReportingTimeZone($input));
+          return true;
+    }
 }

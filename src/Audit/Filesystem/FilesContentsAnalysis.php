@@ -15,25 +15,27 @@ use Symfony\Component\Process\Process;
 #[Dependency(expression: "Target.typeOf('Drutiny\\\Target\\\FilesystemInterface')")]
 #[Parameter(name: 'contents_index', description: 'The index in the search results to retrieve file contents from. Default 0.', default: 0, type: Type::INTEGER)]
 #[Parameter(name: 'filepath', description: "If a search isn't required, you can specify the explicit filepath to get contents from.", type: Type::STRING)]
-class FilesContentsAnalysis extends FilesExistenceAnalysis {
+class FilesContentsAnalysis extends FilesExistenceAnalysis
+{
 
   /**
    * @inheritdoc
    */
-  public function gather(Sandbox $sandbox) {
-    if (!($filepath = $this->getParameter('filepath'))) {
-      parent::gather($sandbox);
-      $results = $this->get('results');
-      $index = $this->get('contents_index');
-      if ($results['found'] == 0 || !isset($results['findings'][$index])) {
-        throw new AuditValidationException("File contents do not exist.");
-      }
-      $filepath = $results['findings'][$index];
-    }
+    public function gather(Sandbox $sandbox)
+    {
+        if (!($filepath = $this->getParameter('filepath'))) {
+            parent::gather($sandbox);
+            $results = $this->get('results');
+            $index = $this->get('contents_index');
+            if ($results['found'] == 0 || !isset($results['findings'][$index])) {
+                throw new AuditValidationException("File contents do not exist.");
+            }
+            $filepath = $results['findings'][$index];
+        }
 
-    $command = Process::fromShellCommandline('test ! -f ' . $filepath . ' ||  cat ' . $filepath);
-    $this->set('contents', $this->target->execute($command, function ($output) {
-      return trim($output);
-    }));
-  }
+        $command = Process::fromShellCommandline('test ! -f ' . $filepath . ' ||  cat ' . $filepath);
+        $this->set('contents', $this->target->execute($command, function ($output) {
+            return trim($output);
+        }));
+    }
 }

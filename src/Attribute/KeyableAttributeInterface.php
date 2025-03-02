@@ -2,6 +2,7 @@
 
 namespace Drutiny\Attribute;
 
-interface KeyableAttributeInterface {
+interface KeyableAttributeInterface
+{
     public function getKey():string;
 }

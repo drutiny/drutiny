@@ -2,7 +2,8 @@
 
 namespace Drutiny;
 
-class LanguageManager {
+class LanguageManager
+{
     protected string $defaultLanguageCode;
     protected string $languageCode;
 

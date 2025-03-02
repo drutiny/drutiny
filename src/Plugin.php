@@ -11,21 +11,21 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class Plugin implements PluginInterface {
+class Plugin implements PluginInterface
+{
     private array $stores;
     private ?bool $isInstalled;
 
     public function __construct(
-      ConfigInterface $pluginConfig, 
-      ConfigInterface $pluginCredentials,
-      ConfigInterface $pluginState,
-      protected InputInterface $input, 
-      protected OutputInterface $output,
-      protected PluginAttribute $attribute,
-      protected Settings $settings,
-      protected LoggerInterface $logger
-    )
-    {
+        ConfigInterface $pluginConfig,
+        ConfigInterface $pluginCredentials,
+        ConfigInterface $pluginState,
+        protected InputInterface $input,
+        protected OutputInterface $output,
+        protected PluginAttribute $attribute,
+        protected Settings $settings,
+        protected LoggerInterface $logger
+    ) {
         // Set the name from the AsPlugin attribute.
         $this->stores[FieldType::CONFIG->key()] = $pluginConfig;
         $this->stores[FieldType::CREDENTIAL->key()] = $pluginCredentials;
@@ -37,7 +37,7 @@ class Plugin implements PluginInterface {
 
     final public function getName():string
     {
-      return $this->attribute->name;
+        return $this->attribute->name;
     }
 
     /**
@@ -45,7 +45,7 @@ class Plugin implements PluginInterface {
      */
     final public function getFieldAttributes():array
     {
-      return $this->attribute->getFieldAttributes();
+        return $this->attribute->getFieldAttributes();
     }
 
     /**
@@ -53,62 +53,64 @@ class Plugin implements PluginInterface {
      */
     final public function __get($name):mixed
     {
-      if (!$this->isInstalled()) {
-        // Use the default value if provided.
-        if (($default = $this->attribute->getField($name)->default) !== null) {
-          return $default;
+        if (!$this->isInstalled()) {
+          // Use the default value if provided.
+            if (($default = $this->attribute->getField($name)->default) !== null) {
+                return $default;
+            }
+            throw new PluginRequiredException("{$this->attribute->name} is not installed. Please run 'plugin:setup {$this->attribute->name}' to configure.");
         }
-        throw new PluginRequiredException("{$this->attribute->name} is not installed. Please run 'plugin:setup {$this->attribute->name}' to configure.");
-      }
-      $field_type = $this->attribute->getField($name)->type;
-      $store = $this->stores[$field_type->key()];
-      return $store[$name] ?? $this->attribute->getField($name)->default;
+        $field_type = $this->attribute->getField($name)->type;
+        $store = $this->stores[$field_type->key()];
+        return $store[$name] ?? $this->attribute->getField($name)->default;
     }
 
     final public function __isset($name)
     {
-      $field_type = $this->attribute->getField($name)->type;
-      $store = $this->stores[$field_type->key()];
-      return isset($store[$name]);
+        $field_type = $this->attribute->getField($name)->type;
+        $store = $this->stores[$field_type->key()];
+        return isset($store[$name]);
     }
 
     /**
      * Callback for extending classes to action something on construction.
      */
-    protected function configure() {}
+    protected function configure()
+    {
+    }
 
     /**
      * Determines if the plugin is installed or not.
      */
     final public function isInstalled():bool
     {
-      if (isset($this->isInstalled)) {
+        if (isset($this->isInstalled)) {
+            return $this->isInstalled;
+        }
+        $this->isInstalled = false;
+        foreach ($this->getFieldAttributes() as $name => $field_info) {
+            $this->isInstalled = $this->isInstalled || $this->__isset($name);
+        }
         return $this->isInstalled;
-      }
-      $this->isInstalled = false;
-      foreach ($this->getFieldAttributes() as $name => $field_info) {
-        $this->isInstalled = $this->isInstalled || $this->__isset($name);
-      }
-      return $this->isInstalled;
     }
 
     final public function isHidden():bool
     {
-      return $this->attribute->hidden;
+        return $this->attribute->hidden;
     }
 
     public function saveAs(array $values):void
     {
-      foreach ($this->getFieldAttributes() as $field) {
-        if (!isset($values[$field->name])) {
-          continue;
+        foreach ($this->getFieldAttributes() as $field) {
+            if (!isset($values[$field->name])) {
+                continue;
+            }
+            $this->stores[$field->type->key()][$field->name] = $values[$field->name];
         }
-        $this->stores[$field->type->key()][$field->name] = $values[$field->name];
-      }
-      foreach ($this->stores as $store) {
-        $store->save();
-      }
-      $this->isInstalled = null;
+        foreach ($this->stores as $store) {
+            $store->save();
+        }
+        $this->isInstalled = null;
     }
 
     /**
@@ -117,8 +119,8 @@ class Plugin implements PluginInterface {
      */
     public function delete():void
     {
-      foreach ($this->stores as $store) {
-        $store->delete();
-      }
+        foreach ($this->stores as $store) {
+            $store->delete();
+        }
     }
 }

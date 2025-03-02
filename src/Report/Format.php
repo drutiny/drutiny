@@ -22,15 +22,17 @@ abstract class Format implements FormatInterface
         $this->configure();
     }
 
-    protected function configure() {}
+    protected function configure()
+    {
+    }
 
     /**
      * {@inheritdoc}
      */
     public function setDefinition(FormatDefinition $definition):FormatInterface
     {
-      $this->definition = $definition;
-      return $this;
+        $this->definition = $definition;
+        return $this;
     }
 
     /**
@@ -38,14 +40,14 @@ abstract class Format implements FormatInterface
      */
     public function getName():string
     {
-      $reflect = new ReflectionClass($this);
-      $attributes = $reflect->getAttributes(AsFormat::class);
+        $reflect = new ReflectionClass($this);
+        $attributes = $reflect->getAttributes(AsFormat::class);
 
-      if (empty($attributes)) {
-          throw new Exception(get_class($this) . " has no format attribute.");
-      }
+        if (empty($attributes)) {
+            throw new Exception(get_class($this) . " has no format attribute.");
+        }
 
-      $format = $attributes[0]->newInstance();
-      return $format->name;
+        $format = $attributes[0]->newInstance();
+        return $format->name;
     }
 }

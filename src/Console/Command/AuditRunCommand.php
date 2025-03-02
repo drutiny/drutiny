@@ -21,20 +21,19 @@ use Symfony\Component\Yaml\Yaml;
  */
 class AuditRunCommand extends DrutinyBaseCommand
 {
-  use ReportingCommandTrait;
-  use LanguageCommandTrait;
+    use ReportingCommandTrait;
+    use LanguageCommandTrait;
 
-  public function __construct(
-    protected TargetFactory $targetFactory,
-    protected ReportFactory $reportFactory,
-    protected ProfileFactory $profileFactory,
-    protected FormatFactory $formatFactory,
-    protected StoreFactory $storeFactory,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected TargetFactory $targetFactory,
+        protected ReportFactory $reportFactory,
+        protected ProfileFactory $profileFactory,
+        protected FormatFactory $formatFactory,
+        protected StoreFactory $storeFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -145,17 +144,16 @@ class AuditRunCommand extends DrutinyBaseCommand
 
         $style = new SymfonyStyle($input, $output);
         if ($report->results[$policy->name]->isIrrelevant()) {
-          $style->warning("Policy {$policy->name} was evaluated as irrelevant for the target " . $target->getId());
-          if (isset($report->results[$policy->name]->tokens['exception'])) {
-            $style->error($report->results[$policy->name]->tokens['exception']);
-          }
-          return 0;
-        }
-        elseif ($report->results[$policy->name]->hasError()) {
-          $style->error("Policy $policy->name has an error for the target " . $target->getId());
-          $tokens = $report->results[$policy->name]->tokens;
-          $style->error($tokens['exception_type'] .': '.$tokens['exception']);
-          return 1;
+            $style->warning("Policy {$policy->name} was evaluated as irrelevant for the target " . $target->getId());
+            if (isset($report->results[$policy->name]->tokens['exception'])) {
+                $style->error($report->results[$policy->name]->tokens['exception']);
+            }
+            return 0;
+        } elseif ($report->results[$policy->name]->hasError()) {
+            $style->error("Policy $policy->name has an error for the target " . $target->getId());
+            $tokens = $report->results[$policy->name]->tokens;
+            $style->error($tokens['exception_type'] .': '.$tokens['exception']);
+            return 1;
         }
 
         $this->formatReport($report, $style, $input);

@@ -18,11 +18,10 @@ class ProfileSourcesCommand extends DrutinyBaseCommand
     use LanguageCommandTrait;
 
     public function __construct(
-      protected ProfileFactory $profileFactory,
-      protected LanguageManager $languageManager
-    )
-    {
-      parent::__construct();
+        protected ProfileFactory $profileFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
     }
   /**
    * @inheritdoc
@@ -41,7 +40,7 @@ class ProfileSourcesCommand extends DrutinyBaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         foreach ($this->profileFactory->sources as $source) {
-          $rows[] = [$source->name, get_class($this->profileFactory->getSource($source->name)), $source->weight];
+            $rows[] = [$source->name, get_class($this->profileFactory->getSource($source->name)), $source->weight];
         }
 
         $io = new SymfonyStyle($input, $output);

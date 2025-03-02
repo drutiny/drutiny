@@ -56,7 +56,7 @@ class ConfigGetCommand extends Command
         ksort($config);
 
         if ($input->hasOption('format') && $input->getOption('format')) {
-            $output->write(match($input->getOption('format')) {
+            $output->write(match ($input->getOption('format')) {
                 'yaml' => Yaml::dump($config),
                 'json' => json_encode($config),
                 default => throw new InvalidArgumentException("No such format. Please specify 'json' or 'yaml'.")
@@ -66,7 +66,7 @@ class ConfigGetCommand extends Command
 
         $rows = [];
         foreach ($config as $key => $value) {
-          $rows[$key] = [$key, Yaml::dump($value)];
+            $rows[$key] = [$key, Yaml::dump($value)];
         }
 
         $io = new SymfonyStyle($input, $output);

@@ -7,12 +7,14 @@ use DateTimeInterface;
 use Drutiny\Target\TargetInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-class Json {
+class Json
+{
     /**
      * Extract variables from known class types.
      */
-    static public function extract(mixed $variable):mixed {
-        return match(gettype($variable)) {
+    public static function extract(mixed $variable):mixed
+    {
+        return match (gettype($variable)) {
             'object' => match (true) {
                 $variable instanceof ParameterBagInterface => self::extract($variable->all()),
                 $variable instanceof TargetInterface => self::extract(array_combine(

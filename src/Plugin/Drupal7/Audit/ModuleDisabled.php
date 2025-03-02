@@ -15,29 +15,29 @@ use Drutiny\Annotation\Param;
  *  type = "string"
  * )
  */
-class ModuleDisabled extends Audit {
+class ModuleDisabled extends Audit
+{
 
   /**
    * @inheritdoc
    */
-  public function audit(Sandbox $sandbox) {
+    public function audit(Sandbox $sandbox)
+    {
 
-    $module = $sandbox->getParameter('module');
+        $module = $sandbox->getParameter('module');
 
-    try {
-      $info = $sandbox->drush(['format' => 'json'])->pmList();
+        try {
+            $info = $sandbox->drush(['format' => 'json'])->pmList();
+        } catch (DrushFormatException $e) {
+            return strpos($e->getOutput(), $module . ' was not found.') !== false;
+        }
+
+        if (!isset($info[$module])) {
+            return true;
+        }
+
+        $status = strtolower($info[$module]['status']);
+
+        return ($status != 'enabled');
     }
-    catch (DrushFormatException $e) {
-      return strpos($e->getOutput(), $module . ' was not found.') !== FALSE;
-    }
-
-    if (!isset($info[$module])) {
-      return TRUE;
-    }
-
-    $status = strtolower($info[$module]['status']);
-
-    return ($status != 'enabled');
-  }
-
 }

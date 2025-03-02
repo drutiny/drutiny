@@ -9,7 +9,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_CLASS)]
 #[Autoconfigure(autowire: false)]
-class PluginField {
+class PluginField
+{
 
     /**
      * Add a configurable field to the plugin schema.
@@ -30,8 +31,6 @@ class PluginField {
         public readonly string $validation = 'is_string',
         public readonly Question $ask = Question::DEFAULT,
         public readonly array $choices = []
-    )
-    {
+    ) {
     }
-
 }

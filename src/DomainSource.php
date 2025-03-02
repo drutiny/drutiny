@@ -15,15 +15,16 @@ class DomainSource
 {
     public function __construct(
         protected Settings $settings,
-        protected ContainerInterface $container, 
+        protected ContainerInterface $container,
         protected CacheInterface $cache
-    )
-    {}
+    ) {
+    }
 
     /**
      * Get a DomainListInterface object from the service container.
      */
-    protected function getServiceFromName(string $name):DomainListInterface {
+    protected function getServiceFromName(string $name):DomainListInterface
+    {
         $registry = $this->settings->get('domain_list.registry');
         if (!isset($registry[$name])) {
             throw new InvalidArgumentException("No such DomainList source exists: $name.");
@@ -60,7 +61,8 @@ class DomainSource
     /**
      * Get the InputOption mode from an InputOption instance.
      */
-    public function getInputOptionMode(InputOption $inputOption):int {
+    public function getInputOptionMode(InputOption $inputOption):int
+    {
         // VALUE_REQUIRED is not a supported mode.
         $mode = $inputOption->acceptValue() ? InputOption::VALUE_OPTIONAL : InputOption::VALUE_NONE;
         if ($inputOption->isNegatable()) {

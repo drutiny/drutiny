@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Lazy load services using uninstalled plugins.
- * 
+ *
  * This allows plugins to be left uninstalled if unused.
  */
 #[CompilerPass(type: PassConfig::TYPE_OPTIMIZE)]

@@ -4,12 +4,14 @@ namespace Drutiny\Helper;
 
 use Symfony\Component\Process\Process;
 
-class ProcessUtility {
+class ProcessUtility
+{
 
     /**
      * Copy the Process configuration from one process to another.
      */
-    public static function copyConfiguration(Process $from, Process $to):void {
+    public static function copyConfiguration(Process $from, Process $to):void
+    {
         $to->setEnv($from->getEnv());
         $to->setWorkingDirectory($from->getWorkingDirectory());
         $to->setTimeout($from->getTimeout());

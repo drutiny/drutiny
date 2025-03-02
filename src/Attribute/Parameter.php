@@ -12,7 +12,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
  */
 #[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_CLASS)]
 #[Autoconfigure(autowire: false)]
-class Parameter {
+class Parameter
+{
     const REQUIRED = 1;
     const OPTIONAL = 2;
 
@@ -21,7 +22,7 @@ class Parameter {
     public function __construct(
         public readonly string $name,
         public readonly string $description,
-        public readonly int $mode = self::OPTIONAL, 
+        public readonly int $mode = self::OPTIONAL,
         public readonly mixed $default = null,
         public readonly ?Type $type = null,
         public readonly ?array $enums = null,
@@ -36,14 +37,13 @@ class Parameter {
         }
     }
 
-    public function fromClass(string|object $class):static {
+    public function fromClass(string|object $class):static
+    {
         if (is_object($class)) {
             $this->class = get_class($class);
-        }
-        elseif (!class_exists($class)) {
+        } elseif (!class_exists($class)) {
             throw new InvalidArgumentException($class . ' does not exist.');
-        }
-        else {
+        } else {
             $this->class = $class;
         }
         return $this;

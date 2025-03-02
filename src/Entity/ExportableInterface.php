@@ -2,11 +2,10 @@
 
 namespace Drutiny\Entity;
 
-interface ExportableInterface {
+interface ExportableInterface
+{
   /**
    * Export an object into a serializable format (e.g. array)
    */
-  public function export():array;
+    public function export():array;
 }
-
- ?>

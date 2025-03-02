@@ -13,16 +13,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class PluginCollectionCommand {
+class PluginCollectionCommand
+{
 
-    public function __construct(protected PluginCollection $pluginCollection) {
-
+    public function __construct(protected PluginCollection $pluginCollection)
+    {
     }
 
     /**
      * Command generator function for service container.
      */
-    public static function getListCommand(PluginCollection $pluginCollection):Command {
+    public static function getListCommand(PluginCollection $pluginCollection):Command
+    {
         $listCommand = new Command($pluginCollection->getName().':list');
         $listCommand->setDescription("List the available configurations for ".$pluginCollection->getName().".");
         $listCommand->addOption(
@@ -58,8 +60,7 @@ class PluginCollectionCommand {
 
         if (!empty($rows)) {
             $io->table($headers, $rows);
-        }
-        else {
+        } else {
             $io->text("There are no plugins setup for ".$this->pluginCollection->getName());
             $io->text("Run ".$this->pluginCollection->getName().":setup to configure a new plugin setting.");
         }
@@ -70,12 +71,13 @@ class PluginCollectionCommand {
     /**
      * Command generator function for service container.
      */
-    public static function getAddCommand(PluginCollection $pluginCollection):Command {
+    public static function getAddCommand(PluginCollection $pluginCollection):Command
+    {
         $setupCommand = new Command($pluginCollection->getName().':add');
         $setupCommand->setDescription("Add a new configuration entry to ".$pluginCollection->getName().".");
         $setupCommand->addArgument(
-            name: $pluginCollection->getPluginAttribute()->collectionKey, 
-            mode: InputOption::VALUE_REQUIRED, 
+            name: $pluginCollection->getPluginAttribute()->collectionKey,
+            mode: InputOption::VALUE_REQUIRED,
             description: $pluginCollection->getKeyField()->description
         );
         foreach ($pluginCollection->getFieldAttributes() as $field_name => $field) {
@@ -125,8 +127,8 @@ class PluginCollectionCommand {
         $deleteCommand = new Command($pluginCollection->getName().':delete');
         $deleteCommand->setDescription("Remove a configuration entry from ".$pluginCollection->getName().".");
         $deleteCommand->addArgument(
-            name: $pluginCollection->getPluginAttribute()->collectionKey, 
-            mode: InputOption::VALUE_REQUIRED, 
+            name: $pluginCollection->getPluginAttribute()->collectionKey,
+            mode: InputOption::VALUE_REQUIRED,
             description: $pluginCollection->getKeyField()->description
         );
         $deleteCommand->setCode(function (InputInterface $input, OutputInterface $output) use ($pluginCollection) {
@@ -183,8 +185,7 @@ class PluginCollectionCommand {
                 continue;
             }
             break;
-        }
-        while (true);
+        } while (true);
         return $value;
     }
 }

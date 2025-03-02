@@ -25,23 +25,23 @@ class Application extends BaseApplication
     private $registrationErrors = [];
 
     public function __construct(
-      string $name, 
-      string $version,
-      protected EventDispatcher $dispatcher,
-      protected LoggerInterface $logger,
-      protected ContainerInterface $container
-    )
-    {
+        string $name,
+        string $version,
+        protected EventDispatcher $dispatcher,
+        protected LoggerInterface $logger,
+        protected ContainerInterface $container
+    ) {
         parent::__construct($name, $version);
         $this->setDispatcher($dispatcher);
     }
 
-    protected function getDefaultInputDefinition(): InputDefinition {
-      $definition = parent::getDefaultInputDefinition();
-      $definition->addOption(
-        new InputOption('dtag', null, InputOption::VALUE_OPTIONAL, 'Tag for internal use.')
-      );
-      return $definition;
+    protected function getDefaultInputDefinition(): InputDefinition
+    {
+        $definition = parent::getDefaultInputDefinition();
+        $definition->addOption(
+            new InputOption('dtag', null, InputOption::VALUE_OPTIONAL, 'Tag for internal use.')
+        );
+        return $definition;
     }
 
     /**
@@ -49,18 +49,18 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface|null $input = null, ?OutputInterface $output = null)
     {
-      if ($this->registrationErrors) {
-          $this->renderRegistrationErrors($input, $output);
-      }
+        if ($this->registrationErrors) {
+            $this->renderRegistrationErrors($input, $output);
+        }
 
-      $event = new GenericEvent('application.run', [
+        $event = new GenericEvent('application.run', [
         'input' => $input,
         'output' => $output,
         'name' => $this->getName(),
         'version' => $this->getVersion(),
-      ]);
-      $this->dispatcher->dispatch($event, $event->getSubject());
-      return parent::doRun($input, $output);
+        ]);
+        $this->dispatcher->dispatch($event, $event->getSubject());
+        return parent::doRun($input, $output);
     }
 
     /**
@@ -69,50 +69,49 @@ class Application extends BaseApplication
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
         ErrorHandler::register($this->container->get(LoggerInterface::class)->withName('php'));
-        $startTimer = microtime(TRUE);
+        $startTimer = microtime(true);
         switch ($output->getVerbosity()) {
-          case OutputInterface::VERBOSITY_VERBOSE:
-            $this->container->get('logger.logfile')->setLevel('NOTICE');
-            break;
-          case OutputInterface::VERBOSITY_VERY_VERBOSE:
-            $this->container->get('logger.logfile')->setLevel('INFO');
-            break;
-          case OutputInterface::VERBOSITY_DEBUG:
-            $this->container->get('logger.logfile')->setLevel('DEBUG');
-            break;
-          default:
-            $this->container->get('logger.logfile')->setLevel('WARNING');
-            break;
+            case OutputInterface::VERBOSITY_VERBOSE:
+                $this->container->get('logger.logfile')->setLevel('NOTICE');
+                break;
+            case OutputInterface::VERBOSITY_VERY_VERBOSE:
+                $this->container->get('logger.logfile')->setLevel('INFO');
+                break;
+            case OutputInterface::VERBOSITY_DEBUG:
+                $this->container->get('logger.logfile')->setLevel('DEBUG');
+                break;
+            default:
+                $this->container->get('logger.logfile')->setLevel('WARNING');
+                break;
         }
 
         try {
-          if (!$command instanceof ListCommand) {
-            if ($this->registrationErrors) {
-                $this->renderRegistrationErrors($input, $output);
-                $this->registrationErrors = [];
-            }
+            if (!$command instanceof ListCommand) {
+                if ($this->registrationErrors) {
+                    $this->renderRegistrationErrors($input, $output);
+                    $this->registrationErrors = [];
+                }
             
+                $returnCode = parent::doRunCommand($command, $input, $output);
+                $endTimer = microtime(true);
+
+                $event = new GenericEvent('command.exit', [
+                'command' => $command,
+                'input' => $input,
+                'output' => $output,
+                'exitCode' => $returnCode,
+                'runtime' => ($endTimer-$startTimer),
+                ]);
+                $this->dispatcher->dispatch($event, $event->getSubject());
+
+                return $returnCode;
+            }
+
             $returnCode = parent::doRunCommand($command, $input, $output);
-            $endTimer = microtime(TRUE);
-
-            $event = new GenericEvent('command.exit', [
-              'command' => $command,
-              'input' => $input,
-              'output' => $output,
-              'exitCode' => $returnCode,
-              'runtime' => ($endTimer-$startTimer),
-            ]);
-            $this->dispatcher->dispatch($event, $event->getSubject());
-
-            return $returnCode;
-          }
-
-          $returnCode = parent::doRunCommand($command, $input, $output);
-          $endTimer = microtime(TRUE);
-        }
-        catch (\Exception $e) {
-          $this->container->get(LoggerInterface::class)->error($e->getMessage());
-          throw $e;
+            $endTimer = microtime(true);
+        } catch (\Exception $e) {
+            $this->container->get(LoggerInterface::class)->error($e->getMessage());
+            throw $e;
         }
 
         if ($this->registrationErrors) {

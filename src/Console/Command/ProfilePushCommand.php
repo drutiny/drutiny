@@ -22,12 +22,11 @@ class ProfilePushCommand extends DrutinyBaseCommand
     use LanguageCommandTrait;
 
     public function __construct(
-      protected ProfileFactory $profileFactory,
-      protected LoggerInterface $logger,
-      protected LanguageManager $languageManager,
-    )
-    {
-      parent::__construct();
+        protected ProfileFactory $profileFactory,
+        protected LoggerInterface $logger,
+        protected LanguageManager $languageManager,
+    ) {
+        parent::__construct();
     }
   /**
    * @inheritdoc
@@ -36,9 +35,9 @@ class ProfilePushCommand extends DrutinyBaseCommand
     {
         $this
         ->addArgument(
-          'profile',
-          InputArgument::REQUIRED,
-          'The name of the profile to push.'
+            'profile',
+            InputArgument::REQUIRED,
+            'The name of the profile to push.'
         )
         ->addArgument(
             'source',
@@ -46,11 +45,11 @@ class ProfilePushCommand extends DrutinyBaseCommand
             'The name of the source to push too.'
         )
         ->addOption(
-          'commit-msg',
-          'm',
-          InputOption::VALUE_OPTIONAL,
-          'A message detailing the changes involved in the push.',
-          ''
+            'commit-msg',
+            'm',
+            InputOption::VALUE_OPTIONAL,
+            'A message detailing the changes involved in the push.',
+            ''
         )
         ->addOption(
             'from',
@@ -72,30 +71,29 @@ class ProfilePushCommand extends DrutinyBaseCommand
         $io = new SymfonyStyle($input, $output);
 
         if (!($remote instanceof PushableProfileSourceInterface)) {
-          $io->error('Source does not support policy push');
-          return 1;
+            $io->error('Source does not support policy push');
+            return 1;
         }
 
         if ($source = $input->getOption('from')) {
-          $source = $this->profileFactory->getSource($source);
+            $source = $this->profileFactory->getSource($source);
         }
 
         $profile = $this->profileFactory->loadProfileByName($input->getArgument('profile'), $source);
 
         try {
-          $profile = $remote->push($profile, $input->getOption('commit-msg'));
-        }
-        catch (IdentityProviderException $e)
-        {
-          $this->logger->error(get_class($e));
-          $this->logger->error($e->getMessage());
-          return 2;
+            $profile = $remote->push($profile, $input->getOption('commit-msg'));
+        } catch (IdentityProviderException $e) {
+            $this->logger->error(get_class($e));
+            $this->logger->error($e->getMessage());
+            return 2;
         }
 
-        $io->success(sprintf('Profile %s successfully pushed to %s. Visit %s',
-          $input->getArgument('profile'),
-          $input->getArgument('source'),
-          $profile->uri
+        $io->success(sprintf(
+            'Profile %s successfully pushed to %s. Visit %s',
+            $input->getArgument('profile'),
+            $input->getArgument('source'),
+            $profile->uri
         ));
 
         return 0;
@@ -106,24 +104,24 @@ class ProfilePushCommand extends DrutinyBaseCommand
      */
     protected function getPushSource(InputInterface $input, OutputInterface $output):PushableProfileSourceInterface
     {
-      $io = new SymfonyStyle($input, $output);
-      if ($source_name = $input->getArgument('source')) {
-        return $this->profileFactory->getSource($input->getArgument('source'));
-      }
-      $sources = array_filter($this->profileFactory->sources, function (AsSource $source) {
-        return $this->profileFactory->getSource($source->name) instanceof PushableProfileSourceInterface;
-      });
-      if (count($sources) == 1) {
-        $name = array_shift($sources)->name;
-        if ($io->confirm("Push profile to source '$name'?")) {
-          return $this->profileFactory->getSource($name);
+        $io = new SymfonyStyle($input, $output);
+        if ($source_name = $input->getArgument('source')) {
+            return $this->profileFactory->getSource($input->getArgument('source'));
         }
-        throw new InvalidArgumentException("There are no pushable sources to push profiles too.");
-      }
-      if (count($sources) == 0) {
-        throw new InvalidArgumentException("There are no pushable sources to push profiles too.");
-      }
-      $choice = $io->choice("Which source would you like to push to?", array_keys($sources));
-      return $this->profileFactory->getSource($sources[$choice]);
+        $sources = array_filter($this->profileFactory->sources, function (AsSource $source) {
+            return $this->profileFactory->getSource($source->name) instanceof PushableProfileSourceInterface;
+        });
+        if (count($sources) == 1) {
+            $name = array_shift($sources)->name;
+            if ($io->confirm("Push profile to source '$name'?")) {
+                return $this->profileFactory->getSource($name);
+            }
+            throw new InvalidArgumentException("There are no pushable sources to push profiles too.");
+        }
+        if (count($sources) == 0) {
+            throw new InvalidArgumentException("There are no pushable sources to push profiles too.");
+        }
+        $choice = $io->choice("Which source would you like to push to?", array_keys($sources));
+        return $this->profileFactory->getSource($sources[$choice]);
     }
 }

@@ -19,9 +19,11 @@ use Twig\Error\RuntimeError;
     mode: Parameter::REQUIRED,
     type: Type::HASH,
 )]
-class AuditAnalysisPipeline extends AbstractAnalysis {
+class AuditAnalysisPipeline extends AbstractAnalysis
+{
     #[DataProvider]
-    protected function aggregateData(AuditFactory $factory, Sandbox $sandbox):void {
+    protected function aggregateData(AuditFactory $factory, Sandbox $sandbox):void
+    {
         foreach ($this->getParameter('pipeline') as $name => $pipeline) {
             try {
                 if (!is_array($pipeline)) {
@@ -46,8 +48,7 @@ class AuditAnalysisPipeline extends AbstractAnalysis {
                 if (!$this->evaluate($pipeline->continueIf, 'twig')) {
                     break;
                 }
-            }
-            catch (RuntimeError $e) {
+            } catch (RuntimeError $e) {
                 $tokens = $audit->dataBag->all();
                 throw new AuditException("Failed to evaluate pipeline: $name ({$pipeline->class}).\n" . $e->getMessage() . "\nTokens: " . print_r($tokens, 1), State::ERROR, $e);
             }
@@ -55,7 +56,8 @@ class AuditAnalysisPipeline extends AbstractAnalysis {
     }
 }
 
-class _Pipeline {
+class _Pipeline
+{
     public function __construct(
         public readonly string $name,
         public readonly string $class,

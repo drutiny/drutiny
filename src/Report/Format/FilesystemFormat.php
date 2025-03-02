@@ -8,7 +8,8 @@ use Drutiny\Report\Format;
 use Exception;
 use ReflectionClass;
 
-abstract class FilesystemFormat extends Format implements FilesystemFormatInterface {
+abstract class FilesystemFormat extends Format implements FilesystemFormatInterface
+{
     /**
      * Location where the writeable directory is.
      */
@@ -19,10 +20,11 @@ abstract class FilesystemFormat extends Format implements FilesystemFormatInterf
      */
     public function setWriteableDirectory(string $dir):void
     {
-      $this->directory = $dir;
+        $this->directory = $dir;
     }
 
-    public function getWriteableDirectory(): string {
+    public function getWriteableDirectory(): string
+    {
         return $this->directory;
     }
 

@@ -18,14 +18,14 @@ class ModuleAnalysis extends AbstractAnalysis
 {
     public function prepare(Policy $policy): ?string
     {
-      return static::class;  
+        return static::class;
     }
 
     #[DataProvider]
     public function listModules():void
     {
         try {
-          $list = $this->target->getService('drush')
+            $list = $this->target->getService('drush')
             ->pmList([
               'format' => 'json',
               'type' => 'module',
@@ -34,33 +34,32 @@ class ModuleAnalysis extends AbstractAnalysis
             ->run(function ($output) {
                 return TextCleaner::decodeDirtyJson($output);
             });
-        }
-        catch (ProcessFailedException $e) {
+        } catch (ProcessFailedException $e) {
           // E.g. The requested field, 'project', is not defined.
           // Retry without requesting specific fields.
-          if (str_contains($e->getProcess()->getErrorOutput(), 'The requested field')) {
-            $list = $this->target->getService('drush')
-            ->pmList([
-              'format' => 'json',
-              'type' => 'module',
-            ])
-            ->run(function ($output) {
-                return TextCleaner::decodeDirtyJson($output);
-            });
-            foreach ($list as $name => &$data) {
-              // Pad with missing fields.
-              $data += [
-                'project' => '',
-                'package' => '',
-                'path' => '',
-                'status' => '',
-                'version' => '',
-                'display_name' => '',
-                'type' => '',
-                'name' => '',
-              ];
+            if (str_contains($e->getProcess()->getErrorOutput(), 'The requested field')) {
+                $list = $this->target->getService('drush')
+                ->pmList([
+                'format' => 'json',
+                'type' => 'module',
+                ])
+                ->run(function ($output) {
+                    return TextCleaner::decodeDirtyJson($output);
+                });
+                foreach ($list as $name => &$data) {
+                    // Pad with missing fields.
+                    $data += [
+                    'project' => '',
+                    'package' => '',
+                    'path' => '',
+                    'status' => '',
+                    'version' => '',
+                    'display_name' => '',
+                    'type' => '',
+                    'name' => '',
+                    ];
+                }
             }
-          }
         }
         
         $this->set('modules', $list);

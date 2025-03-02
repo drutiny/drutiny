@@ -29,22 +29,21 @@ class ConfigAnalysis extends AbstractAnalysis
           'include-overridden' => true,
         ]);
         try {
-          $config = $command->run(function ($output) {
-            return TextCleaner::decodeDirtyJson($output);
-          });
-          $this->set('config', $config);
-        }
-        catch (ProcessFailedException $e) {
+            $config = $command->run(function ($output) {
+                return TextCleaner::decodeDirtyJson($output);
+            });
+            $this->set('config', $config);
+        } catch (ProcessFailedException $e) {
           // Check if the error was because the config did not exist.
-          $config_missing_error = "Config $collection does not exist";
-          $stderr = $e->getProcess()->getErrorOutput();
-          if (strpos($stderr, $config_missing_error) !== FALSE) {
-            $this->set('config', null);
-            return;
-          }
+            $config_missing_error = "Config $collection does not exist";
+            $stderr = $e->getProcess()->getErrorOutput();
+            if (strpos($stderr, $config_missing_error) !== false) {
+                $this->set('config', null);
+                return;
+            }
 
           // Some other error we should continue to throw.
-          throw $e;
+            throw $e;
         }
     }
 }

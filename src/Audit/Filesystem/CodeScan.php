@@ -65,7 +65,7 @@ class CodeScan extends Audit
         // Backwards compatibility. %paths is no longer present since Drush 8.
         if (!isset($stat['%paths'])) {
             foreach ($stat as $key => $value) {
-              $stat['%paths']['%'.$key] = $value;
+                $stat['%paths']['%'.$key] = $value;
             }
         }
 
@@ -74,7 +74,7 @@ class CodeScan extends Audit
         $command = ['find', $directory, '-type f'];
 
         // Add maxdepth to command if applicable.
-        $maxdepth = $this->getParameter('maxdepth', NULL);
+        $maxdepth = $this->getParameter('maxdepth', null);
         if (is_int($maxdepth) && $maxdepth >= 0) {
             $command[] = '-maxdepth ' . $maxdepth;
         }

@@ -2,7 +2,6 @@
 
 namespace Drutiny;
 
-
 use Drutiny\Attribute\AsSource;
 use Drutiny\Policy\UnavailablePolicyException;
 use Drutiny\Policy\UnknownPolicyException;
@@ -24,12 +23,12 @@ class PolicyFactory
     public readonly array $sources;
 
     public function __construct(
-        protected ContainerInterface $container, 
-        protected LoggerInterface $logger, 
-        protected LanguageManager $languageManager, 
+        protected ContainerInterface $container,
+        protected LoggerInterface $logger,
+        protected LanguageManager $languageManager,
         protected ProgressBar $progress,
-        protected Settings $settings)
-    {
+        protected Settings $settings
+    ) {
         if (method_exists($logger, 'withName')) {
             $this->logger = $logger->withName('policy.factory');
         }

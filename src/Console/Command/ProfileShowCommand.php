@@ -20,10 +20,9 @@ class ProfileShowCommand extends DrutinyBaseCommand
     public function __construct(
         protected ProfileFactory $profileFactory,
         protected LanguageManager $languageManager
-      )
-      {
+    ) {
         parent::__construct();
-      }
+    }
   /**
    * @inheritdoc
    */
@@ -58,16 +57,16 @@ class ProfileShowCommand extends DrutinyBaseCommand
         $export = $profile->export();
 
         if (isset($export['format']['html']['content'])) {
-          $export['format']['html']['content'] = str_replace("\r", '', $export['format']['html']['content']);
+            $export['format']['html']['content'] = str_replace("\r", '', $export['format']['html']['content']);
         }
 
         switch ($input->getOption('format')) {
-          case 'json':
-            $format = json_encode($export, JSON_PRETTY_PRINT);
-            break;
-          default:
-            $format = Yaml::dump($export, 6, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
-            break;
+            case 'json':
+                $format = json_encode($export, JSON_PRETTY_PRINT);
+                break;
+            default:
+                $format = Yaml::dump($export, 6, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+                break;
         }
 
         $output->write($format);

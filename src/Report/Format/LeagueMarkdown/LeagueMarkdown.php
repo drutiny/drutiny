@@ -11,7 +11,9 @@ use Twig\Extra\Markdown\MarkdownInterface;
 
 class LeagueMarkdown implements MarkdownInterface
 {
-    public function __construct(private ConverterInterface $converter) {}
+    public function __construct(private ConverterInterface $converter)
+    {
+    }
 
     public function convert(string $body): string
     {
@@ -34,7 +36,8 @@ class LeagueMarkdown implements MarkdownInterface
         return null;
     }
 
-    public static function tableSectionClassAttribute(TableSection $node): ?string {
+    public static function tableSectionClassAttribute(TableSection $node): ?string
+    {
         $tag = $node->getType() === TableSection::TYPE_HEAD ? 'thead' : 'tbody';
 
         if ($tag == 'thead') {

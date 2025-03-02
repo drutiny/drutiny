@@ -8,13 +8,13 @@ use Exception;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
-class ServiceFactory {
+class ServiceFactory
+{
     public readonly array $serviceMap;
     public function __construct(
         Settings $settings,
         protected ContainerInterface $container
-     )
-    {
+    ) {
         $this->serviceMap = $settings->get('service.registry');
     }
 

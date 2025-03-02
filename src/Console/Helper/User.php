@@ -4,7 +4,8 @@ namespace Drutiny\Console\Helper;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class User {
+class User
+{
 
     protected string $identity;
 
@@ -15,11 +16,13 @@ class User {
         $eventDispatcher->dispatch($this, $this::class . '::getIdentity');
     }
 
-    public function getIdentity():string {
+    public function getIdentity():string
+    {
         return $this->identity;
     }
 
-    public function setIdentity(string $identity): void {
+    public function setIdentity(string $identity): void
+    {
         $this->identity = $identity;
     }
 }

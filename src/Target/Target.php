@@ -31,12 +31,11 @@ abstract class Target implements \ArrayAccess, TargetInterface
     protected array $lazyProperties = [];
 
     public function __construct(
-        protected LoggerInterface $logger, 
+        protected LoggerInterface $logger,
         protected LocalCommand $localCommand,
         protected ServiceFactory $serviceFactory,
         protected EventDispatcher $eventDispatcher
-        )
-    {
+    ) {
         if ($logger instanceof Logger) {
             $this->logger = $logger->withName('target');
         }
@@ -60,7 +59,8 @@ abstract class Target implements \ArrayAccess, TargetInterface
     /**
      * Load target by properties instead of by ID.
      */
-    final public function loadByProperties(array $properties) {
+    final public function loadByProperties(array $properties)
+    {
         foreach ($properties as $key => $value) {
             $this[$key] = $value;
         }
@@ -70,7 +70,8 @@ abstract class Target implements \ArrayAccess, TargetInterface
     /**
      * Finalise the loading process.
      */
-    private function finaliseLoad() {
+    private function finaliseLoad()
+    {
         $this->transport = $this->loadTransport();
         $event = new GenericEvent('target.load', [
             'target' => $this
@@ -82,7 +83,8 @@ abstract class Target implements \ArrayAccess, TargetInterface
     /**
      * Override this method to change the transport the target defaults to.
      */
-    protected function loadTransport(): TransportInterface {
+    protected function loadTransport(): TransportInterface
+    {
         return new LocalTransport($this->localCommand);
     }
 
@@ -125,8 +127,8 @@ abstract class Target implements \ArrayAccess, TargetInterface
     /**
      * Allow inheriting Target classes to configure services.
      */
-    protected function configureService(ServiceInterface $service):void {
-        
+    protected function configureService(ServiceInterface $service):void
+    {
     }
 
     /**
@@ -148,7 +150,7 @@ abstract class Target implements \ArrayAccess, TargetInterface
 
     /**
      * Backwards compatible support for run() method. Use send() instead.
-     * 
+     *
      * @deprecated
      */
     public function run(string $cmd, ?callable $preProcess = null, int $ttl = 3600)
@@ -183,7 +185,8 @@ abstract class Target implements \ArrayAccess, TargetInterface
         return $this;
     }
 
-    public function registerLazyProperty($name, callable $value): void {
+    public function registerLazyProperty($name, callable $value): void
+    {
         if ($this->hasProperty($name)) {
             throw new TargetPropertyException("Cannot register lazy property '$name'. Property already exists.");
         }
@@ -278,8 +281,7 @@ abstract class Target implements \ArrayAccess, TargetInterface
     {
         try {
             return $this->propertyAccessor->getValue($this->properties, $key);
-        }
-        catch (NoSuchIndexException $e) {
+        } catch (NoSuchIndexException $e) {
             if (isset($this->lazyProperties[$key])) {
                 $this->setProperty($key, $value = $this->lazyProperties[$key]($this));
                 // Unload lazy property now it has been fufilled.

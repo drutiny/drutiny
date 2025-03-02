@@ -17,14 +17,14 @@ use Drutiny\PolicyFactory;
 class PolicySearchCommand extends Command
 {
 
-  protected $policyFactory;
+    protected $policyFactory;
 
 
-  public function __construct(PolicyFactory $factory)
-  {
-      $this->policyFactory = $factory;
-      parent::__construct();
-  }
+    public function __construct(PolicyFactory $factory)
+    {
+        $this->policyFactory = $factory;
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc

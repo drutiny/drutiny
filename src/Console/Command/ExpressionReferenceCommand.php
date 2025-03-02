@@ -16,10 +16,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ExpressionReferenceCommand extends DrutinyBaseCommand
 {
     public function __construct(
-      protected Settings $settings,
-      protected LoggerInterface $logger
-      )
-    {
+        protected Settings $settings,
+        protected LoggerInterface $logger
+    ) {
         parent::__construct();
     }
 

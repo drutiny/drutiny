@@ -20,20 +20,19 @@ class AuditResponse implements ExportableInterface
     #[ArrayType('keyed')]
     public readonly array $tokens;
     public function __construct(
-      public readonly Policy $policy,
-      public readonly State $state,  
-      array $tokens = [],
-      public readonly ?int $timestamp = null,
-      public readonly ?int $timing = null
-    )
-    {
+        public readonly Policy $policy,
+        public readonly State $state,
+        array $tokens = [],
+        public readonly ?int $timestamp = null,
+        public readonly ?int $timing = null
+    ) {
       // Ensure the state passed matches a compatible state with the policy type.
-      if ($state != $state->withPolicyType($policy->type)) {
-        throw new AuditResponseException("Cannot accept state {$state->name} for policy of type 'data': {$policy->name}");
-      }
+        if ($state != $state->withPolicyType($policy->type)) {
+            throw new AuditResponseException("Cannot accept state {$state->name} for policy of type 'data': {$policy->name}");
+        }
 
-      $tokens['chart'] = $policy->chart;
-      $this->tokens = $tokens;
+        $tokens['chart'] = $policy->chart;
+        $this->tokens = $tokens;
     }
 
     /**
@@ -50,7 +49,7 @@ class AuditResponse implements ExportableInterface
      */
     public function getTokens():array
     {
-      return $this->tokens;
+        return $this->tokens;
     }
 
     /**
@@ -68,8 +67,8 @@ class AuditResponse implements ExportableInterface
     {
         $type = str_replace('_', '-', strtolower($this->state->name));
         return match ($type) {
-          'warning-fail' => 'failure',
-          default => $type
+            'warning-fail' => 'failure',
+            default => $type
         };
     }
 
@@ -86,7 +85,7 @@ class AuditResponse implements ExportableInterface
      */
     public function isFailure():bool
     {
-      return $this->state->isFailure();
+        return $this->state->isFailure();
     }
 
     /**
@@ -144,7 +143,7 @@ class AuditResponse implements ExportableInterface
      */
     public function export():array
     {
-      return [
+        return [
         'policy' => $this->policy->name,
         'status' => $this->state->isSuccessful(),
         'is_notice' => $this->state->isNotice(),
@@ -157,7 +156,7 @@ class AuditResponse implements ExportableInterface
         'exception' => $this->getExceptionMessage(),
         'tokens' => $this->tokens,
         'state' => $this->state,
-      ];
+        ];
     }
 
     /**
@@ -168,8 +167,8 @@ class AuditResponse implements ExportableInterface
 
       // $this->state = $export['state'];
       // $this->tokens = $export['tokens'];
-      $this->policy = drutiny()->get('policy.factory')->loadPolicyByName($export['policy']);
-      unset($export['policy']);
-      $this->importUnserialized($export);
+        $this->policy = drutiny()->get('policy.factory')->loadPolicyByName($export['policy']);
+        unset($export['policy']);
+        $this->importUnserialized($export);
     }
 }

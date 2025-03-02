@@ -4,7 +4,8 @@ namespace Drutiny\Attribute;
 
 use InvalidArgumentException;
 
-enum Type:string {
+enum Type: string
+{
     case INTEGER = 'int';
     case STRING = 'string';
     case BOOLEAN = 'boolean';
@@ -16,7 +17,8 @@ enum Type:string {
     /**
      * Get the Type from PHP gettype().
      */
-    public static function fromVariable(mixed $var):static {
+    public static function fromVariable(mixed $var):static
+    {
         if (is_array($var)) {
             return array_is_list($var) ? static::ARRAY : static::HASH;
         }
@@ -35,7 +37,7 @@ enum Type:string {
      * Determine if the passed value is of the same Type.
      */
     public function is(mixed $var):bool
-    {   
+    {
         // Empty hashes otherwise return as arrays.
         if (is_array($var) && empty($var) && $this == static::HASH) {
             return true;

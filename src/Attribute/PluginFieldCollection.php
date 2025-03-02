@@ -4,7 +4,8 @@ namespace Drutiny\Attribute;
 
 use Exception;
 
-class PluginFieldCollection {
+class PluginFieldCollection
+{
     protected array $collection;
 
     public function add(PluginField $field):self

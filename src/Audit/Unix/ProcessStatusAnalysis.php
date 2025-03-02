@@ -8,9 +8,10 @@ use Drutiny\Sandbox\Sandbox;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Component\Process\Process;
 
-class ProcessStatusAnalysis extends AbstractAnalysis {
+class ProcessStatusAnalysis extends AbstractAnalysis
+{
 
-    public function gather(Sandbox $sandbox) 
+    public function gather(Sandbox $sandbox)
     {
         // # Example of the `ps` output:
         // #     PPID   PID   USER         STAT %CPU COMMAND          STARTED WCHAN

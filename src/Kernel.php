@@ -27,7 +27,7 @@ class Kernel
 {
     private const CONFIG_EXTS = '.{php,yaml,yml}';
     private const CONTAINER_SUFFIX = '.container.php';
-    public  const CONTAINER_EXTENSIONS = '.container-extensions.json';
+    public const CONTAINER_EXTENSIONS = '.container-extensions.json';
     private ContainerInterface $container;
     private bool $initialized = false;
     private array $compilers = [];
@@ -123,7 +123,8 @@ class Kernel
     /**
      * Clean up old generated containers.
      */
-    protected function cleanOldContainers():void {
+    protected function cleanOldContainers():void
+    {
         $files = glob($this->getProjectDir() .'/.*'.self::CONTAINER_SUFFIX);
         foreach ($files as $file) {
             $age = time() - filemtime($file);
@@ -256,17 +257,17 @@ class Kernel
         foreach ([$this->getWorkingDirectory(), $this->getHomeDirectory(), $this->getProjectDir()] as $directory) {
             $files = array_merge($files, array_filter(
                 array_map(
-                    fn ($filename) => "$directory/$filename", 
+                    fn ($filename) => "$directory/$filename",
                     $filenames
-                ), 
-            'file_exists'));
+                ),
+                'file_exists'
+            ));
         }
 
         $cache_file = $this->getProjectDir() . '/' . self::CONTAINER_EXTENSIONS;
         if (file_exists($cache_file)) {
             $cache_files = json_decode(file_get_contents($cache_file), true);
-        }
-        else {
+        } else {
             $finder = new Finder;
             $finder->in($this->getProjectDir().'/vendor')->exclude('tests')->files()->name('drutiny'.self::CONFIG_EXTS);
 

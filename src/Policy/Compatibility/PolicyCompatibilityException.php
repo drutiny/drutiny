@@ -11,8 +11,7 @@ class PolicyCompatibilityException extends \Exception
         public readonly AuditClass $constraint,
         string $message,
         ?Throwable $previous = null
-    )
-    {
+    ) {
         parent::__construct($message, 0, $previous);
     }
 }

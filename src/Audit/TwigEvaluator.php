@@ -13,15 +13,14 @@ use TypeError;
 /**
  * Evaluates expressions through Twig.
  */
-class TwigEvaluator {
+class TwigEvaluator
+{
     protected array $globalContexts = [];
 
     public function __construct(
         protected Environment $twig,
         protected LoggerInterface $logger,
-    )
-    {
-        
+    ) {
     }
 
     public function setTimezone(DateTimeZone $timezone):void
@@ -62,8 +61,7 @@ class TwigEvaluator {
             $contexts = array_merge($this->globalContexts, $contexts);
             $output = $this->twig->render($template, $contexts);
             $result = json_decode($output, true);
-        }
-        catch (TypeError $e) {
+        } catch (TypeError $e) {
             $this->logger->error($e->getMessage());
             return null;
         }

@@ -20,14 +20,13 @@ use Symfony\Component\Yaml\Yaml;
  */
 class TargetMetadataCommand extends DrutinyBaseCommand
 {
-  public function __construct(
-    protected TargetFactory $targetFactory,
-    protected LoggerInterface $logger,
-    protected ProgressBar $progressBar
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected TargetFactory $targetFactory,
+        protected LoggerInterface $logger,
+        protected ProgressBar $progressBar
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -63,8 +62,8 @@ class TargetMetadataCommand extends DrutinyBaseCommand
         $this->progressBar->advance();
      
         $target = $this->targetFactory->create(
-          $input->getArgument('target'), 
-          $input->getOption('uri')
+            $input->getArgument('target'),
+            $input->getOption('uri')
         );
         
         $this->progressBar->advance();
@@ -74,26 +73,26 @@ class TargetMetadataCommand extends DrutinyBaseCommand
         $rows = $object = [];
 
         foreach ($target->getPropertyList() as $key) {
-          $value = $target->getProperty($key);
-          $object[$key] = $value;
-          $value = is_object($value) ? '<object> (' . get_class($value) . ')'  : '<'.gettype($value) . '> ' . Yaml::dump($value, 8, 2);
-          $this->logger->debug("$key: $value");
-          if (strlen($value) > 1024) {
-            $value = substr($value, 0, 1024) . '...';
-          }
-          $rows[] = [$key, $value];
+            $value = $target->getProperty($key);
+            $object[$key] = $value;
+            $value = is_object($value) ? '<object> (' . get_class($value) . ')'  : '<'.gettype($value) . '> ' . Yaml::dump($value, 8, 2);
+            $this->logger->debug("$key: $value");
+            if (strlen($value) > 1024) {
+                $value = substr($value, 0, 1024) . '...';
+            }
+            $rows[] = [$key, $value];
         }
 
         $this->progressBar->finish();
 
         $output->write(match ($input->getOption('format')) {
-          'json' => json_encode($object, JSON_PRETTY_PRINT),
-          'yaml' => Yaml::dump($object),
-          default => $io->table(['Property', 'Value'], $rows) ?? '',
+            'json' => json_encode($object, JSON_PRETTY_PRINT),
+            'yaml' => Yaml::dump($object),
+            default => $io->table(['Property', 'Value'], $rows) ?? '',
         });
 
         if ($input->getOption('export')) {
-          $io->note("Written export to " . TargetExport::create($target)->toTemporaryFile());
+            $io->note("Written export to " . TargetExport::create($target)->toTemporaryFile());
         }
 
         return 0;

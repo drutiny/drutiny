@@ -45,10 +45,11 @@ class TwigEvaluatorPass implements CompilerPassInterface
 
     /**
      * Get a cached registry because searching the filesystem costs.
-     * 
+     *
      * This is public so the expression:reference command can access this registry.
      */
-    public function getRegistry(ContainerInterface|Settings $container): array {
+    public function getRegistry(ContainerInterface|Settings $container): array
+    {
         // At compile time, we'll get the ContainerInterface while later on we should recieve a Settings
         // instance if called again.
         $dirs = ($container instanceof ContainerInterface) ? $container->getParameter('extension.dirs') : $container->get('extension.dirs');

@@ -2,7 +2,8 @@
 
 namespace Drutiny\Policy;
 
-enum PolicyType:string {
-    CASE AUDIT = 'audit';
-    CASE DATA = 'data';
+enum PolicyType: string
+{
+    case AUDIT = 'audit';
+    case DATA = 'data';
 }

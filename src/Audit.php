@@ -82,10 +82,11 @@ abstract class Audit implements AuditInterface
 
     /**
      * Reset the databag.
-     * 
+     *
      * This should happen every time an policy is audited.
      */
-    protected function resetDataBag(): void {
+    protected function resetDataBag(): void
+    {
         $this->dataBag = new DataBag();
         $this->dataBag->add([
             'parameters' => new DataBag(),
@@ -108,8 +109,7 @@ abstract class Audit implements AuditInterface
                 }
                 $this->definition->addParameter($parameter);
             }
-        }
-        while ($reflection = $reflection->getParentClass());
+        } while ($reflection = $reflection->getParentClass());
     }
 
     /**
@@ -131,7 +131,7 @@ abstract class Audit implements AuditInterface
 
     /**
      * Validate the contexts of the audit and target,
-     * 
+     *
      * @deprecated use Drutiny\Policy\Dependency attributes instead.
      */
     protected function validate(): bool
@@ -218,7 +218,6 @@ abstract class Audit implements AuditInterface
                 'uri' => $this->target->getUri(),
                 'policy' => $this->policy->name
             ]);
-
         } catch (DependencyException $e) {
             $outcome = $e->getDependency()->onFail->getAuditOutcome();
             $message = $e->getMessage();
@@ -280,16 +279,14 @@ abstract class Audit implements AuditInterface
             $trace = [];
             do {
                 $trace[] = $e->getTraceAsString();
-            }
-            while ($e = $e->getPrevious());
+            } while ($e = $e->getPrevious());
             $this->set('trace', $trace);
             $this->logger->error("'{policy}' {class} ({uri}): $message", [
               'class' => get_class($this),
               'uri' => $this->target->getUri(),
               'policy' => $this->policy->name
             ]);
-        } 
-        finally {
+        } finally {
             // Log the parameters output.
             $tokens = json_decode(json_encode($this->dataBag->export()), true);
             $this->logger->debug("Tokens:\n".Yaml::dump($tokens, 4, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK));
@@ -317,7 +314,8 @@ abstract class Audit implements AuditInterface
     /**
      * Prepare build parameters.
      */
-    protected function prepareBuildParameters(Policy $policy): Policy {
+    protected function prepareBuildParameters(Policy $policy): Policy
+    {
         // Build parameters to be used in the audit.
         foreach ($policy->build_parameters->all() as $key => $value) {
             try {
@@ -351,10 +349,11 @@ abstract class Audit implements AuditInterface
 
     /**
      * Evaluate a dependency.
-     * 
+     *
      * @throws DependencyException.
      */
-    protected function executeDependency(Dependency $dependency):bool {
+    protected function executeDependency(Dependency $dependency):bool
+    {
         try {
             $expression = $this->interpolate($dependency->expression);
             $return = $this->evaluate($expression, $dependency->syntax, [
@@ -363,8 +362,7 @@ abstract class Audit implements AuditInterface
             if ($return === 1 || $return === true) {
                 return true;
             }
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->logger->warning($dependency->syntax . ': ' . $e->getMessage());
         }
         $this->logger->debug('Expression FAILED.', [
@@ -432,7 +430,7 @@ abstract class Audit implements AuditInterface
 
     /**
      * Know if a parameter exists in the databag.
-     * 
+     *
      * To know if the parameter exists in the audit definition,
      * use Audit::getDefinition()->hasParameter($name).
      */
@@ -494,7 +492,7 @@ abstract class Audit implements AuditInterface
 
     /**
      * Check if an Audit has a given argument.
-     * 
+     *
      * @deprecated use getDefinition()->hasParameter($name) instead.
      */
     public function hasArgument(string $name): bool
@@ -536,9 +534,9 @@ abstract class Audit implements AuditInterface
     protected function addParameter(string $name, int|null $mode = null, string $description = '', $default = null, ?Type $type = null): self
     {
         $this->definition->addParameter(new Parameter(
-            name: $name, 
-            mode: $mode ?? Parameter::OPTIONAL, 
-            description: $description, 
+            name: $name,
+            mode: $mode ?? Parameter::OPTIONAL,
+            description: $description,
             default: $default,
             type: $type,
             class: $this,

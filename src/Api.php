@@ -16,7 +16,7 @@ class Api
     {
         $this->httpFactory = $http_factory;
         if (method_exists($logger, 'withName')) {
-          $logger = $logger->withName('http');
+            $logger = $logger->withName('http');
         }
         $this->logger = $logger;
     }

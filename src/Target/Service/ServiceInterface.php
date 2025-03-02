@@ -2,4 +2,7 @@
 
 namespace Drutiny\Target\Service;
 
-interface ServiceInterface {}
+interface ServiceInterface
+{
+
+}

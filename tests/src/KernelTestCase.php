@@ -22,7 +22,8 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Cache\CacheInterface;
 
-abstract class KernelTestCase extends TestCase {
+abstract class KernelTestCase extends TestCase
+{
 
     protected Application $application;
     protected BufferedOutput $output;
@@ -35,7 +36,7 @@ abstract class KernelTestCase extends TestCase {
         global $kernel;
         $kernel = new Kernel('phpunit', 'x.y.z-dev');
 
-        $this->testTmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'phpunit-drutiny' . mt_rand(1000,9999);
+        $this->testTmpDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'phpunit-drutiny' . mt_rand(1000, 9999);
         $filesystem = new Filesystem;
         $filesystem->mkdir($this->testTmpDir);
 
@@ -43,7 +44,9 @@ abstract class KernelTestCase extends TestCase {
 
         // Mock the local command.
         $kernel->addCompilerPass(new class($builder) implements CompilerPassInterface {
-            public function __construct (protected MockBuilder $builder) {}
+            public function __construct(protected MockBuilder $builder)
+            {
+            }
             public function process(ContainerBuilder $container)
             {
                 $container->set(LocalCommand::class, $this->builder
@@ -58,7 +61,7 @@ abstract class KernelTestCase extends TestCase {
         }, PassConfig::TYPE_OPTIMIZE);
 
         $this->application = $kernel->getApplication();
-        $this->application->setAutoExit(FALSE);
+        $this->application->setAutoExit(false);
         $this->container = $kernel->getContainer();
         $this->output = $this->container->get(OutputInterface::class);
 
@@ -74,7 +77,8 @@ abstract class KernelTestCase extends TestCase {
         $filesystem->remove($this->testTmpDir);
     }
 
-    protected function loadMockTarget($type = 'none', ...$exec_responses):TargetInterface {
+    protected function loadMockTarget($type = 'none', ...$exec_responses):TargetInterface
+    {
         // Dependency factory loads the target from the twigEvaluator.
         $twigEvaluator = $this->container->get(TwigEvaluator::class);
         $targetFactory = $this->container->get(TargetFactory::class);
@@ -95,9 +99,12 @@ abstract class KernelTestCase extends TestCase {
         return $target;
     }
 
-    protected function getFixture($name, $extension = 'yml') {
+    protected function getFixture($name, $extension = 'yml')
+    {
         $filename = dirname(__DIR__) . '/fixtures/' . $name .'.' . $extension;
-        if (!file_exists($filename)) return null;
+        if (!file_exists($filename)) {
+            return null;
+        }
         return match ($extension) {
             'yml' => Yaml::parseFile($filename),
             'yaml' => Yaml::parseFile($filename),

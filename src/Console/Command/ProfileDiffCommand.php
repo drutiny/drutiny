@@ -21,16 +21,15 @@ use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 class ProfileDiffCommand extends DrutinyBaseCommand
 {
 
-  public function __construct(
-    protected Environment $twigEnvironment,
-    protected ProfileFactory $profileFactory,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected Environment $twigEnvironment,
+        protected ProfileFactory $profileFactory,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
-  use LanguageCommandTrait;
+    use LanguageCommandTrait;
 
   /**
    * @inheritdoc
@@ -83,8 +82,7 @@ class ProfileDiffCommand extends DrutinyBaseCommand
             );
             $source1 = $profile_sources[$source];
             unset($profile_sources[$source]);
-        }
-        else {
+        } else {
             $source1 = $this->profileFactory->getSource($input->getArgument('source1'));
             if (isset($profile_sources)) {
                 unset($profile_sources[$source1->name]);
@@ -93,14 +91,12 @@ class ProfileDiffCommand extends DrutinyBaseCommand
 
         if ($input->getArgument('source2') === null && empty($profile_sources)) {
             throw new LogicException("There are not enough sources to diff this profile.");
-        }
-        elseif ($input->getArgument('source2') === null) {
+        } elseif ($input->getArgument('source2') === null) {
             $source2 = count($profile_sources) == 1 ? array_shift($profile_sources) : $profile_sources[$io->choice(
                 question: "Which source to diff as the comparative profile?",
                 choices: array_keys($profile_sources),
             )];
-        }
-        else {
+        } else {
             $source2 = $this->profileFactory->getSource($input->getArgument('source2'));
         }
 
@@ -144,7 +140,8 @@ class ProfileDiffCommand extends DrutinyBaseCommand
     /**
      * @return \Drutiny\profileSource\AbstractprofileSource[]
      */
-    protected function getSourcesByProfileName(string $profile_name):array {
+    protected function getSourcesByProfileName(string $profile_name):array
+    {
         $profile_sources = [];
 
         foreach ($this->profileFactory->sources as $source) {
@@ -157,7 +154,8 @@ class ProfileDiffCommand extends DrutinyBaseCommand
         return $profile_sources;
     }
 
-    protected function prepareProfile(profile $profile) {
+    protected function prepareProfile(profile $profile)
+    {
         $export = $profile->export();
 
         unset($export['source']);

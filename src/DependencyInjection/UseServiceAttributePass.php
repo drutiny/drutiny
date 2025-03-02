@@ -28,8 +28,7 @@ class UseServiceAttributePass implements CompilerPassInterface
             do {
                 $attributes = array_merge($attributes, $reflection->getAttributes(UseService::class));
                 $reflection = $reflection->getParentClass();
-            }
-            while ($reflection);
+            } while ($reflection);
 
             if (empty($attributes)) {
                 continue;
@@ -52,8 +51,7 @@ class UseServiceAttributePass implements CompilerPassInterface
                 $decorator->setFactory([new Reference($use_service_id), 'inject']);
                 $decorator->setArguments([new Reference('.inner'), new Reference('service_container')]);
                 $container->setDefinition("$use_service_id.decorator", $decorator);
-            }
-            while (count($attributes));
+            } while (count($attributes));
         }
     }
 }

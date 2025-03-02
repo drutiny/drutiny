@@ -11,7 +11,8 @@ use InvalidArgumentException;
  * Declare a class constant or property
  */
 #[Attribute(Attribute::TARGET_CLASS)]
-class Version {
+class Version
+{
     public readonly string $version;
     public readonly string $compatibilty;
     public readonly bool $compatible;
@@ -41,7 +42,8 @@ class Version {
     /**
      * Determine if a given version string meets the compatibility constriants.
      */
-    public function compatibleWith(string $version): bool {
+    public function compatibleWith(string $version): bool
+    {
         return Semver::satisfies($version, $this->compatibilty);
     }
 }

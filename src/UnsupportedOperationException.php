@@ -2,4 +2,6 @@
 
 namespace Drutiny;
 
-class UnsupportedOperationException extends \Exception {};
+class UnsupportedOperationException extends \Exception
+{
+};

@@ -18,15 +18,14 @@ use Twig\Environment;
  */
 class PolicyShowCommand extends DrutinyBaseCommand
 {
-  use LanguageCommandTrait;
-  public function __construct(
-    protected PolicyFactory $policyFactory,
-    protected LanguageManager $languageManager,
-    protected Environment $twig
-  )
-  {
-    parent::__construct();
-  }
+    use LanguageCommandTrait;
+    public function __construct(
+        protected PolicyFactory $policyFactory,
+        protected LanguageManager $languageManager,
+        protected Environment $twig
+    ) {
+        parent::__construct();
+    }
   
 
   /**
@@ -62,9 +61,9 @@ class PolicyShowCommand extends DrutinyBaseCommand
         $export = $policy->export();
 
         foreach (['description', 'success', 'remediation', 'failure', 'warning'] as $field) {
-          if (isset($export[$field])) {
-            $export[$field] = str_replace("\r", '', $export[$field]);
-          }
+            if (isset($export[$field])) {
+                $export[$field] = str_replace("\r", '', $export[$field]);
+            }
         }
 
         $key_order = [
@@ -78,22 +77,22 @@ class PolicyShowCommand extends DrutinyBaseCommand
         $yaml = [];
         // Set the YAML file in a given order.
         foreach ($key_order as $key) {
-          $yaml[$key] = $export[$key] ?? null;
+            $yaml[$key] = $export[$key] ?? null;
         }
 
         // Catch all, add any missed fields.
         foreach (array_keys($export) as $key) {
-          $yaml[$key] = $export[$key];
+            $yaml[$key] = $export[$key];
         }
 
         switch ($input->getOption('format')) {
-          case 'json':
-            $format = json_encode($yaml, JSON_PRETTY_PRINT);
-            break;
-          default:
-            $format = Yaml::dump($yaml, 6, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
-            $format = $this->colorizeYaml($format, $yaml, '', $this->getHighlightKeywords());
-            break;
+            case 'json':
+                $format = json_encode($yaml, JSON_PRETTY_PRINT);
+                break;
+            default:
+                $format = Yaml::dump($yaml, 6, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+                $format = $this->colorizeYaml($format, $yaml, '', $this->getHighlightKeywords());
+                break;
         }
 
         $output->write($format);
@@ -101,85 +100,87 @@ class PolicyShowCommand extends DrutinyBaseCommand
         return 0;
     }
 
-    protected function getHighlightKeywords(): array {
-      $keywords = [
+    protected function getHighlightKeywords(): array
+    {
+        $keywords = [
         '{%' => '<comment>{%</comment>',
         '%}' => '<comment>%}</comment>',
         '{{' => '<comment>{{</comment>',
         '}}' => '<comment>}}</comment>',
-      ];
+        ];
 
-      foreach (array_keys($this->twig->getFilters()) as $filter) {
-        $keywords["|$filter"] = '|<fg=yellow>'.$filter.'</>';
-        $keywords["| $filter"] = '| <fg=yellow>'.$filter.'</>';
-      }
+        foreach (array_keys($this->twig->getFilters()) as $filter) {
+            $keywords["|$filter"] = '|<fg=yellow>'.$filter.'</>';
+            $keywords["| $filter"] = '| <fg=yellow>'.$filter.'</>';
+        }
 
-      foreach (array_keys($this->twig->getFunctions()) as $function) {
-        $keywords["$function("] = '<fg=magenta>' . $function . '</>(';
-      }
+        foreach (array_keys($this->twig->getFunctions()) as $function) {
+            $keywords["$function("] = '<fg=magenta>' . $function . '</>(';
+        }
 
-      foreach (array_keys($this->twig->getTests()) as $test) {
-        $keywords[$test] = '<fg=cyan>'.$test.'</>';
-      }
+        foreach (array_keys($this->twig->getTests()) as $test) {
+            $keywords[$test] = '<fg=cyan>'.$test.'</>';
+        }
 
-      return $keywords;
+        return $keywords;
     }
 
-    protected function colorizeYaml(string $yaml, array $data, string $prefix = '', array $keywords = []): string {
-      $colorized_yaml = [];
-      $lines = explode("\n", $yaml);
+    protected function colorizeYaml(string $yaml, array $data, string $prefix = '', array $keywords = []): string
+    {
+        $colorized_yaml = [];
+        $lines = explode("\n", $yaml);
 
-      $value = current($data);
-      $key = key($data);
+        $value = current($data);
+        $key = key($data);
 
-      $wait_till_key_is_found = false;
-
-      foreach ($lines as $line) {
-        $line = $prefix.$line;
-
-        // Highlight simple twig syntax.
-        $line = strtr($line, $keywords);
-        // $line = preg_replace('/([a-z0-9A-Z_]+)\(/', '<fg=yellow>$1</>(', $line);
-        
-        $regex_key = preg_quote(Inline::dump($key));
-        
-        if (!preg_match("/^(\s*)$regex_key:/", $line, $matches)) {
-          // If a recursive call colorized assoc array output then we dont'
-          // want to add lines here until the next key is found.
-          if (!$wait_till_key_is_found && (!is_array($value) || array_is_list($value))) {
-            $colorized_yaml[] = $line;
-          }
-          continue;
-        }
         $wait_till_key_is_found = false;
 
-        $line = preg_replace_callback("/^(\s*)($regex_key):/", function ($matches) {
-          $tag = match (DynamicParameterType::fromParameterName($matches[2])) {
-            DynamicParameterType::EVALUATE => 'magenta',
-            DynamicParameterType::REPLACE => 'yellow',
-            DynamicParameterType::STATIC => 'cyan',
-            default => 'green'
-          };
-          return strtr($matches[0], [
-            $matches[2] => "<fg=$tag>" . $matches[2] . "</>"
-          ]);
-        }, $line);
+        foreach ($lines as $line) {
+            $line = $prefix.$line;
 
-        $colorized_yaml[] = $line;
+          // Highlight simple twig syntax.
+            $line = strtr($line, $keywords);
+          // $line = preg_replace('/([a-z0-9A-Z_]+)\(/', '<fg=yellow>$1</>(', $line);
         
-        if (is_array($value) && !array_is_list($value)) {
-          $colorized_lines = explode("\n", $this->colorizeYaml(Yaml::dump($value, 6, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK), $value, $prefix . '    ', $keywords));
+            $regex_key = preg_quote(Inline::dump($key));
+        
+            if (!preg_match("/^(\s*)$regex_key:/", $line, $matches)) {
+              // If a recursive call colorized assoc array output then we dont'
+              // want to add lines here until the next key is found.
+                if (!$wait_till_key_is_found && (!is_array($value) || array_is_list($value))) {
+                    $colorized_yaml[] = $line;
+                }
+                continue;
+            }
+            $wait_till_key_is_found = false;
 
-          foreach ($colorized_lines as $colored_line) {
-            $colorized_yaml[] = $colored_line;
-          }
-          $wait_till_key_is_found = true;
+            $line = preg_replace_callback("/^(\s*)($regex_key):/", function ($matches) {
+                $tag = match (DynamicParameterType::fromParameterName($matches[2])) {
+                    DynamicParameterType::EVALUATE => 'magenta',
+                    DynamicParameterType::REPLACE => 'yellow',
+                    DynamicParameterType::STATIC => 'cyan',
+                    default => 'green'
+                };
+                return strtr($matches[0], [
+                $matches[2] => "<fg=$tag>" . $matches[2] . "</>"
+                ]);
+            }, $line);
+
+            $colorized_yaml[] = $line;
+        
+            if (is_array($value) && !array_is_list($value)) {
+                $colorized_lines = explode("\n", $this->colorizeYaml(Yaml::dump($value, 6, 4, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK), $value, $prefix . '    ', $keywords));
+
+                foreach ($colorized_lines as $colored_line) {
+                    $colorized_yaml[] = $colored_line;
+                }
+                $wait_till_key_is_found = true;
+            }
+
+            $value = next($data);
+            $key = key($data);
         }
 
-        $value = next($data);
-        $key = key($data);
-      }
-
-      return implode("\n", $colorized_yaml);
+        return implode("\n", $colorized_yaml);
     }
 }

@@ -12,38 +12,38 @@ class CodeScanAnalysis extends AbstractAnalysis
 
     public function configure():void
     {
-      parent::configure();
-      $this->addParameter(
-          'directory',
-          static::PARAMETER_OPTIONAL,
-          'Absolute filepath to directory to scan',
-          '%root'
-      );
-      $this->addParameter(
-          'exclude',
-          static::PARAMETER_OPTIONAL,
-          'Absolute filepaths to directories omit from scanning',
-      );
-      $this->addParameter(
-          'filetypes',
-          static::PARAMETER_OPTIONAL,
-          'file extensions to include in the scan',
-      );
-      $this->addParameter(
-          'patterns',
-          static::PARAMETER_OPTIONAL,
-          'patterns to run over each matching file.',
-      );
-      $this->addParameter(
-          'allowlist',
-          static::PARAMETER_OPTIONAL,
-          'Patterns which the \'patterns\' parameter may yield false positives from',
-      );
-      $this->addParameter(
-          'maxdepth',
-          static::PARAMETER_OPTIONAL,
-          'An optional max depth for the scan.',
-      );
+        parent::configure();
+        $this->addParameter(
+            'directory',
+            static::PARAMETER_OPTIONAL,
+            'Absolute filepath to directory to scan',
+            '%root'
+        );
+        $this->addParameter(
+            'exclude',
+            static::PARAMETER_OPTIONAL,
+            'Absolute filepaths to directories omit from scanning',
+        );
+        $this->addParameter(
+            'filetypes',
+            static::PARAMETER_OPTIONAL,
+            'file extensions to include in the scan',
+        );
+        $this->addParameter(
+            'patterns',
+            static::PARAMETER_OPTIONAL,
+            'patterns to run over each matching file.',
+        );
+        $this->addParameter(
+            'allowlist',
+            static::PARAMETER_OPTIONAL,
+            'Patterns which the \'patterns\' parameter may yield false positives from',
+        );
+        $this->addParameter(
+            'maxdepth',
+            static::PARAMETER_OPTIONAL,
+            'An optional max depth for the scan.',
+        );
     }
 
 
@@ -58,7 +58,7 @@ class CodeScanAnalysis extends AbstractAnalysis
         // Backwards compatibility. %paths is no longer present since Drush 8.
         if (!isset($stat['%paths'])) {
             foreach ($stat as $key => $value) {
-              $stat['%paths']['%'.$key] = $value;
+                $stat['%paths']['%'.$key] = $value;
             }
         }
 
@@ -67,7 +67,7 @@ class CodeScanAnalysis extends AbstractAnalysis
         $command = ['find', $directory, '-type f'];
 
         // Add maxdepth to command if applicable.
-        $maxdepth = $this->getParameter('maxdepth', NULL);
+        $maxdepth = $this->getParameter('maxdepth', null);
         if (is_int($maxdepth) && $maxdepth >= 0) {
             $command[] = '-maxdepth ' . $maxdepth;
         }

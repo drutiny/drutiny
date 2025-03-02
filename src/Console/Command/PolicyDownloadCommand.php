@@ -22,17 +22,16 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class PolicyDownloadCommand extends DrutinyBaseCommand
 {
-  use LanguageCommandTrait;
+    use LanguageCommandTrait;
 
-  public function __construct(
-    protected LoggerInterface $logger, 
-    protected PolicyFactory $policyFactory, 
-    protected LanguageManager $languageManager,
-    protected Settings $settings
-    )
-  {
-      parent::__construct();
-  }
+    public function __construct(
+        protected LoggerInterface $logger,
+        protected PolicyFactory $policyFactory,
+        protected LanguageManager $languageManager,
+        protected Settings $settings
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -93,7 +92,9 @@ class PolicyDownloadCommand extends DrutinyBaseCommand
         $commentary = ['This policy was downloaded using policy:download command.'];
         foreach ($export as $key => $value) {
             if (in_array($key, $remove_keys) || empty($value)) {
-                if (in_array($key, $remove_keys)) $commentary[] = "Original $key: $value";
+                if (in_array($key, $remove_keys)) {
+                    $commentary[] = "Original $key: $value";
+                }
                 unset($export[$key]);
             }
         }
@@ -128,7 +129,8 @@ class PolicyDownloadCommand extends DrutinyBaseCommand
         return 0;
     }
 
-    protected function getSource(InputInterface $input, OutputInterface $output) {
+    protected function getSource(InputInterface $input, OutputInterface $output)
+    {
         $source = $input->getArgument('source');
         if (!empty($source)) {
             return $source;
@@ -138,7 +140,7 @@ class PolicyDownloadCommand extends DrutinyBaseCommand
         $sources = [];
         foreach ($this->policyFactory->sources as $source) {
             $source = $this->policyFactory->getSource($source->name);
-            $list = $source->getList($this->languageManager);    
+            $list = $source->getList($this->languageManager);
             $sources[$source->name] = $list[$input->getArgument('policy')] ?? false;
         }
 
@@ -146,14 +148,11 @@ class PolicyDownloadCommand extends DrutinyBaseCommand
 
         if (empty($choices)) {
             throw new InvalidArgumentException($input->getArgument('policy') . ' could not be found.');
-        }
-        elseif (count($choices) > 1) {
+        } elseif (count($choices) > 1) {
             $choice = $render->choice("Which source would you like to download the policy from?", $choices);
-        }
-        elseif (!$render->confirm("Download ".$input->getArgument('policy')." from {$choices[0]}?")) {
+        } elseif (!$render->confirm("Download ".$input->getArgument('policy')." from {$choices[0]}?")) {
             throw new Exception("Opted not to download policy.");
-        }
-        else {
+        } else {
             $choice = 0;
         }
 

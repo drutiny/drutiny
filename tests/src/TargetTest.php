@@ -86,7 +86,8 @@ class TargetTest extends KernelTestCase
 
     public function testDrushTarget()
     {
-        $target = $this->loadMockTarget('drush',
+        $target = $this->loadMockTarget(
+            'drush',
             $this->getFixture('drush-site:alias'),
             $this->getFixture('drush-bin'),
             $this->getFixture('drush-status'),
@@ -106,7 +107,8 @@ class TargetTest extends KernelTestCase
 
     public function testDdevTarget()
     {
-        $target = $this->loadMockTarget('ddev',
+        $target = $this->loadMockTarget(
+            'ddev',
             $this->getFixture('ddev-describe'),
             $this->getFixture('drush-bin'),
             $this->getFixture('drush-status'),
@@ -122,7 +124,8 @@ class TargetTest extends KernelTestCase
 
     public function testLandoTarget()
     {
-        $target = $this->loadMockTarget('lando',
+        $target = $this->loadMockTarget(
+            'lando',
             $this->getFixture('lando-list'),
             $this->getFixture('lando-info'),
             $this->getFixture('drush-bin'),

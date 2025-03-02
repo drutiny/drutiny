@@ -9,7 +9,8 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Process\Process;
 
-class ProcessManagerViewer {
+class ProcessManagerViewer
+{
 
     const STATUS_PENDING = 'pending';
     const STATUS_RUNNING = 'running';
@@ -23,7 +24,8 @@ class ProcessManagerViewer {
     protected Closure $onUpdate;
     private float $lastRender;
 
-    public function __construct(ConsoleOutput $output, protected ProcessManager $processManager) {
+    public function __construct(ConsoleOutput $output, protected ProcessManager $processManager)
+    {
         $this->output = $output->section();
         $this->table = new Table($this->output);
 
@@ -37,17 +39,20 @@ class ProcessManagerViewer {
         $this->table->setRows($this->rows);
     }
 
-    public function onStatusChange(Closure $callback):self {
+    public function onStatusChange(Closure $callback):self
+    {
         $this->onStatusChange = $callback;
         return $this;
     }
 
-    public function onUpdate(Closure $callback):self {
+    public function onUpdate(Closure $callback):self
+    {
         $this->onUpdate = $callback;
         return $this;
     }
 
-    public function watchAndWait() {
+    public function watchAndWait()
+    {
         while (!$this->processManager->hasFinished()) {
             $rerender = false;
             $active = $this->processManager->getActive();
@@ -63,8 +68,7 @@ class ProcessManagerViewer {
                     $this->rows[$name][1] = $status;
                     $this->table->setRow($row_id, $this->rows[$name]);
                     $this->processStatuses[$name] = self::STATUS_RUNNING;
-                }
-                elseif (isset($this->onUpdate)) {
+                } elseif (isset($this->onUpdate)) {
                     $callback = $this->onUpdate;
                     $update = $callback($process, $name);
                     if (is_string($update)) {
@@ -104,9 +108,10 @@ class ProcessManagerViewer {
         return $this->processManager;
     }
 
-    public function render(int $active = 0, int $completed = 0):self {
+    public function render(int $active = 0, int $completed = 0):self
+    {
         if (isset($this->lastRender)) {
-           $this->clean();
+            $this->clean();
         }
         $this->table->render();
         $this->output->writeln($active . ' Active. ' . count($this->rows) . '/' . $completed . ' Completed');
@@ -114,13 +119,15 @@ class ProcessManagerViewer {
         return $this;
     }
 
-    public function clean():self {
+    public function clean():self
+    {
         $clear_lines = 5 + count($this->rows);
         $this->output->clear($clear_lines);
         return $this;
     }
 
-    public function setHeaders(array $headers):self {
+    public function setHeaders(array $headers):self
+    {
         $this->table->setHeaders($headers);
         return $this;
     }

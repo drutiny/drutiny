@@ -23,22 +23,21 @@ use Symfony\Component\Yaml\Yaml;
  */
 class PolicyAuditCommand extends DrutinyBaseCommand
 {
-  use ReportingCommandTrait;
-  use LanguageCommandTrait;
+    use ReportingCommandTrait;
+    use LanguageCommandTrait;
 
-  public function __construct(
-    protected ProfileFactory $profileFactory,
-    protected PolicyFactory $policyFactory,
-    protected TargetFactory $targetFactory,
-    protected ReportFactory $reportFactory,
-    protected FormatFactory $formatFactory,
-    protected StoreFactory $storeFactory,
-    protected LoggerInterface $logger,
-    protected LanguageManager $languageManager
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected ProfileFactory $profileFactory,
+        protected PolicyFactory $policyFactory,
+        protected TargetFactory $targetFactory,
+        protected ReportFactory $reportFactory,
+        protected FormatFactory $formatFactory,
+        protected StoreFactory $storeFactory,
+        protected LoggerInterface $logger,
+        protected LanguageManager $languageManager
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -78,7 +77,7 @@ class PolicyAuditCommand extends DrutinyBaseCommand
             'x',
             InputOption::VALUE_OPTIONAL,
             'Send an exit code to the console if a policy of a given severity fails. Defaults to none (exit code 0). (Options: none, low, normal, high, critical)',
-            FALSE
+            false
         );
         parent::configure();
         $this->configureReporting();
@@ -133,7 +132,7 @@ class PolicyAuditCommand extends DrutinyBaseCommand
 
         // Get the URLs.
         if ($uri = $input->getOption('uri')) {
-          $target->setUri($uri);
+            $target->setUri($uri);
         }
 
         $profile->setReportingPeriod($this->getReportingPeriodStart($input), $this->getReportingPeriodEnd($input));
@@ -145,24 +144,23 @@ class PolicyAuditCommand extends DrutinyBaseCommand
         $response = $report->results[$name];
 
         if ($input->getOption('pipe')) {
-          $output->write(base64_encode(serialize($response)));
-          return Command::SUCCESS;
+            $output->write(base64_encode(serialize($response)));
+            return Command::SUCCESS;
         }
 
         $style = new SymfonyStyle($input, $output);
         if ($response->state->isIrrelevant()) {
-          $style->warning("Policy $name was evaluated as irrelevant for the target " . $target->getId());
-          if (isset($response->tokens['exception'])) {
-            $style->error($response->tokens['exception']);
-          }
-          return 0;
-        }
-        elseif ($response->state->hasError()) {
-          $style->error("Policy $name has an error for the target " . $target->getId());
-          $tokens = $response->tokens;
-          $style->error($tokens['exception_type'] .': '.$tokens['exception'] . ' in ' . ($tokens['file'] ?? 'unknown file') . ' on line ' . ($tokens['line'] ?? 'unknown'));
-          $style->error(implode(PHP_EOL, $tokens['trace'] ?? ['Stacktrace not provided.']));
-          return 1;
+            $style->warning("Policy $name was evaluated as irrelevant for the target " . $target->getId());
+            if (isset($response->tokens['exception'])) {
+                $style->error($response->tokens['exception']);
+            }
+            return 0;
+        } elseif ($response->state->hasError()) {
+            $style->error("Policy $name has an error for the target " . $target->getId());
+            $tokens = $response->tokens;
+            $style->error($tokens['exception_type'] .': '.$tokens['exception'] . ' in ' . ($tokens['file'] ?? 'unknown file') . ' on line ' . ($tokens['line'] ?? 'unknown'));
+            $style->error(implode(PHP_EOL, $tokens['trace'] ?? ['Stacktrace not provided.']));
+            return 1;
         }
 
         $this->formatReport($report, $style, $input);
@@ -171,7 +169,7 @@ class PolicyAuditCommand extends DrutinyBaseCommand
 
         // Do not use a non-zero exit code when no severity is set (Default).
         $exit_severity = $input->getOption('exit-on-severity');
-        if ($exit_severity === FALSE) {
+        if ($exit_severity === false) {
             return 0;
         }
         $this->logger->info("Exiting with max severity code.");

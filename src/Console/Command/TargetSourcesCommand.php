@@ -20,12 +20,11 @@ use ReflectionClass;
 class TargetSourcesCommand extends DrutinyBaseCommand
 {
 
-  public function __construct(
-    protected TargetFactory $targetFactory
-  )
-  {
-    parent::__construct();
-  }
+    public function __construct(
+        protected TargetFactory $targetFactory
+    ) {
+        parent::__construct();
+    }
 
   /**
    * @inheritdoc
@@ -44,8 +43,8 @@ class TargetSourcesCommand extends DrutinyBaseCommand
     {
         $rows = [];
         foreach ($this->targetFactory->getTypes() as $type => $class) {
-          $reflection = new ReflectionClass($class);
-          $rows[] = [$type, $class, $reflection->implementsInterface(TargetSourceInterface::class) ? 'yes' : 'no'];
+            $reflection = new ReflectionClass($class);
+            $rows[] = [$type, $class, $reflection->implementsInterface(TargetSourceInterface::class) ? 'yes' : 'no'];
         }
 
         $io = new SymfonyStyle($input, $output);

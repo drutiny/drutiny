@@ -4,4 +4,7 @@ namespace Drutiny\Profile;
 
 use Exception;
 
-class ProfileNotFoundException extends Exception {}
+class ProfileNotFoundException extends Exception
+{
+
+}

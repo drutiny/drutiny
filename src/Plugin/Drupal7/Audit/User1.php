@@ -25,43 +25,45 @@ use Drutiny\Annotation\Param;
  *  default = 1
  * )
  */
-class User1 extends Audit {
+class User1 extends Audit
+{
 
-  public function configure():void {
-    $this->setDeprecated();
-  }
+    public function configure():void
+    {
+        $this->setDeprecated();
+    }
 
   /**
    * @inheritdoc
    */
-  public function audit(Sandbox $sandbox) {
-    // Get the details for user #1.
-    $user = $sandbox->drush(['format' => 'json'])->userInformation(1);
-    $user = (object) array_pop($user);
+    public function audit(Sandbox $sandbox)
+    {
+      // Get the details for user #1.
+        $user = $sandbox->drush(['format' => 'json'])->userInformation(1);
+        $user = (object) array_pop($user);
 
-    $errors = [];
+        $errors = [];
 
-    // Username.
-    $pattern = $sandbox->getParameter('blacklist');
-    if (preg_match("#$pattern#i", $user->name)) {
-      $errors[] = "Username '$user->name' is too easy to guess.";
+      // Username.
+        $pattern = $sandbox->getParameter('blacklist');
+        if (preg_match("#$pattern#i", $user->name)) {
+            $errors[] = "Username '$user->name' is too easy to guess.";
+        }
+        $sandbox->setParameter('username', $user->name);
+
+      // Email address.
+        $email = $sandbox->getParameter('email');
+        if (!empty($email) && ($email !== $user->mail)) {
+            $errors[] = "Email address '$user->mail' is not set correctly.";
+        }
+
+      // Status.
+        $status = (bool) $sandbox->getParameter('status');
+        if ($status !== (bool) $user->status) {
+            $errors[] = 'Status is not set correctly. Should be ' . ($user->status ? 'active' : 'inactive') . '.';
+        }
+
+        $sandbox->setParameter('errors', $errors);
+        return empty($errors);
     }
-    $sandbox->setParameter('username', $user->name);
-
-    // Email address.
-    $email = $sandbox->getParameter('email');
-    if (!empty($email) && ($email !== $user->mail)) {
-      $errors[] = "Email address '$user->mail' is not set correctly.";
-    }
-
-    // Status.
-    $status = (bool) $sandbox->getParameter('status');
-    if ($status !== (bool) $user->status) {
-      $errors[] = 'Status is not set correctly. Should be ' . ($user->status ? 'active' : 'inactive') . '.';
-    }
-
-    $sandbox->setParameter('errors', $errors);
-    return empty($errors);
-  }
-
 }

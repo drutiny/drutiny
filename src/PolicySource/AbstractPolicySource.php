@@ -13,13 +13,13 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\Cache\CacheInterface;
 use TypeError;
 
-abstract class AbstractPolicySource implements PolicySourceInterface {
+abstract class AbstractPolicySource implements PolicySourceInterface
+{
     public readonly string $name;
     public function __construct(
         protected AsSource $source,
         protected CacheInterface $cache
-    )
-    {
+    ) {
         $this->name = $source->name;
     }
 
@@ -34,26 +34,25 @@ abstract class AbstractPolicySource implements PolicySourceInterface {
 
     protected function doLoad(array $definition): Policy
     {
-      try {
-        $definition['source'] = $this->source->name;
+        try {
+            $definition['source'] = $this->source->name;
 
-        $reflection = new ReflectionClass(Policy::class);
-        $args = [];
+            $reflection = new ReflectionClass(Policy::class);
+            $args = [];
 
-        // Only pass in arguments that the Policy constructor is expecting.
-        // This creates backwards compatibility with other drutiny clients
-        // reading in newer policy definitions.
-        foreach ($reflection->getConstructor()->getParameters() as $arg) {
-            if (isset($definition[$arg->name])) {
-                $args[$arg->name] = $definition[$arg->name];
+          // Only pass in arguments that the Policy constructor is expecting.
+          // This creates backwards compatibility with other drutiny clients
+          // reading in newer policy definitions.
+            foreach ($reflection->getConstructor()->getParameters() as $arg) {
+                if (isset($definition[$arg->name])) {
+                    $args[$arg->name] = $definition[$arg->name];
+                }
             }
+            return new Policy(...$args);
+        } catch (TypeError $e) {
+            $code = Yaml::dump($args);
+            throw new UnknownPolicyException("Cannot load policy '{$definition['name']}' from '{$this->source->name}': " . $e->getMessage() . PHP_EOL . $code, 0, $e);
         }
-        return new Policy(...$args);
-      }
-      catch (TypeError $e) {
-        $code = Yaml::dump($args);
-        throw new UnknownPolicyException("Cannot load policy '{$definition['name']}' from '{$this->source->name}': " . $e->getMessage() . PHP_EOL . $code, 0, $e);
-      }
     }
 
     final public function getList(LanguageManager $languageManager): array
@@ -71,7 +70,7 @@ abstract class AbstractPolicySource implements PolicySourceInterface {
         $this->cache->delete($key);
         foreach ($this->getList($languageManager) as $definition) {
             yield $this->load($definition);
-        } 
+        }
     }
 
     abstract protected function doGetList(LanguageManager $languageManager): array;

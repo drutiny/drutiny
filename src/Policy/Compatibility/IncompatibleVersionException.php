@@ -2,4 +2,6 @@
 
 namespace Drutiny\Policy\Compatibility;
 
-class IncompatibleVersionException extends PolicyCompatibilityException {}
+class IncompatibleVersionException extends PolicyCompatibilityException
+{
+}

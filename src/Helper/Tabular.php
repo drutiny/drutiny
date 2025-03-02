@@ -2,14 +2,17 @@
 
 namespace Drutiny\Helper;
 
-class Tabular {
+class Tabular
+{
     const DIVIDER = '_';
-    static public function flatten(object|array $object, $divider = Tabular::DIVIDER) {
+    public static function flatten(object|array $object, $divider = Tabular::DIVIDER)
+    {
         $array = Json::extract($object);
         return self::doFlatten($array, '', $divider);
     }
 
-    static protected function doFlatten(mixed $variable, string $prefix, string $divider) {
+    protected static function doFlatten(mixed $variable, string $prefix, string $divider)
+    {
         if (gettype($variable) != 'array') {
             return $variable;
         }
@@ -18,8 +21,7 @@ class Tabular {
             $value = self::doFlatten($v, $prefix.$k.$divider, $divider);
             if (is_array($value)) {
                 $array += $value;
-            }
-            else {
+            } else {
                 $array[$prefix.$k] = $value;
             }
         }

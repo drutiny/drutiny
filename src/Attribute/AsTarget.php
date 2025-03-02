@@ -5,5 +5,6 @@ namespace Drutiny\Attribute;
 use Attribute;
 
 #[Attribute]
-class AsTarget extends Name {
+class AsTarget extends Name
+{
 }

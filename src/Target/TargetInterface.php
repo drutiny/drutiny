@@ -19,7 +19,7 @@ interface TargetInterface
 
     /**
      * Run a command through the ExecutionService.
-     * 
+     *
      * @deprecated use Drutiny\Target\TargetInterface::execute() instead.
      */
     public function run(string $cmd, callable $preProcess, int $ttl = 3600);

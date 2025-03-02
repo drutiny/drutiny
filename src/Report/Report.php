@@ -18,7 +18,8 @@ use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 use Symfony\Component\Process\Process;
 
 #[Autoconfigure(autowire: false)]
-class Report {
+class Report
+{
     use ReportingPeriodTrait;
 
     public readonly string $uuid;
@@ -40,8 +41,7 @@ class Report {
         public readonly ?int $timing = null,
         public readonly string $language = 'und',
         public readonly DateTimeInterface $created = new \DateTime(timezone: new DateTimeZone('UTC')),
-    )
-    {
+    ) {
         $this->setReportingPeriod($profile->reportingPeriodStart, $profile->reportingPeriodEnd);
 
         $data = random_bytes(16);
@@ -74,7 +74,8 @@ class Report {
         })->state->isSuccessful();
     }
 
-    public function resolve(ProcessManager $processManager): self {
+    public function resolve(ProcessManager $processManager): self
+    {
         if (count($this->results)) {
             throw new RuntimeException("Report already has results. Cannot resolve results from processManager.");
         }
@@ -114,14 +115,15 @@ class Report {
 
     /**
      * Get an identifiable name of the report.
-     * 
+     *
      * Although this name contains the date, for a completely
      * unique name, use or incorporate the UUID.
      */
-    public function getName(): string {
+    public function getName(): string
+    {
         return strtr(implode('-', [
-            $this->target->getTargetName(), 
-            $this->profile->name, 
+            $this->target->getTargetName(),
+            $this->profile->name,
             $this->uri,
             $this->reportingPeriodStart->format('Ymd-His'),
           ]) . '.' . $this->language, [

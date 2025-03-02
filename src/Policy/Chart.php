@@ -7,7 +7,8 @@ use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(autowire: false)]
-class Chart {
+class Chart
+{
     public function __construct(
         #[Description('The machine-name of the ID that can be used as an HTML id attribute.')]
         public readonly string $id,
@@ -41,22 +42,20 @@ class Chart {
         public readonly bool $hideTable = false,
         public readonly bool $stacked = false,
         public readonly bool $maintainAspectRatio = false,
-    )
-    {
-        
+    ) {
     }
 
     /**
      * Create a chart from array parameters.
      */
-    static public function fromArray(array $chart, string $id):self {
+    public static function fromArray(array $chart, string $id):self
+    {
         $params = ['id' => $id];
         foreach ($chart as $opt => $value) {
             $property = str_replace('-', '', ucwords($opt, '-'));
             $property[0] = strtolower($property[0]);
             if (!property_exists(self::class, $property)) {
                 throw new InvalidArgumentException("$property (".gettype($value).") does not exist");
-                
             }
             $params[$property] = $value;
         }
@@ -66,16 +65,19 @@ class Chart {
     /**
      * Create a new Chart object modified from the existing.
      */
-    public function with(...$props):self {
+    public function with(...$props):self
+    {
         $args = array_merge(get_object_vars($this), $props);
         return new static(...$args);
     }
 
-    public function addXaxisLabels(string $css_selector): self {
+    public function addXaxisLabels(string $css_selector): self
+    {
         return $this->with(labels: $css_selector);
     }
 
-    public function addPieLabels(string $css_selector): self {
+    public function addPieLabels(string $css_selector): self
+    {
         return $this->with(labels: $css_selector);
     }
 

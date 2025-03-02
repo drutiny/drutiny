@@ -29,13 +29,13 @@ use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
     name: 'report:render',
     description: 'Render a report from a json output file produced by the profile:run command.'
 )]
-class ReportRenderCommand extends Command {
+class ReportRenderCommand extends Command
+{
 
     public function __construct(
         protected FormatFactory $formatFactory,
         protected TargetFactory $targetFactory,
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -124,14 +124,14 @@ class ReportRenderCommand extends Command {
     /**
      * Load a target from report metadata.
      */
-    protected function loadTarget(string $uri, array $metadata = []): TargetInterface {
+    protected function loadTarget(string $uri, array $metadata = []): TargetInterface
+    {
         $target = $this->targetFactory->create('none:none', $uri);
         foreach ($metadata as $key => $value) {
             try {
                 $value = is_array($value) ? new DataBag($value) :  $value;
                 $target->setProperty($key, $value);
-            }
-            catch (NoSuchPropertyException $e) {
+            } catch (NoSuchPropertyException $e) {
             }
         }
             
@@ -141,7 +141,8 @@ class ReportRenderCommand extends Command {
     /**
      * Load an audit response object.
      */
-    protected function loadAuditResponse(array $response): AuditResponse {
+    protected function loadAuditResponse(array $response): AuditResponse
+    {
         unset($response['policy']['rendered']);
         $response['policy']['type'] = $response['policy']['type']['value'];
         $response['policy']['severity'] = $response['policy']['severity']['value'];

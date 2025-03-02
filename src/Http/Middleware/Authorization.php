@@ -12,19 +12,19 @@ use Psr\Log\LoggerInterface;
 
 #[Plugin(name: 'http:authorization', collectionKey: 'domain', as: '$pluginCollection')]
 #[PluginField(
-  name: 'domain',
-  description: "The domain to apply the HTTP Authorization header to.",
-  type: FieldType::CONFIG
+    name: 'domain',
+    description: "The domain to apply the HTTP Authorization header to.",
+    type: FieldType::CONFIG
 )]
 #[PluginField(
-  name: 'username',
-  description: "The username to use for basic http digest authorization",
-  type: FieldType::CREDENTIAL
+    name: 'username',
+    description: "The username to use for basic http digest authorization",
+    type: FieldType::CREDENTIAL
 )]
 #[PluginField(
-  name: 'password',
-  description: "The password to use for basic http digest authorization",
-  type: FieldType::CREDENTIAL
+    name: 'password',
+    description: "The password to use for basic http digest authorization",
+    type: FieldType::CREDENTIAL
 )]
 class Authorization implements MiddlewareInterface
 {
@@ -34,7 +34,6 @@ class Authorization implements MiddlewareInterface
      */
     public function __construct(protected PluginCollection $pluginCollection, protected LoggerInterface $logger)
     {
-
     }
 
     /**
@@ -46,7 +45,7 @@ class Authorization implements MiddlewareInterface
         $host = parse_url($uri, PHP_URL_HOST);
 
         if (!$this->pluginCollection->has($host)) {
-          return $request;
+            return $request;
         }
 
         $plugin = $this->pluginCollection->get($host);

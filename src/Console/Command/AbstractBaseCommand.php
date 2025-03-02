@@ -14,13 +14,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Abstract base command.
- * 
+ *
  * This command helps auto-instansiate typed properties with
  * the service container.
  */
-abstract class AbstractBaseCommand extends Command {
+abstract class AbstractBaseCommand extends Command
+{
 
-    public function __construct(protected ContainerInterface $container) {
+    public function __construct(protected ContainerInterface $container)
+    {
         foreach ($this->getLoadableProperties() as $name => $autoload) {
             if (isset($this->{$name})) {
                 continue;
@@ -57,7 +59,8 @@ abstract class AbstractBaseCommand extends Command {
     /**
      * Instansiate class properties with defaults from the service container.
      */
-    protected function instansiate(ContainerInterface $container): void {
+    protected function instansiate(ContainerInterface $container): void
+    {
         foreach ($this->getLoadableProperties() as $name => $autoload) {
             if (isset($this->{$name}) || !$autoload->enabled) {
                 continue;
@@ -78,7 +81,8 @@ abstract class AbstractBaseCommand extends Command {
     /**
      * @return \Drutiny\Attribute\Autoload[]
      */
-    private function getLoadableProperties(): array {
+    private function getLoadableProperties(): array
+    {
         $reflection = new \ReflectionClass($this::class);
         $properties = $this->getLoadablePropertiesForClass($reflection);
         
@@ -93,7 +97,8 @@ abstract class AbstractBaseCommand extends Command {
     /**
      * @return \Drutiny\Attribute\Autoload[]
      */
-    private function getLoadablePropertiesForClass(ReflectionClass $reflection): array {
+    private function getLoadablePropertiesForClass(ReflectionClass $reflection): array
+    {
         $properties = [];
         foreach ($reflection->getProperties() as $property) {
             if (isset($this->{$property->name})) {

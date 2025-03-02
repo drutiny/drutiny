@@ -33,31 +33,23 @@ class Profile
     public function __construct(
         #[Description('The human readable name of the profile.')]
         public readonly string $title,
-
         #[Description('The machine-name of the profile.')]
         public readonly string $name,
-
         #[Description('Unique identifier such as a URL.')]
         public readonly string $uuid,
-
         #[Description('Where the profile is sourced from.')]
         public readonly string $source,
-
         #[Description('A description why the profile is valuable.')]
         public readonly string $description,
-
         #[Description('Language code')]
         public readonly string $language = 'en',
-
         array $policies = [],
         array $dependencies = [],
         public readonly array $excluded_policies = [],
         array $format = ['terminal' => []],
-
         #[Description('The URI this profile can be referenced and located by.')]
         public readonly ?string $uri = null,
-    )
-    {
+    ) {
         $this->policies = $this->buildPolicyDefinitions($policies);
         $this->dependencies = $this->buildPolicyDefinitions($dependencies);
         $this->format = $this->buildFormatDefinitions($format);
@@ -142,9 +134,9 @@ class Profile
         // Fix Yaml::dump bug where it doesn't correctly split \r\n to multiple
         // lines.
         foreach ($data as $key => $value) {
-          if (is_string($value)) {
-            $data[$key] = str_replace("\r\n", "\n", $value);
-          }
+            if (is_string($value)) {
+                $data[$key] = str_replace("\r\n", "\n", $value);
+            }
         }
         return $data;
     }

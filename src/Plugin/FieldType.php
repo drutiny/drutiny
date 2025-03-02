@@ -2,7 +2,8 @@
 
 namespace Drutiny\Plugin;
 
-enum FieldType {
+enum FieldType
+{
     case CONFIG;
     case CREDENTIAL;
     case STATE;
@@ -16,7 +17,7 @@ enum FieldType {
         };
     }
 
-    static public function get(string $type):FieldType
+    public static function get(string $type):FieldType
     {
         return match ($type) {
             'config' => self::CONFIG,

@@ -16,9 +16,9 @@ class User1 extends Audit
     public function configure():void
     {
         $this->addParameter(
-           'email',
-           static::PARAMETER_OPTIONAL,
-           'The email the user account should be.',
+            'email',
+            static::PARAMETER_OPTIONAL,
+            'The email the user account should be.',
         );
         $this->addParameter(
             'blacklist',
@@ -45,14 +45,13 @@ class User1 extends Audit
               'uid' => 1,
               'format' => 'json'
             ]);
-        }
-        else {
+        } else {
             $command = $drush->userInformation(1, ['format' => 'json']);
         }
 
         $user = $command->run(function ($output) {
-          $json = json_decode($output, true);
-          return (object) array_pop($json);
+            $json = json_decode($output, true);
+            return (object) array_pop($json);
         });
 
         $this->set('user', $user);

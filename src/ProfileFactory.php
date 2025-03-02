@@ -19,33 +19,33 @@ class ProfileFactory
     public readonly array $sources;
 
     public function __construct(
-      protected ContainerInterface $container, 
-      protected CacheInterface $cache, 
-      protected LanguageManager $languageManager, 
-      protected ProgressBar $progress,
-      protected Settings $settings,
-      protected LoggerInterface $logger)
-    {
+        protected ContainerInterface $container,
+        protected CacheInterface $cache,
+        protected LanguageManager $languageManager,
+        protected ProgressBar $progress,
+        protected Settings $settings,
+        protected LoggerInterface $logger
+    ) {
         $this->sources = $this->buildSources();
     }
 
     /**
      * Create a profile from an array of values.
      */
-     public function create(array $values):Profile
-     {
-        $includes = $values['include'] ?? []; unset($values['include']);
+    public function create(array $values):Profile
+    {
+        $includes = $values['include'] ?? [];
+        unset($values['include']);
         $profile = new Profile(...$values);
         try {
             foreach ($includes as $include) {
                 $profile = $profile->mergeWith($this->loadProfileByName($include));
-              }
-        }
-        catch (ProfileNotFoundException $e) {
+            }
+        } catch (ProfileNotFoundException $e) {
             throw new ProfileCompilationException("Cannot initialize profile '{$profile->name}' due to a profile include '$include' failing to load.", 0, $e);
         }
         return $profile;
-     }
+    }
 
     /**
      * Load policy by name.
@@ -53,7 +53,7 @@ class ProfileFactory
     public function loadProfileByName(string|Profile $name, ?ProfileSourceInterface $source = null):Profile
     {
         if ($name instanceof Profile) {
-          return $name;
+            return $name;
         }
 
         $list = $this->getProfileList();

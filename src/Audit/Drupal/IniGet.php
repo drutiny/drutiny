@@ -27,24 +27,25 @@ use Drutiny\Annotation\Param;
 class IniGet extends AbstractComparison
 {
 
-    public function configure():void {
-      $this->addParameter(
-        'setting',
-        static::PARAMETER_OPTIONAL,
-        'The name of the ini setting to check.'
-      );
-      $this->addParameter(
-        'value',
-        static::PARAMETER_OPTIONAL,
-        'The local value of the ini setting to compare for.'
-      );
-      $this->addParameter(
-        'comp_type',
-        static::PARAMETER_OPTIONAL,
-        'The comparison operator to use for the comparison.'
-      );
+    public function configure():void
+    {
+        $this->addParameter(
+            'setting',
+            static::PARAMETER_OPTIONAL,
+            'The name of the ini setting to check.'
+        );
+        $this->addParameter(
+            'value',
+            static::PARAMETER_OPTIONAL,
+            'The local value of the ini setting to compare for.'
+        );
+        $this->addParameter(
+            'comp_type',
+            static::PARAMETER_OPTIONAL,
+            'The comparison operator to use for the comparison.'
+        );
 
-      $this->setDeprecated();
+        $this->setDeprecated();
     }
 
     public function audit(Sandbox $sandbox)

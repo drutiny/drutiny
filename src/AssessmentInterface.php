@@ -5,7 +5,8 @@ namespace Drutiny;
 use Drutiny\AuditResponse\AuditResponse;
 use Drutiny\Target\TargetInterface;
 
-interface AssessmentInterface {
+interface AssessmentInterface
+{
     public function getErrorCode();
     public function getPolicyResult(string $name):AuditResponse;
     public function getResults();

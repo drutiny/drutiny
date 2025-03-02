@@ -8,8 +8,8 @@ use Drutiny\Report\RenderedReport;
 use Drutiny\Report\Report;
 
 #[AsFormat(
-  name: 'markdown',
-  extension: 'md'
+    name: 'markdown',
+    extension: 'md'
 )]
 class Markdown extends HTML
 {
@@ -22,7 +22,7 @@ class Markdown extends HTML
 
         $lines = explode(PHP_EOL, $markdown);
         array_walk($lines, function (&$line) {
-          $line = trim($line);
+            $line = trim($line);
         });
 
         $this->buffer->write(implode(PHP_EOL, $lines));
@@ -31,17 +31,18 @@ class Markdown extends HTML
 
     protected function prepareContent(array $variables):array
     {
-      $sections = [];
+        $sections = [];
 
       // In 3.x we support Twig TemplateWrappers to be passed directly
       // to the report format.
-      foreach ($this->definition->content->getBlockNames() as $block){
-        $sections[] = $this->definition->content->renderBlock($block, $variables);
-      }
-      return $sections;
+        foreach ($this->definition->content->getBlockNames() as $block) {
+            $sections[] = $this->definition->content->renderBlock($block, $variables);
+        }
+        return $sections;
     }
 
-    public static function formatHeadings(string $markdown): string {
+    public static function formatHeadings(string $markdown): string
+    {
 
         $lines = explode(PHP_EOL, $markdown);
 
@@ -84,7 +85,7 @@ class Markdown extends HTML
             elseif (($table['start'] + 1) == $idx) {
                 $table['rows'][$idx] = [];
                 continue;
-            } 
+            }
             // End table
             elseif (strpos($line, ' | ') === false) {
                 // Only process if there were data cells to process. Just a header isn't a table.
@@ -95,7 +96,7 @@ class Markdown extends HTML
                         // Look for the header seperator line and use dash '-' instead of space pads.
                         $pad = $table_line === 1 ? '-' : ' ';
                         $row = array_pad($row, $table['cols'], $pad);
-                        foreach ($row as $i => $value) {    
+                        foreach ($row as $i => $value) {
                             $row[$i] = str_pad($value, $table['widths'][$i], $pad, STR_PAD_RIGHT);
                         }
 

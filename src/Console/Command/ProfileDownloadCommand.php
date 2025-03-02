@@ -23,11 +23,10 @@ class ProfileDownloadCommand extends Command
     use LanguageCommandTrait;
 
     public function __construct(
-        protected ProfileFactory $profileFactory, 
-        protected LanguageManager $languageManager, 
+        protected ProfileFactory $profileFactory,
+        protected LanguageManager $languageManager,
         protected Settings $settings
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -63,10 +62,10 @@ class ProfileDownloadCommand extends Command
         $profile = $this->profileFactory->loadProfileByName($input->getArgument('profile'));
         $export = $profile->export();
         foreach ($export['policies'] as &$override) {
-          unset($override['name'], $override['weight']);
-          if (isset($override['severity']) && $override['severity'] == 'normal') {
-              unset($override['severity']);
-          }
+            unset($override['name'], $override['weight']);
+            if (isset($override['severity']) && $override['severity'] == 'normal') {
+                unset($override['severity']);
+            }
         }
         $filename = getcwd() . DIRECTORY_SEPARATOR . $this->settings->get('profile.library.fs') . "/{$profile->name}.profile.yml";
         $dir = dirname($filename);

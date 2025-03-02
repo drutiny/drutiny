@@ -11,20 +11,20 @@ use Drutiny\Target\TargetInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
 
-class AuditFactory {
+class AuditFactory
+{
 
     public function __construct(
         protected ContainerInterface $container,
         protected TargetFactory $targetFactory
-        )
-    {
-
+    ) {
     }
 
     /**
      * Get an Audit object for the provided policy and target.
      */
-    public function get(Policy $policy, TargetInterface $target):AuditInterface {
+    public function get(Policy $policy, TargetInterface $target):AuditInterface
+    {
         $reflection = new ReflectionClass($policy->class);
         if (!$reflection->implementsInterface(AuditInterface::class)) {
             throw new AuditException("{$policy->class} does not implement " . AuditInterface::class);
@@ -65,8 +65,7 @@ class AuditFactory {
         do {
             $attributes = array_merge($attributes, $reflection->getAttributes(UseService::class));
             $reflection = $reflection->getParentClass();
-        }
-        while ($reflection);
+        } while ($reflection);
 
         if (empty($attributes)) {
             return $audit;
@@ -75,8 +74,7 @@ class AuditFactory {
         do {
             $service = array_pop($attributes)->newInstance();
             $service->inject($audit, $this->container);
-        }
-        while (count($attributes));
+        } while (count($attributes));
 
         return $audit;
     }

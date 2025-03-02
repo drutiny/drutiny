@@ -58,8 +58,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
         protected EventDispatcher $eventDispatcher,
         protected StoreFactory $storeFactory,
         protected LanguageManager $languageManager
-    )
-    {
+    ) {
         parent::__construct();
     }
 
@@ -222,8 +221,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
         if (count($uris) > 1) {
             $this->progressBar->clear();
             $exit_codes = $this->asyncExecuteWithUpdates($input, $output, $uris);
-        }
-        else {
+        } else {
             $uri = array_shift($uris);
             $report_uris = [];
             try {
@@ -239,26 +237,22 @@ class ProfileRunCommand extends DrutinyBaseCommand
                 if ($report instanceof ProcessManager) {
                     if ($output instanceof ConsoleOutput && !$input->getOption('no-interaction')) {
                         $report = $this->waitForReportWithUpdates($report, $output, $target);
-                    }
-                    else {
+                    } else {
                         $report = $this->waitForReport($report);
                     }
                 }
     
                 $report_uris = $this->formatReport($report, $console, $input);
                 $exit_codes[] = $report->successful ? 0 : $report->severity->getWeight();
-            }
-            catch (TargetLoadingException | TargetNotFoundException | InvalidTargetException $e) {
+            } catch (TargetLoadingException | TargetNotFoundException | InvalidTargetException $e) {
                 $console->error($e->getMessage());
                 $exit_codes[] = $e::ERROR_CODE;
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->error("{$profile->name} audit on $uri failed: " . $e->getMessage());
                 $console->error("{$profile->name} audit on $uri failed: " . $e->getMessage());
                 $exit_codes[] = 17;
                 throw $e;
-            }
-            catch (\Error $e) {
+            } catch (\Error $e) {
                 $this->logger->error("{$profile->name} audit on $uri failed: " . $e->getMessage());
                 $console->error("{$profile->name} audit on $uri failed: " . $e->getMessage());
                 $exit_codes[] = 17;
@@ -289,7 +283,8 @@ class ProfileRunCommand extends DrutinyBaseCommand
         return $exit_code >= $exit_severity ? $exit_code : Command::SUCCESS;
     }
 
-    protected function asyncExecuteWithUpdates(InputInterface $input, ConsoleOutput $output, array $uris):array {
+    protected function asyncExecuteWithUpdates(InputInterface $input, ConsoleOutput $output, array $uris):array
+    {
         $processManager = new ProcessManager($this->logger);
         $processManager->maxConcurrency = 3;
         foreach ($uris as $uri) {
@@ -370,13 +365,12 @@ class ProfileRunCommand extends DrutinyBaseCommand
             rows: array_map(function ($result) {
                 try {
                     $severity = Severity::fromInt($result['severity'])->name;
-                }
-                catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $severity = 'NONE';
                 }
                 return [
-                    $result['uri'], 
-                    $severity, 
+                    $result['uri'],
+                    $severity,
                     implode(PHP_EOL, $result['report_uris'])
                 ];
             }, $results)
@@ -388,7 +382,8 @@ class ProfileRunCommand extends DrutinyBaseCommand
     /**
      * Wait for a streaming report to resolve.
      */
-    protected function waitForReportWithUpdates(ProcessManager $report, ConsoleOutput $output, TargetInterface $target): Report {
+    protected function waitForReportWithUpdates(ProcessManager $report, ConsoleOutput $output, TargetInterface $target): Report
+    {
         $viewer = new ProcessManagerViewer($output, $report);
         $viewer->setHeaders([$target['domain'], 'Status', 'Timing'])
             ->onStatusChange(function ($status) {
@@ -408,7 +403,8 @@ class ProfileRunCommand extends DrutinyBaseCommand
         return $report->resolve();
     }
 
-    protected function waitForReport(ProcessManager $report): Report {
+    protected function waitForReport(ProcessManager $report): Report
+    {
         while (!$report->hasFinished()) {
             $total = $report->length();
             $active = count($report->getActive());

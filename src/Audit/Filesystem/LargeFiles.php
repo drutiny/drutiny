@@ -28,9 +28,9 @@ class LargeFiles extends Audit
     public function configure():void
     {
         $this->addParameter(
-          'max_size',
-          static::PARAMETER_OPTIONAL,
-          'Report files larger than this value measured in megabytes.'
+            'max_size',
+            static::PARAMETER_OPTIONAL,
+            'Report files larger than this value measured in megabytes.'
         );
     }
 

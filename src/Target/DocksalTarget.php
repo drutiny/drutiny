@@ -83,10 +83,10 @@ class DocksalTarget extends DrushTarget implements TargetInterface, TargetSource
         foreach ($this->findTargets() as $app => $location) {
             $uri = str_replace('_', '-', basename($location)).'.docksal';
             $targets[] = [
-          'id' => $app,
-          'uri' => $uri,
-          'name' => $app
-        ];
+            'id' => $app,
+            'uri' => $uri,
+            'name' => $app
+            ];
         }
         return $targets;
     }
@@ -106,8 +106,7 @@ class DocksalTarget extends DrushTarget implements TargetInterface, TargetSource
                 }
                 return $a;
             });
-        }
-        catch (ProcessFailedException $e) {
+        } catch (ProcessFailedException $e) {
             throw new TargetSourceFailureException(message: "`fin alias list` command failed.", previous: $e);
         }
     }

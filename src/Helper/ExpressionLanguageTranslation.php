@@ -5,12 +5,11 @@ namespace Drutiny\Helper;
 use Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
 
 #[Autoconfigure(autowire: false)]
-class ExpressionLanguageTranslation {
+class ExpressionLanguageTranslation
+{
     public function __construct(
         protected string $expression
-    )
-    {
-        
+    ) {
     }
 
     public function toTwigSyntax():string
@@ -29,7 +28,7 @@ class ExpressionLanguageTranslation {
             "#\!([^=])#" => 'not $1',
         ];
 
-        $this->expression = preg_replace(array_keys($regex_tokens), array_values($regex_tokens), $this->expression);    
+        $this->expression = preg_replace(array_keys($regex_tokens), array_values($regex_tokens), $this->expression);
 
         return strtr($this->expression, $tokens);
     }

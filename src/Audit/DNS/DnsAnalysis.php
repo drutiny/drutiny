@@ -16,7 +16,7 @@ class DnsAnalysis extends AbstractAnalysis
     #[DataProvider]
     public function lookup(): void
     {
-        $type = match($this->getParameter('type')) {
+        $type = match ($this->getParameter('type')) {
             'A' => DNS_A,
             'CNAME' => DNS_CNAME,
             'MX' => DNS_MX,

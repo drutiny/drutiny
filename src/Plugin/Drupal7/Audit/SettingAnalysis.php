@@ -16,15 +16,15 @@ class SettingAnalysis extends AbstractAnalysis
     public function gather(Sandbox $sandbox)
     {
 
-      $drush = $this->target->getService('drush');
-      $settings = $drush->runtime(function () {
-          global $conf;
-          return $conf;
-      });
+        $drush = $this->target->getService('drush');
+        $settings = $drush->runtime(function () {
+            global $conf;
+            return $conf;
+        });
 
-      if (!is_array($settings)) {
-          throw new \Exception("Settings retrieved were not in a known format. Expected Array.");
-      }
+        if (!is_array($settings)) {
+            throw new \Exception("Settings retrieved were not in a known format. Expected Array.");
+        }
 
         $this->set('settings', $settings);
     }

@@ -26,9 +26,8 @@ class PolicyListCommand extends DrutinyBaseCommand
         protected ProfileFactory $profileFactory,
         protected PolicyFactory $policyFactory,
         protected LanguageManager $languageManager
-    )
-    {
-        parent::__construct();    
+    ) {
+        parent::__construct();
     }
   /**
    * @inheritdoc
@@ -74,8 +73,12 @@ class PolicyListCommand extends DrutinyBaseCommand
         if ($source_filter = $input->getOption('source')) {
             $this->progressBar->setMessage("Filtering policies by source: $source_filter");
             $list = array_filter($list, function ($policy) use ($source_filter) {
-                if ($source_filter == $policy['source']) return true;
-                if ($source_filter == preg_replace('/\<.+\>/U', '', $policy['source'])) return true;
+                if ($source_filter == $policy['source']) {
+                    return true;
+                }
+                if ($source_filter == preg_replace('/\<.+\>/U', '', $policy['source'])) {
+                    return true;
+                }
                 return false;
             });
         }
@@ -84,7 +87,7 @@ class PolicyListCommand extends DrutinyBaseCommand
         if ($input->getOption('show-profile-usage')) {
             $this->progressBar->setMessage("Mapping policy utilisation by profile.");
             $profiles = array_map(function ($profile) {
-              return $this->profileFactory->loadProfileByName($profile['name']);
+                return $this->profileFactory->loadProfileByName($profile['name']);
             }, $this->profileFactory->getProfileList());
         }
         
@@ -107,7 +110,7 @@ class PolicyListCommand extends DrutinyBaseCommand
         // Restrict visibility of policies to those in profile allow list.
         $allow_list = $this->settings->has('profile.allow_list') ? $this->settings->get('profile.allow_list') : [];
         if (!empty($allow_list) && $input->getOption('show-profile-usage')) {
-          $rows = array_filter($rows, fn($r) => $r['profile_util']);
+            $rows = array_filter($rows, fn($r) => $r['profile_util']);
         }
 
         usort($rows, function ($a, $b) {

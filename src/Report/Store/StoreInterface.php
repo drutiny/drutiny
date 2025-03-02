@@ -8,7 +8,8 @@ use Drutiny\Report\Report;
 use GuzzleHttp\Psr7\Uri;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-interface StoreInterface {
+interface StoreInterface
+{
     
     /**
      * Store the formatted report.

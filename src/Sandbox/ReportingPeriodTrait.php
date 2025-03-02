@@ -131,28 +131,28 @@ trait ReportingPeriodTrait
      */
     public function getReportingPeriodSteps():int
     {
-      $duration = $this->getReportingPeriodDuration();
+        $duration = $this->getReportingPeriodDuration();
 
-      $steps = array_map(function ($interval) use ($duration) {
-        return (int) ceil($duration / $interval);
-      }, $this->_getReportingPeriodIntervals());
+        $steps = array_map(function ($interval) use ($duration) {
+            return (int) ceil($duration / $interval);
+        }, $this->_getReportingPeriodIntervals());
 
-      $steps = array_combine($this->_getReportingPeriodIntervals(), $steps);
+        $steps = array_combine($this->_getReportingPeriodIntervals(), $steps);
 
-      $steps = array_filter($steps, function ($step) {
-        // Filter intervals to those resulting in 51 to 100 steps.
-        return $step > 50 && $step <= 100;
-      });
+        $steps = array_filter($steps, function ($step) {
+          // Filter intervals to those resulting in 51 to 100 steps.
+            return $step > 50 && $step <= 100;
+        });
 
-      if (empty($steps)) {
-        // If the duration is less than 30mins, then set the stepping period
-        // to 30 seconds.
-        if ($duration < 1800) {
-          return 30;
+        if (empty($steps)) {
+          // If the duration is less than 30mins, then set the stepping period
+          // to 30 seconds.
+            if ($duration < 1800) {
+                return 30;
+            }
         }
-      }
 
       // Return the key from the first element in the steps array, which should be the largest number of steps.
-      return key($steps);
+        return key($steps);
     }
 }
