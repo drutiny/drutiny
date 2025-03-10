@@ -21,6 +21,14 @@ use Twig\Error\RuntimeError;
 )]
 class AuditAnalysisPipeline extends AbstractAnalysis
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare(\Drutiny\Policy $policy): ?string
+    {
+        return 'audit_analysis_pipeline_' . mt_rand(1000, 9999);
+    }
+    
     #[DataProvider]
     protected function aggregateData(AuditFactory $factory, Sandbox $sandbox):void
     {
