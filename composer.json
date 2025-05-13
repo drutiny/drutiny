@@ -32,7 +32,7 @@
         "symfony/finder": "^4.4|^5.0",
         "symfony/process": "^5.0",
         "symfony/yaml": "5.0.*",
-        "twig/twig": "3.0.*",
+        "twig/twig": "^3.3.8",
         "twig/markdown-extra": "^3.0",
         "twig/string-extra": "^3.0",
         "league/html-to-markdown": "^4.9",
