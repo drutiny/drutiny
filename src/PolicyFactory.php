@@ -26,6 +26,7 @@ class PolicyFactory
         protected ContainerInterface $container,
         protected LoggerInterface $logger,
         protected LanguageManager $languageManager,
+        protected AuditFactory $auditFactory,
         protected ProgressBar $progress,
         protected Settings $settings
     ) {
@@ -129,7 +130,7 @@ class PolicyFactory
         }
 
         $available_list = array_filter($policy_list, function ($listedPolicy) {
-            if (!class_exists($listedPolicy['class'])) {
+            if (!$this->auditFactory->has($listedPolicy['class'])) {
                 $this->logger->debug('Failed to find class:  ' . $listedPolicy['class']);
                 return false;
             }
