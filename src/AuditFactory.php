@@ -43,15 +43,25 @@ class AuditFactory
             }
             $class_name = $this->extractClassNameFromFile($file->getRealPath());
             if ($class_name) {
-                $reflection = new ReflectionClass($class_name);
-                if (!$reflection->implementsInterface(AuditInterface::class)) {
-                    continue;
+                try {
+
+                    $reflection = new ReflectionClass($class_name);
+                    if (!$reflection->implementsInterface(AuditInterface::class)) {
+                        continue;
+                    }
+                    $registry[$class_name] = $class_name;
+                    // Check if the RenamedFrom attribute is present and if so add the old name to the registry.
+                    $attributes = $reflection->getAttributes(RenamedFrom::class);
+                    foreach ($attributes as $attribute) {
+                        $registry[$attribute->newInstance()->oldName] = $class_name;
+                    }
                 }
-                $registry[$class_name] = $class_name;
-                // Check if the RenamedFrom attribute is present and if so add the old name to the registry.
-                $attributes = $reflection->getAttributes(RenamedFrom::class);
-                foreach ($attributes as $attribute) {
-                    $registry[$attribute->newInstance()->oldName] = $class_name;
+                catch (\Error $e) {
+                    // When running --no-dev, tests will be missing PHPUnit classes.
+                    if (!str_contains($e->getMessage(), 'PHPUnit')) {
+                        $this->logger->warning("Error processing audit class $class_name: " . $e->getMessage());
+                    }
+                    continue;
                 }
             }
         }
