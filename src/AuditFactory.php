@@ -9,7 +9,9 @@ use Drutiny\Audit\AuditValidationException;
 use Drutiny\Audit\Exception\AuditException;
 use Drutiny\Target\TargetFactory;
 use Drutiny\Target\TargetInterface;
+use Phar;
 use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use Symfony\Component\Finder\Finder;
 
@@ -24,6 +26,7 @@ class AuditFactory
         protected ContainerInterface $container,
         protected TargetFactory $targetFactory,
         protected Settings $settings,
+        protected LoggerInterface $logger
     ) {
         $finder = new Finder;
         $files = $finder->in($settings->get('extension.dirs'))
@@ -33,6 +36,11 @@ class AuditFactory
         // Register all audit classes found in the extension directories
         $registry = [];
         foreach ($files as $file) {
+            // In Phar contexts, getRealPath() can return false. This is not supported.
+            if ($file->getRealPath() === false && Phar::running() !== '') {
+                $this->logger->warning("Cannot extract class name from file: {$file->getFilename()}. Phar context not supported.");
+                continue;
+            }
             $class_name = $this->extractClassNameFromFile($file->getRealPath());
             if ($class_name) {
                 $reflection = new ReflectionClass($class_name);
