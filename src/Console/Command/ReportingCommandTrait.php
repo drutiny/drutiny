@@ -147,6 +147,9 @@ trait ReportingCommandTrait
             if ($format instanceof Terminal) {
                 $format->setDependencyReport();
             }
+            if ($format instanceof FilesystemFormatInterface) {
+                $format->setWriteableDirectory($input->getOption('report-dir'));
+            }
             $formats = [$format];
         } else {
             $formats = $this->getFormats($input, $report->profile, $this->formatFactory);

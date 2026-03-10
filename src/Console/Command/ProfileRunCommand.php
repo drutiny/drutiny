@@ -14,6 +14,7 @@ use Drutiny\ProfileFactory;
 use Drutiny\Report\FormatFactory;
 use Drutiny\Report\Report;
 use Drutiny\Report\ReportFactory;
+use Drutiny\Report\ReportType;
 use Drutiny\Report\StoreFactory;
 use Drutiny\Settings;
 use Drutiny\Target\Exception\InvalidTargetException;
@@ -46,6 +47,13 @@ class ProfileRunCommand extends DrutinyBaseCommand
     use LanguageCommandTrait;
 
     public const EXIT_INVALID_TARGET = 114;
+    
+    /**
+     * Base exit code for dependency failures.
+     * Actual exit code is DEPENDENCY_FAILURE_BASE + severity weight.
+     * Exit codes: 33 (LOW), 34 (NORMAL), 36 (HIGH), 40 (CRITICAL)
+     */
+    public const DEPENDENCY_FAILURE_BASE = 32;
 
     public function __construct(
         protected PolicyFactory $policyFactory,
@@ -95,7 +103,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
             'exit-on-severity',
             'x',
             InputOption::VALUE_OPTIONAL,
-            'Send an exit code to the console if a policy of a given severity fails. Defaults to none (exit code 0). (Options: none, low, normal, high, critical)',
+            'Send exit codes to the console for failures with severity >= threshold. Provide severity weight (1=LOW, 2=NORMAL, 4=HIGH, 8=CRITICAL, 32=DEPENDENCY_FAILURES). Without this option, always returns exit code 0.',
             false
         )
         ->addOption(
@@ -243,9 +251,13 @@ class ProfileRunCommand extends DrutinyBaseCommand
                         $report = $this->waitForReport($report);
                     }
                 }
+
+                assert($report instanceof Report);
     
                 $report_uris = $this->formatReport($report, $console, $input);
-                $exit_codes[] = $report->successful ? 0 : $report->severity->getWeight();
+                
+                // Encode exit code based on report type and severity
+                $exit_codes[] = $this->getReportExitCode($report);
             } catch (TargetLoadingException | TargetNotFoundException | InvalidTargetException $e) {
                 $console->error($e->getMessage());
                 $exit_codes[] = $e::ERROR_CODE;
@@ -275,7 +287,7 @@ class ProfileRunCommand extends DrutinyBaseCommand
             $output->writeln("");
         }
 
-        // Do not use a non-zero exit code when no severity is set (Default).
+        // Do not use a non-zero exit code when no severity threshold is set (Default).
         $exit_severity = $input->getOption('exit-on-severity');
         if ($exit_severity === false) {
             return Command::SUCCESS;
@@ -283,6 +295,30 @@ class ProfileRunCommand extends DrutinyBaseCommand
         $exit_code = max($exit_codes);
 
         return $exit_code >= $exit_severity ? $exit_code : Command::SUCCESS;
+    }
+
+    /**
+     * Get the exit code for a report based on its type and severity.
+     * 
+     * Dependency failures are encoded as: DEPENDENCY_FAILURE_BASE + severity_weight
+     * Regular assessment failures return the severity weight directly.
+     * 
+     * @param Report $report The report to get exit code for
+     * @return int The exit code
+     */
+    protected function getReportExitCode(Report $report): int
+    {
+        if ($report->successful) {
+            return 0;
+        }
+        
+        // Encode dependency failures with base offset
+        if ($report->type === ReportType::DEPENDENCIES) {
+            return self::DEPENDENCY_FAILURE_BASE + $report->severity->getWeight();
+        }
+        
+        // Regular assessment failures return severity weight
+        return $report->severity->getWeight();
     }
 
     protected function asyncExecuteWithUpdates(InputInterface $input, ConsoleOutput $output, array $uris):array
