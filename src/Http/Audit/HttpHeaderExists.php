@@ -2,6 +2,7 @@
 
 namespace Drutiny\Http\Audit;
 
+use Drutiny\Audit;
 use Drutiny\Sandbox\Sandbox;
 use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\ResponseInterface;
@@ -49,7 +50,8 @@ class HttpHeaderExists extends Http
         } catch (RequestException $e) {
             $sandbox->logger()->error($e->getMessage());
             $this->set('request_error', $e->getMessage());
+            throw new \Exception("The audit was not able to get the HTTP headers; HTTP result code=" . $e->getCode());
+            return self::ERROR;
         }
-        return false;
     }
 }
