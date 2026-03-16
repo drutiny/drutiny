@@ -358,7 +358,8 @@
                     "target",
                     "type",
                     "reportingPeriodStart",
-                    "reportingPeriodEnd"
+                    "reportingPeriodEnd",
+                    "created"
                 ],
                 "type": "object",
                 "properties": {
@@ -445,6 +446,13 @@
                     "language": {
                         "title": "language",
                         "type": "string",
+                        "nullable": false,
+                        "readOnly": true
+                    },
+                    "created": {
+                        "title": "created",
+                        "type": "string",
+                        "format": "date-time",
                         "nullable": false,
                         "readOnly": true
                     }
