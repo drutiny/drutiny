@@ -139,6 +139,12 @@ class ProfileRunCommand extends DrutinyBaseCommand
             InputOption::VALUE_NONE,
             'Pipe the output instead of formatting it.',
         )
+        ->addOption(
+            'preflight',
+            null,
+            InputOption::VALUE_NONE,
+            'Only evaluate policy dependencies and prepare checks and report which policies will and will not run.',
+        )
         ;
         $this->configureReporting();
         $this->configureDomainSource($this->domainSource);
@@ -227,6 +233,11 @@ class ProfileRunCommand extends DrutinyBaseCommand
 
         $exit_codes = [Command::SUCCESS];
 
+        if ($input->getOption('preflight')) {
+            $this->progressBar->clear();
+            return $this->preflight($profile, $uris, $input, $console);
+        }
+
         // Run multisite audits in seperate processes.
         if (count($uris) > 1) {
             $this->progressBar->clear();
@@ -295,6 +306,41 @@ class ProfileRunCommand extends DrutinyBaseCommand
         $exit_code = max($exit_codes);
 
         return $exit_code >= $exit_severity ? $exit_code : Command::SUCCESS;
+    }
+
+    /**
+     * Render a terminal report of which policies will and will not run.
+     */
+    protected function preflight(Profile $profile, array $uris, InputInterface $input, SymfonyStyle $console): int
+    {
+        $failures = 0;
+        foreach ($uris as $uri) {
+            try {
+                $target = $this->targetFactory->create($input->getArgument('target'), $uri);
+            } catch (TargetLoadingException | TargetNotFoundException | InvalidTargetException $e) {
+                $console->error($e->getMessage());
+                $failures++;
+                continue;
+            }
+
+            $rows = $this->reportFactory->preflight($profile, $target);
+            $skipped = array_filter($rows, fn($row) => !$row['run']);
+            $failures += count($skipped);
+
+            $console->title(sprintf('Preflight: %s on %s', $profile->name, $uri ?? $target->uri));
+            $console->table(
+                ['Policy', 'Will run', 'Blocked at', 'Reason'],
+                array_map(fn($row) => [
+                    $row['policy'],
+                    $row['run'] ? '<fg=green>Yes</>' : '<fg=red>No</>',
+                    $row['stage'],
+                    $row['reason'],
+                ], $rows)
+            );
+            $console->writeln(sprintf('%d will run, %d will not run.', count($rows) - count($skipped), count($skipped)));
+        }
+
+        return $failures > 0 && $input->getOption('exit-on-severity') !== false ? 1 : Command::SUCCESS;
     }
 
     /**

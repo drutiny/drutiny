@@ -12,6 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  *
@@ -54,6 +55,13 @@ class PolicyListCommand extends DrutinyBaseCommand
             'u',
             InputOption::VALUE_NONE,
             'Show the number of profiles a policy is used in.'
+        )
+        ->addOption(
+            'format',
+            'f',
+            InputOption::VALUE_OPTIONAL,
+            'Output format: table, json, yaml or csv.',
+            'table'
         );
         $this->configureLanguage();
     }
@@ -63,15 +71,30 @@ class PolicyListCommand extends DrutinyBaseCommand
    */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->progressBar->start(4);
+        $format = strtolower($input->getOption('format'));
+        if (!in_array($format, ['table', 'json', 'yaml', 'csv'], true)) {
+            $output->writeln("<error>Unsupported format '$format'. Supported formats: table, json, yaml, csv.</error>");
+            return 1;
+        }
+
+        // Progress bar feedback is only meaningful for interactive table output.
+        $showProgress = $format === 'table';
+
+        if ($showProgress) {
+            $this->progressBar->start(4);
+        }
 
         $this->initLanguage($input);
 
-        $this->progressBar->setMessage("Loading policy library from policy sources.");
+        if ($showProgress) {
+            $this->progressBar->setMessage("Loading policy library from policy sources.");
+        }
         $list = $this->policyFactory->getPolicyList();
 
         if ($source_filter = $input->getOption('source')) {
-            $this->progressBar->setMessage("Filtering policies by source: $source_filter");
+            if ($showProgress) {
+                $this->progressBar->setMessage("Filtering policies by source: $source_filter");
+            }
             $list = array_filter($list, function ($policy) use ($source_filter) {
                 if ($source_filter == $policy['source']) {
                     return true;
@@ -82,34 +105,41 @@ class PolicyListCommand extends DrutinyBaseCommand
                 return false;
             });
         }
-        $this->progressBar->advance();
+        if ($showProgress) {
+            $this->progressBar->advance();
+        }
 
-        if ($input->getOption('show-profile-usage')) {
-            $this->progressBar->setMessage("Mapping policy utilisation by profile.");
+        $showProfileUsage = $input->getOption('show-profile-usage');
+        if ($showProfileUsage) {
+            if ($showProgress) {
+                $this->progressBar->setMessage("Mapping policy utilisation by profile.");
+            }
             $profiles = array_map(function ($profile) {
                 return $this->profileFactory->loadProfileByName($profile['name']);
             }, $this->profileFactory->getProfileList());
         }
-        
-        $this->progressBar->advance();
+
+        if ($showProgress) {
+            $this->progressBar->advance();
+        }
         $rows = [];
         foreach ($list as $listedPolicy) {
             $row = [
-                'description' => '<options=bold>' . wordwrap($listedPolicy['title'], 50) . '</>',
+                'title' => $listedPolicy['title'],
                 'name' => $listedPolicy['name'],
                 'source' => implode(', ', $listedPolicy['sources']),
             ];
-            if ($input->getOption('show-profile-usage')) {
-                $row['profile_util'] = count(array_filter($profiles, function (Profile $profile) use ($listedPolicy) {
+            if ($showProfileUsage) {
+                $row['profile_util'] = implode(", ", array_map(fn($p) => $p->name, array_filter($profiles, function (Profile $profile) use ($listedPolicy) {
                     return in_array($listedPolicy['name'], array_keys($profile->policies));
-                }));
+                })));
             }
             $rows[] = $row;
         }
 
         // Restrict visibility of policies to those in profile allow list.
         $allow_list = $this->settings->has('profile.allow_list') ? $this->settings->get('profile.allow_list') : [];
-        if (!empty($allow_list) && $input->getOption('show-profile-usage')) {
+        if (!empty($allow_list) && $showProfileUsage) {
             $rows = array_filter($rows, fn($r) => $r['profile_util']);
         }
 
@@ -119,18 +149,52 @@ class PolicyListCommand extends DrutinyBaseCommand
 
             return $x[0] == strtolower($a['name']) ? -1 : 1;
         });
-        $this->progressBar->finish();
+        $rows = array_values($rows);
 
-        $io = new SymfonyStyle($input, $output);
-        $headers = ['Title', 'Name', 'Source'];
-        if ($input->getOption('show-profile-usage')) {
-            $headers[] = 'Profile Utilization';
+        if ($showProgress) {
+            $this->progressBar->finish();
         }
-        $io->table($headers, $rows);
 
-        $io->writeln(sprintf('%d policies, %d sources', count($rows), count(
-            array_unique(array_map(fn ($p) => explode(',', $p['source'])[0], $rows))
-        )));
+        switch ($format) {
+            case 'json':
+                $output->writeln(json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                break;
+
+            case 'yaml':
+                $output->write(Yaml::dump($rows, 4, 2));
+                break;
+
+            case 'csv':
+                $headers = ['title', 'name', 'source'];
+                if ($showProfileUsage) {
+                    $headers[] = 'profile_util';
+                }
+                $stream = fopen('php://temp', 'r+');
+                fputcsv($stream, $headers, ',', '"', '\\');
+                foreach ($rows as $row) {
+                    fputcsv($stream, $row, ',', '"', '\\');
+                }
+                rewind($stream);
+                $output->write(stream_get_contents($stream));
+                fclose($stream);
+                break;
+
+            default:
+                $io = new SymfonyStyle($input, $output);
+                $headers = ['Title', 'Name', 'Source'];
+                if ($showProfileUsage) {
+                    $headers[] = 'Profile Utilization';
+                }
+                $io->table($headers, array_map(function ($row) {
+                    $row['title'] = '<options=bold>' . wordwrap($row['title'], 50) . '</>';
+                    return array_values($row);
+                }, $rows));
+
+                $io->writeln(sprintf('%d policies, %d sources', count($rows), count(
+                    array_unique(array_map(fn ($p) => explode(',', $p['source'])[0], $rows))
+                )));
+                break;
+        }
 
         return 0;
     }

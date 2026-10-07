@@ -167,6 +167,62 @@ class ReportFactory
         return $processManager;
     }
 
+    /**
+     * Evaluate only the dependency and prepare stages of a profile's policies.
+     *
+     * @return array<int, array{policy: string, run: bool, stage: string, reason: string}>
+     */
+    public function preflight(Profile $profile, TargetInterface $target):array
+    {
+        $contexts = $this->buildContexts($target);
+        $rows = [];
+
+        foreach ($profile->dependencies as $definition) {
+            $policy = $definition->getPolicy($this->policyFactory);
+            $response = $this->getDependencyResponse($contexts, $policy);
+            if ($response) {
+                $rows[] = [
+                    'policy' => $policy->name,
+                    'run' => false,
+                    'stage' => 'profile dependency',
+                    'reason' => $response->getExceptionMessage(),
+                ];
+                return $rows;
+            }
+        }
+
+        // The reporting period is readonly once set, so each class gets one audit instance
+        // and the period is only applied on creation.
+        $audits = [];
+        foreach ($profile->policies as $definition) {
+            $policy = $definition->getPolicy($this->policyFactory);
+            $response = $this->getDependencyResponse($contexts, $policy);
+            if ($response) {
+                $rows[] = [
+                    'policy' => $policy->name,
+                    'run' => false,
+                    'stage' => 'dependency',
+                    'reason' => $response->getExceptionMessage(),
+                ];
+                continue;
+            }
+
+            try {
+                if (!isset($audits[$policy->class])) {
+                    $audits[$policy->class] = $this->auditFactory->mock($policy->class, $target);
+                    $audits[$policy->class]->setReportingPeriod($profile->reportingPeriodStart, $profile->reportingPeriodEnd);
+                }
+                $audits[$policy->class]->prepare($policy);
+                $rows[] = ['policy' => $policy->name, 'run' => true, 'stage' => '', 'reason' => ''];
+            } catch (AuditException $e) {
+                $rows[] = ['policy' => $policy->name, 'run' => false, 'stage' => 'prepare', 'reason' => $e->getMessage()];
+            } catch (Exception | Error $e) {
+                $rows[] = ['policy' => $policy->name, 'run' => false, 'stage' => 'prepare', 'reason' => get_class($e) . ': ' . $e->getMessage()];
+            }
+        }
+        return $rows;
+    }
+
     public function promise(Profile $profile, TargetInterface $target):Report|ProcessManager
     {
         $contexts = $this->buildContexts($target);
