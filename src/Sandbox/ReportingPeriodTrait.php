@@ -141,7 +141,7 @@ trait ReportingPeriodTrait
 
         $steps = array_filter($steps, function ($step) {
           // Filter intervals to those resulting in 51 to 100 steps.
-            return $step > 50 && $step <= 100;
+            return $step >= 50 && $step <= 100;
         });
 
         if (empty($steps)) {

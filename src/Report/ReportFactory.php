@@ -292,11 +292,24 @@ class ReportFactory
         foreach ($batch as $class => $policies) {
             $audit = $this->auditFactory->mock($class, $target);
             $audit->setReportingPeriod($start, $end);
+
+            // Prepare every policy in the batch BEFORE executing any of
+            // them. An audit class's prepare() may accumulate state across
+            // calls (e.g. to build one combined query for the whole batch)
+            // so that its first gather() call has the full picture. Doing
+            // prepare()+execute() per-policy in a single pass (the previous
+            // behaviour) meant the first policy to execute only ever saw
+            // itself prepared, defeating that optimization.
+            $prepared = [];
             foreach ($policies as $policy) {
+                if ($this->prepareAudit($audit, $policy, $errors) === false) {
+                    continue;
+                }
+                $prepared[] = $policy;
+            }
+
+            foreach ($prepared as $policy) {
                 try {
-                    if ($this->prepareAudit($audit, $policy, $errors) === false) {
-                        continue;
-                    }
                     $this->logger->info("Auditing $policy->title");
                     $response = $this->policyAudit($policy, $audit, $start, $end);
                 } catch (Error|Exception $e) {
